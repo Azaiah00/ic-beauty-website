@@ -10,6 +10,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Hide the dev-only route indicator (the "N" badge in the corner).
+  devIndicators: false,
   images: {
     formats: ["image/avif", "image/webp"],
   },

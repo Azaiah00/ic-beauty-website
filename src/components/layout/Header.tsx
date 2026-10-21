@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { nav, bookHref, business } from "@/lib/site";
 
@@ -14,19 +14,62 @@ export function Header({ mark }: { mark: React.ReactNode }) {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  // Direction-aware hide/show: hide once scrolling DOWN past the header, show only after a
+  // deliberate scroll UP. Movement is accumulated per direction (so tiny momentum/touch events
+  // can't flip it), y is clamped (iOS rubber-band bounce), and work is batched to one rAF.
+  const hiddenRef = useRef(false);
+  const scrolledRef = useRef(false);
   useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      setHidden(y > 500 && y > last + 4);
-      if (y < last - 4) setHidden(false);
+    const HIDE_AFTER = 96; // header height + a little
+    const DOWN_DELTA = 12; // px of continuous downward travel before hiding
+    const UP_DELTA = 32; // px of continuous upward travel before showing (ignores jitter/bounce)
+    let last = Math.max(0, window.scrollY);
+    let travel = 0; // signed distance travelled in the current direction
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const y = Math.min(Math.max(0, window.scrollY), Math.max(0, max));
+      const dy = y - last;
       last = y;
+
+      const isScrolled = y > 24;
+      if (isScrolled !== scrolledRef.current) {
+        scrolledRef.current = isScrolled;
+        setScrolled(isScrolled);
+      }
+
+      if (dy === 0) return;
+      // reset accumulated travel whenever the direction changes
+      travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy;
+
+      let next = hiddenRef.current;
+      if (y <= HIDE_AFTER) next = false; // always visible near the top
+      else if (travel > DOWN_DELTA) next = true;
+      else if (travel < -UP_DELTA) next = false;
+
+      if (next !== hiddenRef.current) {
+        hiddenRef.current = next;
+        setHidden(next);
+      }
     };
-    onScroll();
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Route change: always bring the header back.
+  useEffect(() => {
+    hiddenRef.current = false;
+    setHidden(false);
+  }, [pathname]);
 
   useEffect(() => {
     const lenis = window.__lenis;
@@ -48,7 +91,7 @@ export function Header({ mark }: { mark: React.ReactNode }) {
         Skip to content
       </a>
       <header
-        className={`fixed inset-x-0 top-0 z-50 text-plum-900 transition-[transform,background,box-shadow] duration-500 ease-[var(--ease-lens)] ${
+        className={`fixed inset-x-0 top-0 z-50 text-plum-900 will-change-transform transition-[transform,background-color,box-shadow] duration-300 ease-out ${
           hidden && !open ? "-translate-y-full" : "translate-y-0"
         } ${scrolled && !open ? "bg-bone/90 shadow-[0_1px_0_rgba(58,29,69,0.08)] backdrop-blur-md" : "bg-transparent"}`}
       >
@@ -111,7 +154,11 @@ export function Header({ mark }: { mark: React.ReactNode }) {
               </li>
             ))}
           </ul>
-          <Link href={bookHref} tabIndex={open ? 0 : -1} className="mt-8 inline-flex h-14 items-center justify-center rounded-pill bg-plum-900 px-8 font-sans text-[0.74rem] font-medium uppercase tracking-[0.16em] text-bone">
+          <Link
+            href={bookHref}
+            tabIndex={open ? 0 : -1}
+            className="mt-8 flex w-full min-h-[3.75rem] items-center justify-center rounded-pill bg-amethyst px-6 font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_10px_28px_rgba(110,63,134,0.32)] transition-[background,box-shadow,transform] duration-300 hover:bg-plum-800 hover:shadow-[0_12px_32px_rgba(110,63,134,0.4)] active:scale-[0.99]"
+          >
             Book a free discovery call
           </Link>
           <div className="mt-auto pt-10 text-plum-700">
