@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/* ============================================================
+   I.C. BEAUTY — DESIGN TOKENS  (see DESIGN.md — never go off-token)
+   Direction: "Quiet Luxury" — elegant editorial, bone paper,
+   deep plum anchors, hairline brass rules. Hints of artistry
+   come from arches, light and composition, never gimmicks.
+   ============================================================ */
+@theme {
+  --color-ink: #1b1220;
+  --color-plum-950: #1d1022;
+  --color-plum-900: #24132a;
+  --color-plum-800: #3a1d45;
+  --color-plum-700: #5c4d60;
+  --color-amethyst: #6e3f86;
+  --color-orchid: #9b72b0;
+  --color-lilac: #cdb8dc;
+  --color-mist: #f1ebf3;
+  --color-bone: #f8f4ee;
+  --color-paper: #fdfbf8;
+  --color-sand: #ece4d8;
+  --color-taupe: #8a7d74;
+  --color-brass: #b8955a;
+  --color-brass-soft: #dcc394;
+  --color-brass-deep: #7d6232;
+  --color-sage: #7d8c6a;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-jost), "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  --text-mega: clamp(3.4rem, 1.9rem + 6.2vw, 8.2rem);
+  --text-mega--line-height: 0.95;
+  --text-display: clamp(2.7rem, 1.7rem + 4.1vw, 6rem);
+  --text-display--line-height: 1;
+  --text-title: clamp(2.2rem, 1.5rem + 2.4vw, 3.9rem);
+  --text-title--line-height: 1.04;
+  --text-lede: clamp(1.08rem, 1rem + 0.35vw, 1.28rem);
+  --text-lede--line-height: 1.7;
+
+  --radius-pill: 999px;
+  --radius-card: 1.25rem;
+
+  --ease-lens: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-marquee: marquee 48s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-bone);
+    color: var(--color-ink);
+    scrollbar-color: var(--color-amethyst) var(--color-bone);
+    scrollbar-width: thin;
+  }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 380;
+    line-height: 1.7;
+    letter-spacing: 0.005em;
+    background: var(--color-bone);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+  strong, b { font-weight: 500; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-lilac); color: var(--color-ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amethyst);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Custom scrollbar — bone track, plum → amethyst thumb with a brass edge (brand rule: never default grey) */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-bone); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-plum-800), var(--color-amethyst));
+    border-radius: 999px;
+    border: 2px solid var(--color-bone);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-amethyst); }
+  [data-scroll-inner]::-webkit-scrollbar { height: 4px; }
+  [data-scroll-inner]::-webkit-scrollbar-thumb { border: 0; background: var(--color-lilac); }
+}
+
+@utility container-x {
+  width: 100%;
+  max-width: 86rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.15rem, 0.5rem + 2.8vw, 3.25rem);
+}
+/* Refined small-caps label */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+@utility italic-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-lens);
+  &:hover { background-size: 100% 1px; }
+}
+/* Arch frame — the signature shape (echoes salon alcoves + her circular wall logo) */
+@utility arch {
+  border-radius: 999px 999px 1.25rem 1.25rem;
+}
+/* Hairline brass rule */
+@utility rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-brass), transparent);
+}
+
+/* Above-the-fold entrance: pure CSS, transform-only (LCP-safe, no JS wait) */
+@keyframes rise {
+  from { transform: translate3d(0, 22px, 0); }
+  to { transform: none; }
+}
+@keyframes settle {
+  from { transform: scale(1.07); }
+  to { transform: none; }
+}
+.js-motion .rise { animation: rise 1.1s var(--ease-lens) both; animation-delay: calc(var(--d, 0) * 90ms); }
+.js-motion .settle { animation: settle 2.2s var(--ease-lens) both; }
+
+/* Scroll entrances (bound by SmoothScroll) — only hidden when JS + motion are available */
+/* [data-reveal] is never hidden by CSS — SmoothScroll hides only below-the-fold elements once GSAP is live. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
