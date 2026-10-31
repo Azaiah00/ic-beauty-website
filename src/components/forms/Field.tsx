@@ -19,12 +19,12 @@ function Label({ label, required, hint, tone, htmlFor }: { label: string; requir
   );
 }
 
-export function Input({ label, name, required, hint, tone = "light", className, type = "text", autoComplete, placeholder }: Base & { type?: string; autoComplete?: string; placeholder?: string }) {
+export function Input({ label, name, required, hint, tone = "light", className, type = "text", autoComplete, placeholder, defaultValue }: Base & { type?: string; autoComplete?: string; placeholder?: string; defaultValue?: string }) {
   const id = `f-${name}`;
   return (
     <div className={className}>
       <Label label={label} required={required} hint={hint} tone={tone} htmlFor={id} />
-      <input id={id} name={name} type={type} required={required} autoComplete={autoComplete} placeholder={placeholder} className={box(tone)} />
+      <input id={id} name={name} type={type} required={required} autoComplete={autoComplete} placeholder={placeholder} defaultValue={defaultValue} className={box(tone)} />
     </div>
   );
 }
@@ -48,12 +48,12 @@ export function Select({ label, name, required, hint, tone = "light", className,
   );
 }
 
-export function Textarea({ label, name, required, hint, tone = "light", className, rows = 4, placeholder }: Base & { rows?: number; placeholder?: string }) {
+export function Textarea({ label, name, required, hint, tone = "light", className, rows = 4, placeholder, defaultValue }: Base & { rows?: number; placeholder?: string; defaultValue?: string }) {
   const id = `f-${name}`;
   return (
     <div className={className}>
       <Label label={label} required={required} hint={hint} tone={tone} htmlFor={id} />
-      <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} className={box(tone)} />
+      <textarea id={id} name={name} rows={rows} required={required} placeholder={placeholder} defaultValue={defaultValue} className={box(tone)} />
     </div>
   );
 }

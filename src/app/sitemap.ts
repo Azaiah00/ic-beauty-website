@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { articles } from "@/lib/articles";
+import { products } from "@/lib/products";
 
 export const dynamic = "force-static";
 
@@ -16,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/book", 0.9, "monthly"],
     ["/scalp-check", 0.8, "monthly"],
     ["/hub", 0.7, "weekly"],
+    ["/shop", 0.75, "weekly"],
     ["/learn", 0.8, "weekly"],
     ["/faq", 0.7, "monthly"],
     ["/contact", 0.6, "yearly"],
@@ -24,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
   return [
     ...pages.map(([p, priority, changeFrequency]) => ({ url: `${SITE_URL}${p}`, lastModified: now, priority, changeFrequency })),
+    ...products.filter((p) => !p.freeHref && !p.redirectTo).map((p) => ({ url: `${SITE_URL}/shop/${p.slug}`, lastModified: now, priority: 0.6, changeFrequency: "monthly" as const })),
     ...articles.map((a) => ({ url: `${SITE_URL}/learn/${a.slug}`, lastModified: new Date(a.modified), priority: 0.7, changeFrequency: "monthly" as const })),
   ];
 }

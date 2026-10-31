@@ -19,8 +19,9 @@ export const metadata: Metadata = {
 };
 
 function Card({ h }: { h: HubItem }) {
+  const ext = /^https?:\/\//.test(h.href);
   return (
-    <a href={h.href} target="_blank" rel="noopener noreferrer" className="group flex flex-col border-t border-plum-800/15 pt-7 transition-colors duration-500 hover:border-amethyst" data-reveal>
+    <a href={h.href} {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="group flex flex-col border-t border-plum-800/15 pt-7 transition-colors duration-500 hover:border-amethyst" data-reveal>
       <div className="flex items-center justify-between gap-3">
         <span className="eyebrow text-amethyst">{h.type}</span>
         {h.affiliate && <span className="rounded-pill bg-mist px-2.5 py-1 text-[0.68rem] uppercase tracking-wider text-plum-700">Affiliate</span>}
@@ -32,7 +33,7 @@ function Card({ h }: { h: HubItem }) {
         <span className="inline-flex items-center gap-1.5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-plum-900 group-hover:text-amethyst">
           {h.cta}
           <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" strokeWidth={1.5} />
-          <span className="sr-only">(opens in a new tab)</span>
+          {ext && <span className="sr-only">(opens in a new tab)</span>}
         </span>
       </div>
     </a>

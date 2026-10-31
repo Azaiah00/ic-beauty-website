@@ -56,9 +56,7 @@ export const links = {
   instagramLegacy: "https://www.instagram.com/giftedhands804",
   youtube: "https://www.youtube.com/@i.c.beauty1561",
   youtubeChannel: "https://www.youtube.com/channel/UCbFR_jMa2G41eYhljQE_fYw",
-  stan: "https://stan.store/ICBeauty",
-  stanRadiance: "https://stan.store/ICBeauty/p/radiance-rewired",
-  stanFoodList: "https://stan.store/ICBeauty/p/psoriasisdermatitis-food-list-guide",
+  // Stan store retired (2026-10-30): every product now sells on-site at /shop (see src/lib/products.ts).
   phase2Form: "https://form.jotform.com/232350414294046",
   /**
    * Phase 1 discovery-call booking. Her current Linktree points to the old Square site.
@@ -67,8 +65,8 @@ export const links = {
    * and every "Book" button switches to it automatically.
    */
   phase1Scheduler: "" as string,
-  /** Square Online retail store. Move it to shop.icbeautyinyou.com before DNS cut-over. */
-  shop: "https://www.icbeautyinyou.com/s/shop",
+  /** On-site shop (the old Square Online store went offline at the 2026-10-30 DNS cut-over; /s/shop redirects here). */
+  shop: "/shop",
   supplementsStore: "https://www.optimalhealthsystems.com/collections/all/",
   digestiveEnzyme: "https://www.optimalhealthsystems.com/cart/49244690350382:1",
   aoYouth: "https://shop.solexnation.com/Icbeauty/product/1463",

@@ -54,6 +54,8 @@ export function Footer() {
             <p className="eyebrow text-lilac/75">Start here</p>
             <ul className="mt-4 space-y-2.5">
               <li><Link className="link-underline text-bone/85 hover:text-bone" href={bookHref}>Book a discovery call</Link></li>
+              <li><Link className="link-underline text-bone/85 hover:text-bone" href="/hair-love">Free Red Flags checklist</Link></li>
+              <li><Link className="link-underline text-bone/85 hover:text-bone" href="/shop">Shop guides</Link></li>
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/scalp-check">Scalp Self-Check</Link></li>
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/faq">FAQ</Link></li>
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/contact">Contact</Link></li>

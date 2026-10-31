@@ -4,7 +4,14 @@
  * Submissions appear in Netlify → Forms; set email notifications to icbeautyinyou@gmail.com.
  * Swap-later seam: replace this function to send to a CRM (e.g. GoHighLevel) without touching any UI.
  */
+import { isDemoActive } from "./demo";
+
 export async function submitForm(formName: string, data: Record<string, string>) {
+  // Presenter demo (/demo): pretend success, never create a real Netlify submission.
+  if (isDemoActive()) {
+    await new Promise((r) => setTimeout(r, 450));
+    return true;
+  }
   const body = new URLSearchParams({ "form-name": formName, ...data }).toString();
   const res = await fetch("/__forms.html", {
     method: "POST",

@@ -20,7 +20,7 @@ const dayMap: Record<string, string> = {
   Sunday: "https://schema.org/Sunday",
 };
 
-const sameAs = [links.instagram, links.facebook, links.youtube, links.stan, links.tiktok];
+const sameAs = [links.instagram, links.facebook, links.youtube, links.tiktok];
 
 export function businessNode() {
   return {

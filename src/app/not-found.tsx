@@ -1,8 +1,13 @@
-import { ICMark } from "@/components/brand/ICMark";
+import { ICMark, Wordmark } from "@/components/brand/ICMark";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { Btn } from "@/components/ui/Btn";
 
 export default function NotFound() {
   return (
+    <>
+    <Header mark={<Wordmark markClass="h-10 w-auto text-amethyst" className="text-plum-900" />} />
+    <main id="main">
     <section className="flex min-h-[90dvh] items-center bg-bone pt-24">
       <div className="container-x flex flex-col items-center text-center">
         <ICMark className="h-24 w-auto text-amethyst" title="" />
@@ -15,5 +20,8 @@ export default function NotFound() {
         </div>
       </div>
     </section>
+    </main>
+    <Footer />
+    </>
   );
 }

@@ -85,10 +85,10 @@ export function ExitIntent() {
           <div className="relative mt-6">
             <div className={`rounded-card border border-plum-900/10 bg-paper p-6 transition-[filter,transform] duration-[1200ms] ease-[var(--ease-lens)] ${focused ? "blur-0" : "scale-[0.98] blur-[7px]"}`} aria-hidden={!focused}>
               <p className="eyebrow text-brass-deep">Free download</p>
-              <p className="mt-2 font-display text-2xl">The Hair Health Checklist</p>
+              <p className="mt-2 font-display text-2xl">Hair Health Red Flags Most People Ignore</p>
               <p className="mt-2 text-[0.95rem] text-plum-700">Iisha&apos;s at-home self-check. Catch small changes before they become big ones.</p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <a href={links.stan} target="_blank" rel="noopener noreferrer" tabIndex={focused ? 0 : -1} className="rounded-pill bg-plum-900 px-5 py-3 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-bone hover:bg-amethyst">Get my free checklist</a>
+                <Link href="/hair-love" onClick={close} tabIndex={focused ? 0 : -1} className="rounded-pill bg-plum-900 px-5 py-3 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-bone hover:bg-amethyst">Get my free checklist</Link>
                 <Link href="/scalp-check" tabIndex={focused ? 0 : -1} onClick={close} className="rounded-pill border border-plum-900/25 px-5 py-3 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-plum-900 hover:border-plum-900">Take the 2-min Self-Check</Link>
               </div>
             </div>

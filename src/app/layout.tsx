@@ -2,11 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { cormorant, jost } from "./fonts";
 import { SITE_URL, business } from "@/lib/site";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
-import { ExitIntent } from "@/components/ExitIntent";
-import { Wordmark } from "@/components/brand/ICMark";
+import { DemoBar } from "@/components/demo/DemoBar";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, businessNode, personNode, websiteNode, methodNode } from "@/lib/schema";
 
@@ -68,11 +65,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-dvh bg-bone">
         <JsonLd data={graph(businessNode(), personNode(), websiteNode(), methodNode())} />
-        <Header mark={<Wordmark markClass="h-10 w-auto text-amethyst" className="text-plum-900" />} />
-        <main id="main">{children}</main>
-        <Footer />
+        {children}
         <SmoothScroll />
-        <ExitIntent />
+        <DemoBar />
       </body>
     </html>
   );

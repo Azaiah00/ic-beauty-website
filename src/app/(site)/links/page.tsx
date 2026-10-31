@@ -27,9 +27,10 @@ const groups = [
   {
     title: "Learn",
     items: [
-      { t: "Radiance Rewired: heal your gut ($7.99)", h: links.stanRadiance },
-      { t: "Free Hair Health Checklist", h: links.stan },
-      { t: "Free Psoriasis / Dermatitis Food List", h: links.stanFoodList },
+      { t: "FREE: Hair Health Red Flags checklist + food guide", h: "/hair-love" },
+      { t: "30 Days to a New Love Story with Your H.A.I.R. (pilot)", h: "/hair-love/30-days" },
+      { t: "Radiance Rewired: heal your gut ($7.99)", h: "/shop/radiance-rewired" },
+      { t: "Shop all guides", h: "/shop" },
       { t: "Let's Talk About… YouTube series", h: links.youtube },
       { t: "The Hair Wellness Library", h: "/learn" },
     ],
@@ -38,7 +39,7 @@ const groups = [
     title: "Holistic solutions",
     items: [
       { t: "Digestive enzyme deal: $1", h: links.digestiveEnzyme },
-      { t: "Custom sound therapy", h: links.stan },
+      { t: "Custom sound therapy", h: "/shop/custom-sound-therapy" },
       { t: "What is frequency energy medicine?", h: links.frequencyVideo },
       { t: "AO Youth collagen-boosting supplement", h: links.aoYouth },
       { t: "Red light therapy", h: links.redLight },

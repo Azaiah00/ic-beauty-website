@@ -26,9 +26,18 @@ const nextConfig: NextConfig = {
       { source: "/privacy-policy", destination: "/policies", permanent: true },
       { source: "/privacy", destination: "/policies", permanent: true },
       { source: "/terms", destination: "/policies", permanent: true },
-      { source: "/s/shop", destination: "/hub#shop", permanent: false },
-      { source: "/shop", destination: "/hub#shop", permanent: false },
+      { source: "/s/shop", destination: "/shop", permanent: true },
       { source: "/linktree", destination: "/links", permanent: true },
+      // Funnel short links: easy to say out loud on TikTok Live / IG
+      { source: "/hairlove", destination: "/hair-love", permanent: false },
+      { source: "/free", destination: "/hair-love", permanent: false },
+      { source: "/checklist", destination: "/hair-love", permanent: false },
+      { source: "/30days", destination: "/hair-love/30-days", permanent: false },
+      { source: "/pilot", destination: "/hair-love/30-days", permanent: false },
+      { source: "/join", destination: "/circle", permanent: false },
+      { source: "/membership", destination: "/circle", permanent: false },
+      // Old Stan store links → on-site shop
+      { source: "/stan", destination: "/shop", permanent: true },
     ];
   },
 };
