@@ -7,18 +7,15 @@ import { Needs } from "@/components/ui/Needs";
 import { FAQList } from "@/components/sections/FAQList";
 import { FunnelVideo, StickyCta } from "@/components/funnel/FunnelBits";
 import { PilotApplyForm } from "@/components/funnel/PilotApplyForm";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/hair-love/30-days"),
   title: "30 Days to a New Love Story with Your H.A.I.R. | Founding Seats",
   description:
     "Iisha C. Silver's virtual hair education program. Learn to embrace, understand and confidently care for your hair in 30 days. Pilot cohort, February 2027. Founding seats are limited.",
   alternates: { canonical: `${funnel.basePath}/30-days` },
   robots: { index: false, follow: true },
-  openGraph: {
-    title: "30 Days to a New Love Story with Your H.A.I.R.",
-    description: "A virtual education program by Iisha C. Silver. Pilot cohort, February 2027.",
-    images: ["/images/funnel-hero-woman.jpg"],
-  },
 };
 
 const icons = [Video, Library, CalendarCheck, Users];

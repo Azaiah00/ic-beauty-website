@@ -5,18 +5,15 @@ import { img } from "@/lib/images";
 import { funnel } from "@/lib/funnel";
 import { OptInForm } from "@/components/funnel/OptInForm";
 import { StickyCta } from "@/components/funnel/FunnelBits";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/hair-love"),
   title: "Free: Hair Health Red Flags Most People Ignore",
   description:
     "Iisha C. Silver's free 5-minute self-check: 13 scalp, routine and body red flags most women ignore, plus exactly what to do next. Bonus: The Scalp-Calm Kitchen food guide.",
   alternates: { canonical: funnel.basePath },
   robots: { index: false, follow: true },
-  openGraph: {
-    title: "Your hair has been talking. Are you listening?",
-    description: "Free 5-minute self-check from hair wellness educator Iisha C. Silver.",
-    images: ["/images/mock-checklist.jpg"],
-  },
 };
 
 const inside = [

@@ -11,11 +11,13 @@ import { products } from "@/lib/products";
 import { funnel } from "@/lib/funnel";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/shop"),
   title: "Shop: Hair Wellness Guides, Downloads & Membership",
   description:
-    "Iisha C. Silver's hair wellness guides and tools: the free Hair Health Red Flags checklist, The Scalp-Calm Kitchen food guide, Radiance Rewired, Custom Sound Therapy and the WIN WIN membership.",
+    "Iisha C. Silver's hair wellness guides and tools: the free Hair Health Red Flags checklist, The Scalp-Calm Kitchen food guide, Radiance Rewired, Custom Sound Therapy and The H.A.I.R. Circle membership.",
   alternates: { canonical: "/shop" },
 };
 

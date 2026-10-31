@@ -12,6 +12,7 @@ import { ProductRequestForm } from "@/components/shop/ProductRequestForm";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
 import { SITE_URL, business } from "@/lib/site";
+import { shareMeta } from "@/lib/share";
 
 export function generateStaticParams() {
   return products.filter((p) => !p.freeHref && !p.redirectTo).map((p) => ({ slug: p.slug }));
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${p.name}: ${p.tagline}`,
     description: p.description,
     alternates: { canonical: `/shop/${p.slug}` },
+    ...shareMeta(`/shop/${p.slug}`),
   };
 }
 

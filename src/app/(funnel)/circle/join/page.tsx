@@ -4,8 +4,10 @@ import { Check } from "lucide-react";
 import { img } from "@/lib/images";
 import { membership } from "@/lib/portal/data";
 import { CircleJoinForm } from "@/components/funnel/CircleJoinForm";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/circle/join"),
   title: `Join ${membership.name}`,
   description: `Start your ${membership.trialDays}-day free trial of ${membership.name}.`,
   alternates: { canonical: "/circle/join" },

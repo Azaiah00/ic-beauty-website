@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Check, ArrowRight, ShieldCheck } from "lucide-react";
 import { membership, lessons } from "@/lib/portal/data";
 import { FirstName } from "@/components/funnel/FunnelBits";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/circle/welcome"),
   title: `Welcome to ${membership.name}`,
   alternates: { canonical: "/circle/welcome" },
   robots: { index: false, follow: false },

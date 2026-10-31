@@ -6,8 +6,10 @@ import { img } from "@/lib/images";
 import { funnel } from "@/lib/funnel";
 import { FirstName } from "@/components/funnel/FunnelBits";
 import { links } from "@/lib/site";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/hair-love/reserved"),
   title: "Application received",
   description: "Your founding-seat application for 30 Days to a New Love Story with Your H.A.I.R. is in.",
   alternates: { canonical: `${funnel.basePath}/reserved` },

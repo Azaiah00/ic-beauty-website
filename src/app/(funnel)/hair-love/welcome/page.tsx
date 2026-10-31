@@ -5,8 +5,10 @@ import { Download, Mail, ArrowRight, Check } from "lucide-react";
 import { img } from "@/lib/images";
 import { funnel } from "@/lib/funnel";
 import { FirstName, FunnelVideo } from "@/components/funnel/FunnelBits";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/hair-love/welcome"),
   title: "Your checklist is ready",
   description: "Download Hair Health Red Flags Most People Ignore and your bonus food guide.",
   alternates: { canonical: `${funnel.basePath}/welcome` },

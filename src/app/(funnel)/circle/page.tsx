@@ -7,14 +7,15 @@ import { membership, lessons } from "@/lib/portal/data";
 import { Needs } from "@/components/ui/Needs";
 import { FAQList } from "@/components/sections/FAQList";
 import { StickyCta } from "@/components/funnel/FunnelBits";
+import { shareMeta } from "@/lib/share";
 
 export const metadata: Metadata = {
+  ...shareMeta("/circle"),
   title: `${membership.name} | Monthly Hair Wellness Membership`,
   description:
     "A new hair wellness lesson every Monday, a private portal to track your progress, worksheets to download, and your care notes from Iisha C. Silver, all in one affordable monthly membership.",
   alternates: { canonical: "/circle" },
   robots: { index: false, follow: true },
-  openGraph: { title: membership.name, description: membership.promise, images: ["/images/portal-preview.jpg"] },
 };
 
 const features = [
