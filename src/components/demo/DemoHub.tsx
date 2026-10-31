@@ -27,7 +27,7 @@ export function DemoHub() {
           {[
             { I: MonitorPlay, t: "Start anywhere", d: "Tap any step below. A bar at the bottom of every page gives you Back and Next." },
             { I: MousePointerClick, t: "Forms are pre-filled", d: "Just press the button on any form. It moves on like the real thing." },
-            { I: Keyboard, t: "Arrow keys work", d: "On a laptop, ← and → move between steps. Talking points sit in the bar." },
+            { I: Keyboard, t: "Explore freely", d: "Tap the eye icon to hide the guide and click around. Show guide brings it back." },
             { I: ShieldCheck, t: "Nothing is sent", d: "Demo mode never creates real sign-ups and only affects this browser tab." },
           ].map(({ I, t, d }) => (
             <li key={t} className="rounded-card border border-plum-800/10 bg-paper p-5">
