@@ -17,10 +17,10 @@ export const metadata: Metadata = {
 const groups = [
   {
     title: "Client bookings",
-    note: "Book online with Iisha · new clients start with a free Phase 1 call",
+    note: "Every new client starts with a free discovery call · virtual clients welcome",
     items: [
-      { t: "New clients start here: free 15-minute Phase 1 call", h: "/book?service=phase-1", primary: true },
-      { t: "Book any service with Iisha", h: bookHref },
+      { t: "New clients start here: free 15-minute discovery call", h: bookHref, primary: true },
+      { t: "Returning clients: book a service", h: "/book?service=all" },
       { t: "Take the free Scalp Self-Check", h: "/scalp-check" },
     ],
   },

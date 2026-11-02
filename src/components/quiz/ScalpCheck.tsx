@@ -273,7 +273,7 @@ export function ScalpCheck() {
                 ))}
               </ol>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={`/book?service=phase-1&profile=${encodeURIComponent(result.profile.name)}`} className="rounded-pill bg-bone px-6 py-3.5 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-plum-900 hover:bg-white">Book my free discovery call</Link>
+                <Link href={`/book?profile=${encodeURIComponent(result.profile.name)}`} className="rounded-pill bg-bone px-6 py-3.5 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-plum-900 hover:bg-white">Book my free discovery call</Link>
                 <button onClick={restart} className="inline-flex items-center gap-2 rounded-pill border border-lilac/30 px-6 py-3.5 text-lilac hover:text-bone"><RotateCcw className="h-4 w-4" aria-hidden="true" />Retake</button>
               </div>
               <p className="mt-6 text-[0.78rem] text-lilac/75">This self-check is educational. It is not a diagnosis or medical advice.</p>

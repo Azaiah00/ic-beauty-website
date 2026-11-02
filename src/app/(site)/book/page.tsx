@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import { Phone, Clock, CalendarCheck, Sparkles, ClipboardList, ListChecks } from "lucide-react";
+import { Phone, Clock, CalendarCheck, Sparkles, ClipboardList, ListChecks, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { DiscoveryForm } from "@/components/forms/DiscoveryForm";
 import { SquareBooking } from "@/components/forms/SquareBooking";
+import { JotformEmbed } from "@/components/forms/JotformEmbed";
 import { Disclaimer } from "@/components/sections/Disclaimer";
 import { business, links } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
@@ -18,23 +19,25 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { i: Phone, t: "New here? Start with the free Phase 1 call", d: "A complimentary 15-minute call. Iisha listens, asks the right questions and tells you honestly what she sees." },
-  { i: CalendarCheck, t: "Pick a time that works", d: "Choose your service and time below. Your appointment goes straight onto Iisha's calendar." },
-  { i: ClipboardList, t: "Share a little about your hair", d: "New clients: take two minutes to answer a few questions so Iisha is ready for your call." },
+  { i: ClipboardList, t: "Request your free call", d: "Answer a few quick questions about your hair and goals. It takes about 2 minutes." },
+  { i: Phone, t: "Free 15-minute discovery call", d: "Complimentary and no pressure. Iisha listens, asks the right questions and tells you honestly what she sees." },
+  { i: CalendarCheck, t: "Your plan and your appointment", d: "Iisha recommends the right next step and gets you on her calendar." },
 ];
 
 export default async function BookPage({ searchParams }: { searchParams: Promise<{ type?: string; profile?: string; service?: string }> }) {
   const { type, profile, service } = await searchParams;
   const classRequest = type === "class";
-  const phase1 = service === "phase-1";
+  // Default tab = Iisha's Jotform discovery form (every new client starts here). Square tabs for booking a service directly.
+  const tab: "start" | "phase-1" | "services" = service === "phase-1" ? "phase-1" : service === "all" ? "services" : "start";
+  const pill = (on: boolean) => `inline-flex min-h-11 items-center gap-2 rounded-pill px-4 text-[0.78rem] font-medium uppercase tracking-[0.12em] ${on ? "bg-plum-900 text-bone" : "border border-plum-800/20 text-plum-900 hover:border-plum-800/50"}`;
   return (
     <>
       <JsonLd data={graph(breadcrumb([{ name: "Book", path: "/book" }]))} />
       <PageHero
         crumbs={[{ name: "Book", href: "/book" }]}
-        eyebrow={classRequest ? "Family & parent classes" : "Book with Iisha"}
+        eyebrow={classRequest ? "Family & parent classes" : "New clients start here · Free discovery call"}
         title={<>You don&apos;t have to do this <span className="italic-accent text-amethyst">alone.</span></>}
-        lede={<p>Whether you&apos;re noticing thinning, dealing with an unhappy scalp or simply want to keep healthy hair healthy, new clients start with a free 15-minute Phase 1 call. Virtual options available.</p>}
+        lede={<p>Whether you&apos;re noticing thinning, dealing with an unhappy scalp or simply want to keep healthy hair healthy, it starts with a free 15-minute call with Iisha. Virtual clients welcome.</p>}
       />
       <section className="bg-bone py-16 sm:py-24">
         <div className="container-x grid gap-12 lg:grid-cols-12">
@@ -54,7 +57,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
             <div className="mt-10 space-y-3 rounded-card bg-mist p-6 text-[0.95rem] text-plum-800">
               <p className="flex items-center gap-2"><Clock className="h-4 w-4 text-amethyst" aria-hidden="true" />{business.bookingNote}</p>
               <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-amethyst" aria-hidden="true" />Prefer to call or text? <a href={business.phoneHref} className="font-medium underline decoration-amethyst/40 underline-offset-4">{business.phone}</a></p>
-              <p className="flex items-start gap-2"><ClipboardList className="mt-0.5 h-4 w-4 shrink-0 text-amethyst" aria-hidden="true" /><span>New client? <a href={links.discoveryForm} target="_blank" rel="noopener noreferrer" className="font-medium underline decoration-amethyst/40 underline-offset-4">Answer Iisha&apos;s quick questions</a> before your call.</span></p>
+              <p className="flex items-start gap-2"><CalendarCheck className="mt-0.5 h-4 w-4 shrink-0 text-amethyst" aria-hidden="true" /><span>Returning client? <Link href="/book?service=all" className="font-medium underline decoration-amethyst/40 underline-offset-4">Book your service online</Link>.</span></p>
             </div>
           </div>
           <div className="order-1 rounded-card border border-plum-800/10 bg-paper p-3 sm:p-8 lg:order-2 lg:col-span-8">
@@ -70,15 +73,19 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
                     <span>Your Scalp Self-Check result: <strong>{profile.slice(0, 80)}</strong>. Mention it on your call so Iisha can start right where you are.</span>
                   </p>
                 )}
-                <div className="mb-4 flex flex-wrap gap-2">
-                  <Link href="/book?service=phase-1" className={`inline-flex min-h-11 items-center gap-2 rounded-pill px-4 text-[0.78rem] font-medium uppercase tracking-[0.12em] ${phase1 ? "bg-plum-900 text-bone" : "border border-plum-800/20 text-plum-900 hover:border-plum-800/50"}`}>
-                    <Phone className="h-4 w-4" aria-hidden="true" /> Free Phase 1 call
+                <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="How would you like to book?">
+                  <Link href="/book" role="tab" aria-selected={tab === "start"} className={pill(tab === "start")}>
+                    <MessageCircle className="h-4 w-4" aria-hidden="true" /> New client: start here
                   </Link>
-                  <Link href="/book" className={`inline-flex min-h-11 items-center gap-2 rounded-pill px-4 text-[0.78rem] font-medium uppercase tracking-[0.12em] ${!phase1 ? "bg-plum-900 text-bone" : "border border-plum-800/20 text-plum-900 hover:border-plum-800/50"}`}>
-                    <ListChecks className="h-4 w-4" aria-hidden="true" /> All services
+                  <Link href="/book?service=all" role="tab" aria-selected={tab !== "start"} className={pill(tab !== "start")}>
+                    <ListChecks className="h-4 w-4" aria-hidden="true" /> Book a service
                   </Link>
                 </div>
-                <SquareBooking key={phase1 ? "p1" : "all"} src={phase1 ? links.squareDiscoveryCall : links.squareBooking} title="Book an appointment with Iisha (Square Appointments)" />
+                {tab === "start" ? (
+                  <JotformEmbed formId={links.discoveryFormId} title="Hair Wellness Discovery Call request form" />
+                ) : (
+                  <SquareBooking key={tab} src={tab === "phase-1" ? links.squareDiscoveryCall : links.squareBooking} title="Book an appointment with Iisha (Square Appointments)" />
+                )}
               </>
             )}
           </div>
