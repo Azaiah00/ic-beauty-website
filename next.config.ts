@@ -38,7 +38,16 @@ const nextConfig: NextConfig = {
       { source: "/membership", destination: "/circle", permanent: false },
       // Old Stan store links → on-site shop
       { source: "/stan", destination: "/shop", permanent: true },
+      // New-client front door: the free Phase 1 call in her Square booking, embedded on /book.
+      { source: "/start", destination: "/book?service=phase-1", permanent: false },
+      { source: "/discovery", destination: "/book?service=phase-1", permanent: false },
+      // Latest newsletter (update when the next issue ships)
+      { source: "/newsletter", destination: "/newsletter/2026-11", permanent: false },
     ];
+  },
+  async rewrites() {
+    // Email newsletters are static, self-contained HTML in /public/newsletter/<issue>/index.html
+    return [{ source: "/newsletter/:issue(\\d{4}-\\d{2})", destination: "/newsletter/:issue/index.html" }];
   },
 };
 

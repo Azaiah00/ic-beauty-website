@@ -51,13 +51,31 @@ export const business = {
 /** Every outbound link she currently uses — verified live 2026-10-20. */
 export const links = {
   instagram: "https://www.instagram.com/i.c.beautybrand/",
-  tiktok: "https://www.tiktok.com/@i.c.beautybrand", // she states "same name" as IG — CONFIRM
+  tiktok: "https://www.tiktok.com/@icbeautybrand", // as written by Iisha in her Nov 2026 newsletter
   facebook: "https://www.facebook.com/giftedhands804",
   instagramLegacy: "https://www.instagram.com/giftedhands804",
   youtube: "https://www.youtube.com/@i.c.beauty1561",
   youtubeChannel: "https://www.youtube.com/channel/UCbFR_jMa2G41eYhljQE_fYw",
   // Stan store retired (2026-10-30): every product now sells on-site at /shop (see src/lib/products.ts).
-  phase2Form: "https://form.jotform.com/232350414294046",
+  /**
+   * Iisha's Jotform intake system (2026-11-01). EVERY new salon client starts with the
+   * discovery-call form (also her TikTok bio link). After the call she sends ONE of three
+   * pathway intakes. Only "Maintenance & Style" has been shared so far; add the other two here.
+   */
+  discoveryFormId: "262988873070067",
+  discoveryForm: "https://form.jotform.com/262988873070067",
+  pathwayIntakes: {
+    maintenanceStyle: "https://form.jotform.com/263017559235055",
+  },
+  /**
+   * Square Appointments (2026-11-01): every "Book" button goes to Square until the custom booking
+   * portal is built. /book embeds this booking flow on-site; bookings land in her Square calendar.
+   */
+  squareBooking: "https://book.squareup.com/appointments/bbc91c4d-3001-402c-b34d-c6630114f74f/location/EVVWFXT0K865D/services",
+  /** Deep link to her free "Phase 1 15min Call To Recovery" service in Square. */
+  squareDiscoveryCall: "https://book.squareup.com/appointments/bbc91c4d-3001-402c-b34d-c6630114f74f/location/EVVWFXT0K865D/services/OOAAONTVEIK2SEF2PMKETWD4",
+  /** Retired 2026-11-01 (replaced by the discovery form + pathway intakes). Kept for reference only. */
+  phase2FormLegacy: "https://form.jotform.com/232350414294046",
   /**
    * Phase 1 discovery-call booking. Her current Linktree points to the old Square site.
    * Until Square Appointments / Calendly URL is confirmed, Phase 1 requests go through

@@ -17,10 +17,10 @@ export const metadata: Metadata = {
 const groups = [
   {
     title: "Client bookings",
-    note: "Hair recovery & hair care consult · openings 4–12 weeks out",
+    note: "Book online with Iisha · new clients start with a free Phase 1 call",
     items: [
-      { t: "Book your Phase 1 discovery call", h: bookHref, primary: true },
-      { t: "Phase 2: Hair recovery consultation form", h: links.phase2Form },
+      { t: "New clients start here: free 15-minute Phase 1 call", h: "/book?service=phase-1", primary: true },
+      { t: "Book any service with Iisha", h: bookHref },
       { t: "Take the free Scalp Self-Check", h: "/scalp-check" },
     ],
   },
