@@ -26,7 +26,9 @@ export type Product = {
   redirectTo?: string;
   /** Square payment link; empty = request form. */
   checkoutUrl: string;
-  /** Owed asset: the original file still has to be sent to us to recreate. */
+  /** Not on sale yet: the page shows "Coming soon" and a notify-me list instead of a price button. */
+  comingSoon?: boolean;
+  /** Owed asset: the original file still has to be sent to us to recreate (internal note, never shown on the site). */
   needsSource?: string;
   featured?: boolean;
 };
@@ -71,6 +73,7 @@ export const products: Product[] = [
     image: "lm-food-cover",
     checkoutUrl: "",
     needsSource: "Original Radiance Rewired file (to recreate in the new design)",
+    comingSoon: true,
     featured: true,
   },
   {

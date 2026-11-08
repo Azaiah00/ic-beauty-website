@@ -61,6 +61,7 @@ export function Footer() {
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/contact">Contact</Link></li>
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/links">All links</Link></li>
               <li><Link className="link-underline text-bone/85 hover:text-bone" href="/policies">Policies</Link></li>
+              <li><Link className="link-underline text-bone/85 hover:text-bone" href="/login">Log in</Link></li>
             </ul>
           </div>
           <div className="col-span-2 sm:col-span-1">

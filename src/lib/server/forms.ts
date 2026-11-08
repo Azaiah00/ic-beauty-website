@@ -154,16 +154,27 @@ export const FORMS: Record<string, FormDef> = {
     }),
   },
   "product-request": {
-    label: "Product requests",
-    tab: "Product requests",
+    label: "Product requests & early lists",
+    tab: "Products",
     required: ["email"],
     group: "Website: Product requests",
-    statuses: ["New", "Link sent", "Paid", "Delivered"],
-    confirmation: (s) => ({
-      subject: `Your request for ${s.data.product || "your guide"}`,
-      heading: `Thank you, ${first(s)}.`,
-      paragraphs: [`Your request for <strong>${s.data.product || "your guide"}</strong> came through. I'll send your secure checkout link personally.`],
-    }),
+    statuses: ["New", "Early list", "Link sent", "Paid", "Delivered"],
+    confirmation: (s) =>
+      /notify/i.test(s.data.request ?? "")
+        ? {
+            subject: `You're on the early list for ${s.data.product || "my new guide"}`,
+            heading: `You're on the list, ${first(s)}.`,
+            paragraphs: [
+              `<strong>${s.data.product || "My new guide"}</strong> is almost ready. You'll be the first to know the moment it launches.`,
+              "In the meantime, your free Hair Health Red Flags checklist is the best place to start.",
+            ],
+            cta: { label: "Get the free checklist", href: U(funnel.leadMagnet.file) },
+          }
+        : {
+            subject: `Your request for ${s.data.product || "your guide"}`,
+            heading: `Thank you, ${first(s)}.`,
+            paragraphs: [`Your request for <strong>${s.data.product || "your guide"}</strong> came through. I'll send your secure checkout link personally.`],
+          },
   },
   newsletter: {
     label: "Newsletter sign-ups",

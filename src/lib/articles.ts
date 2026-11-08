@@ -176,7 +176,7 @@ export const articles: Article[] = [
       { label: "American Academy of Dermatology — Hair loss: Who gets and causes", url: "https://www.aad.org/public/diseases/hair-loss/causes/18-causes" },
       { label: "American Academy of Dermatology — Do you have hair loss or hair shedding?", url: "https://www.aad.org/public/diseases/hair-loss/insider/shedding" },
     ],
-    cta: { label: "Get Radiance Rewired ($7.99)", href: "/shop/radiance-rewired" },
+    cta: { label: "Join the early list for Radiance Rewired", href: "/shop/radiance-rewired#get" },
   },
   {
     slug: "shedding-vs-hair-loss",

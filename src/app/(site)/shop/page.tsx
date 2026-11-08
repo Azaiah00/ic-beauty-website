@@ -81,8 +81,8 @@ export default function ShopPage() {
                   <span className="mt-2 flex-1 text-[0.96rem] text-plum-700">{p.tagline}</span>
                   <span className="mt-5 flex items-baseline justify-between">
                     <span className="font-display text-2xl text-plum-900">
-                      {p.price}
-                      {p.priceNote && <span className="ml-1.5 font-sans text-[0.75rem] text-plum-700">{p.priceNote}</span>}
+                      {p.comingSoon ? "Coming soon" : p.price}
+                      {!p.comingSoon && p.priceNote && <span className="ml-1.5 font-sans text-[0.75rem] text-plum-700">{p.priceNote}</span>}
                     </span>
                     <span className="inline-flex items-center gap-1.5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-plum-900">
                       View <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

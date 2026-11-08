@@ -234,10 +234,10 @@ export const hubItems: HubItem[] = [
   {
     name: "Radiance Rewired",
     type: "Digital guide",
-    price: "$7.99",
+    price: "Coming soon",
     blurb: "Transform your gut, transform your hair. The link between gut health and hair, food and lifestyle shifts, and how to nourish your strands from the inside out.",
-    href: "/shop/radiance-rewired",
-    cta: "I want to heal my gut",
+    href: "/shop/radiance-rewired#get",
+    cta: "Join the early list",
   },
   {
     name: "Hair Health Red Flags Checklist",

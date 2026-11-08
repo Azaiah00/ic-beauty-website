@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, UserRound } from "lucide-react";
 import { nav, bookHref, business } from "@/lib/site";
 
 export function Header({ mark }: { mark: React.ReactNode }) {
@@ -100,7 +100,7 @@ export function Header({ mark }: { mark: React.ReactNode }) {
             {mark}
           </Link>
           <nav aria-label="Primary" className="hidden xl:block">
-            <ul className="flex items-center gap-8">
+            <ul className="flex items-center gap-5 2xl:gap-8">
               {nav.map((n) => {
                 const active = pathname === n.href || pathname.startsWith(n.href + "/");
                 return (
@@ -108,7 +108,7 @@ export function Header({ mark }: { mark: React.ReactNode }) {
                     <Link
                       href={n.href}
                       aria-current={active ? "page" : undefined}
-                      className={`link-underline py-1 font-sans text-[0.74rem] font-medium uppercase tracking-[0.16em] transition-colors hover:text-amethyst ${active ? "text-amethyst" : "text-plum-900"}`}
+                      className={`link-underline whitespace-nowrap py-1 font-sans text-[0.74rem] font-medium uppercase tracking-[0.14em] transition-colors 2xl:tracking-[0.16em] hover:text-amethyst ${active ? "text-amethyst" : "text-plum-900"}`}
                     >
                       {n.label}
                     </Link>
@@ -118,11 +118,15 @@ export function Header({ mark }: { mark: React.ReactNode }) {
             </ul>
           </nav>
           <div className="flex items-center gap-2">
+            <Link href="/login" title="Log in" className="hidden h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-plum-900/20 px-3.5 text-[0.72rem] font-medium uppercase tracking-[0.14em] transition hover:border-plum-900 sm:inline-flex xl:px-0" aria-label="Log in">
+              <UserRound className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              <span className="hidden md:inline xl:hidden">Log in</span>
+            </Link>
             <a href={business.phoneHref} className="hidden h-11 w-11 items-center justify-center rounded-full border border-plum-900/20 transition hover:border-plum-900 sm:inline-flex" aria-label={`Call ${business.phone}`}>
               <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
             </a>
-            <Link href={bookHref} className="hidden h-11 items-center rounded-pill min-[380px]:inline-flex bg-plum-900 px-5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-bone transition hover:bg-amethyst">
-              Book<span className="hidden sm:inline">&nbsp;a consultation</span>
+            <Link href={bookHref} className="hidden h-11 items-center whitespace-nowrap rounded-pill min-[380px]:inline-flex bg-plum-900 px-5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-bone transition hover:bg-amethyst">
+              Book<span className="hidden sm:inline xl:hidden 2xl:inline">&nbsp;a consultation</span>
             </Link>
             <button
               type="button"
@@ -165,6 +169,9 @@ export function Header({ mark }: { mark: React.ReactNode }) {
             <p className="eyebrow text-amethyst">Visit the studio</p>
             <p className="mt-2">{business.address.street}, {business.address.city}, VA {business.address.postalCode}</p>
             <a tabIndex={open ? 0 : -1} href={business.phoneHref} className="mt-1 block text-plum-900">{business.phone}</a>
+            <Link tabIndex={open ? 0 : -1} href="/login" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-pill border border-plum-900/20 px-4 text-[0.78rem] font-medium uppercase tracking-[0.14em] text-plum-900">
+              <UserRound className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" /> Log in
+            </Link>
           </div>
         </div>
       </div>

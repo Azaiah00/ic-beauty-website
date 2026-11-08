@@ -29,7 +29,7 @@ const groups = [
     items: [
       { t: "FREE: Hair Health Red Flags checklist + food guide", h: "/hair-love" },
       { t: "30 Days to a New Love Story with Your H.A.I.R. (pilot)", h: "/hair-love/30-days" },
-      { t: "Radiance Rewired: heal your gut ($7.99)", h: "/shop/radiance-rewired" },
+      { t: "Radiance Rewired: coming soon, join the early list", h: "/shop/radiance-rewired#get" },
       { t: "Shop all guides", h: "/shop" },
       { t: "Let's Talk About… YouTube series", h: links.youtube },
       { t: "The Hair Wellness Library", h: "/learn" },

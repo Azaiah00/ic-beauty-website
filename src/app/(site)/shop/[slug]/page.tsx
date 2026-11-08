@@ -89,21 +89,26 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   </li>
                 ))}
               </ul>
-              {p.needsSource && <p className="mt-6"><Needs>Owed: {p.needsSource}</Needs></p>}
 
               <div id="get" className="mt-10 scroll-mt-28 rounded-card border border-plum-800/10 bg-paper p-6 sm:p-8">
                 <div className="flex items-baseline justify-between gap-4">
-                  <p className="font-display text-[2.6rem] leading-none text-plum-900">{p.price}</p>
-                  {p.priceNote && <p className="text-[0.9rem] text-plum-700">{p.priceNote}</p>}
+                  {p.comingSoon ? (
+                    <p className="font-display text-[2.2rem] leading-none text-plum-900">Coming soon</p>
+                  ) : (
+                    <p className="font-display text-[2.6rem] leading-none text-plum-900">{p.price}</p>
+                  )}
+                  {p.comingSoon ? <p className="text-[0.9rem] text-plum-700">Launching at {p.price}</p> : p.priceNote && <p className="text-[0.9rem] text-plum-700">{p.priceNote}</p>}
                 </div>
                 <div className="mt-6">
-                  {p.checkoutUrl ? (
+                  {p.comingSoon ? (
+                    <ProductRequestForm product={p.name} price={p.price} notify />
+                  ) : p.checkoutUrl ? (
                     <Btn href={p.checkoutUrl} size="lg" className="w-full">Buy now · {p.price}</Btn>
                   ) : (
                     <ProductRequestForm product={p.name} price={p.price} />
                   )}
                 </div>
-                <p className="mt-5 flex items-center gap-2 text-[0.82rem] text-plum-700">
+                <p className={`mt-5 items-center gap-2 text-[0.82rem] text-plum-700 ${p.comingSoon ? "hidden" : "flex"}`}>
                   <ShieldCheck className="h-4 w-4 text-sage" aria-hidden="true" /> Secure checkout through Square
                   <span className="mx-1 text-brass">·</span>
                   <Download className="h-4 w-4 text-sage" aria-hidden="true" /> Digital delivery

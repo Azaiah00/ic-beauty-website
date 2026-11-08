@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Download, Mail, ArrowRight, Check } from "lucide-react";
 import { img } from "@/lib/images";
 import { funnel } from "@/lib/funnel";
+import { productBySlug } from "@/lib/products";
 import { FirstName, FunnelVideo } from "@/components/funnel/FunnelBits";
 import { shareMeta } from "@/lib/share";
 
@@ -20,6 +21,7 @@ const dl =
 
 export default function WelcomePage() {
   const t = funnel.tripwire;
+  const soon = !!productBySlug(t.slug)?.comingSoon;
   return (
     <>
       {/* STEP 1: deliver the promise instantly */}
@@ -83,7 +85,7 @@ export default function WelcomePage() {
           <div className="grid overflow-hidden rounded-card border border-amethyst/30 bg-paper shadow-[0_40px_80px_-50px_rgba(36,19,42,0.6)] md:grid-cols-[0.9fr_1.1fr]">
             <div className="relative min-h-[16rem] bg-sand">
               {img("lm-food-cover") && <Image src={img("lm-food-cover")!} alt="" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />}
-              <span className="absolute left-4 top-4 rounded-pill bg-plum-900 px-3.5 py-1.5 font-sans text-[0.66rem] font-medium uppercase tracking-[0.16em] text-bone">Your next step</span>
+              <span className="absolute left-4 top-4 rounded-pill bg-plum-900 px-3.5 py-1.5 font-sans text-[0.66rem] font-medium uppercase tracking-[0.16em] text-bone">{soon ? "Coming soon" : "Your next step"}</span>
             </div>
             <div className="p-7 sm:p-10">
               <p className="eyebrow text-amethyst">Checked anything under Body &amp; Gut?</p>
@@ -94,15 +96,15 @@ export default function WelcomePage() {
                 Your hair is built from what your body can absorb. Radiance Rewired walks you through the gut–hair connection and the simple food and lifestyle shifts that nourish your strands from the inside out. It&apos;s the natural next read after your checklist.
               </p>
               <ul className="mt-5 grid gap-2 text-[0.97rem] text-plum-900">
-                {["The gut–hair connection, explained simply", "Food & lifestyle shifts you can start today", "Instant digital download"].map((x) => (
+                {["The gut–hair connection, explained simply", "Food & lifestyle shifts you can start today", soon ? "Digital download, launching soon" : "Instant digital download"].map((x) => (
                   <li key={x} className="flex items-start gap-2.5"><Check className="mt-1 h-4 w-4 shrink-0 text-amethyst" aria-hidden="true" />{x}</li>
                 ))}
               </ul>
               <div className="mt-7 flex flex-wrap items-center gap-5">
-                <Link href={t.href} className="group inline-flex min-h-[3.4rem] items-center justify-center gap-3 rounded-pill bg-amethyst px-8 font-sans text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_12px_30px_rgba(110,63,134,0.3)] transition hover:bg-plum-800">
-                  Get it for {t.price} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                <Link href={soon ? `${t.href}#get` : t.href} className="group inline-flex min-h-[3.4rem] items-center justify-center gap-3 rounded-pill bg-amethyst px-8 font-sans text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_12px_30px_rgba(110,63,134,0.3)] transition hover:bg-plum-800">
+                  {soon ? "Notify me" : `Get it for ${t.price}`} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
-                <span className="text-[0.85rem] text-plum-700">One-time · less than a smoothie</span>
+                <span className="text-[0.85rem] text-plum-700">{soon ? `Launching soon at ${t.price}` : "One-time · less than a smoothie"}</span>
               </div>
             </div>
           </div>
