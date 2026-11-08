@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Lock } from "lucide-react";
-import { submitForm, formToObject } from "@/lib/forms";
+import { submitForm, formToObject, FormError } from "@/lib/forms";
 import { Honeypot } from "@/components/forms/Field";
 import { funnel } from "@/lib/funnel";
 import { demoSample } from "@/lib/demo";
@@ -55,14 +55,18 @@ export function OptInForm({ id = "optin", cta = "Send me the checklist" }: { id?
     if (data["bot-field"]) return;
     setStatus("sending");
     try {
+      sessionStorage.setItem("icb-first-name", (data["first-name"] || "").slice(0, 40));
+    } catch {}
+    try {
       await submitForm("hair-love-optin", { ...data, ...src, "lead-magnet": funnel.leadMagnet.title });
-      try {
-        sessionStorage.setItem("icb-first-name", (data["first-name"] || "").slice(0, 40));
-      } catch {}
-      router.push(`${funnel.basePath}/welcome`);
-    } catch {
-      setStatus("error");
+    } catch (err) {
+      // A typo in the email is worth fixing; anything else (network, server) must never block a free download.
+      if (err instanceof FormError) {
+        setStatus("error");
+        return;
+      }
     }
+    router.push(`${funnel.basePath}/welcome`);
   }
 
   return (
@@ -113,7 +117,7 @@ export function OptInForm({ id = "optin", cta = "Send me the checklist" }: { id?
       <div aria-live="polite">
         {status === "error" && (
           <p className="text-center text-[0.9rem] text-[#b4533c]">
-            Something went wrong. Please try again, or text (804) 397-3340.
+            Please check your email address and try again, or text (804) 397-3340.
           </p>
         )}
       </div>
