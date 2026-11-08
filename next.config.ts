@@ -8,6 +8,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Owner-only deliverables (QR codes, print files) ship inside the server functions, never as public files.
+  outputFileTracingIncludes: {
+    "/api/admin/files": ["./private/deliverables/**/*"],
+    "/admin": ["./private/deliverables/**/*"],
+  },
   reactStrictMode: true,
   poweredByHeader: false,
   // Hide the dev-only route indicator (the "N" badge in the corner).

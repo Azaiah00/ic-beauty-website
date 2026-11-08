@@ -72,3 +72,20 @@ export function renderOwnerAlert(s: Submission, formLabel: string) {
   const text = [`New ${formLabel}: ${s.name || s.email}`, `${s.email} ${s.phone}`, "", ...Object.entries(s.data).filter(([, v]) => v).map(([k, v]) => `${label(k)}: ${v}`), "", `Dashboard: ${link}`].join("\n");
   return { html: shell(inner, `${s.name || s.email} just filled out ${formLabel}`), text };
 }
+
+/** A personal email Iisha writes from her dashboard: plain text in, branded email out (signature added). */
+export function renderPersonal(subject: string, body: string) {
+  const linkify = (s: string) => s.replace(/(https?:\/\/[^\s<]+)/g, (u) => `<a href="${u}" style="color:${AMETHYST};font-weight:bold;">${u}</a>`);
+  const paras = body
+    .trim()
+    .split(/\n{2,}/)
+    .map((p) => `<p style="margin:0 0 16px;">${linkify(esc(p)).replace(/\n/g, "<br>")}</p>`)
+    .join("");
+  const inner = `<tr><td style="padding:34px 32px 10px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;color:#3a2a3e;">
+${paras}
+<p style="margin:22px 0 6px;">With love,</p>
+<p style="margin:0 0 24px;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:${PLUM};">Iisha C. Silver</p>
+</td></tr>`;
+  const text = `${body.trim()}\n\nWith love,\nIisha C. Silver\nI.C. Beauty · ${business.phone} · ${SITE_URL.replace(/^https?:\/\//, "")}`;
+  return { html: shell(inner, body.trim().split("\n")[0].slice(0, 120)), text, subject };
+}

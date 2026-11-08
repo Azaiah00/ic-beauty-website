@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
-  LogOut, Download, Search, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
+  LogOut, Download, Search, FolderOpen, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS, formNames } from "@/lib/server/forms";
@@ -15,6 +15,10 @@ import { links } from "@/lib/site";
 import { Suspense } from "react";
 import { ICMark } from "@/components/brand/ICMark";
 import { MobileMenu } from "./MobileMenu";
+import { DeliverablesView } from "./Deliverables";
+import { EmailComposer, type Template } from "./EmailComposer";
+import { emailMode } from "@/lib/server/email";
+import { SITE_URL, business } from "@/lib/site";
 import { Avatar, Ring, AreaChart, DotBar, Bars, TZ } from "./ui";
 
 export const metadata: Metadata = { title: "Owner dashboard", robots: { index: false, follow: false } };
@@ -47,6 +51,28 @@ function statusTone(s: string) {
   return "bg-brass-soft/35 text-plum-900";
 }
 
+function templatesFor(s: Submission): Template[] {
+  const first = (s.name.split(/\s+/)[0] || "there").replace(/^\w/, (c) => c.toUpperCase());
+  const book = `${SITE_URL}/book`;
+  const checklist = `${SITE_URL}${funnel.leadMagnet.file}`;
+  const reach = `Just reply to this email, or call or text me at ${business.phone}.`;
+  const followUp: Record<string, string> = {
+    "pilot-application": `Hi ${first},\n\nThank you so much for applying for the founding group of ${funnel.pilot.name}. I read your application and I'd love to talk with you about it.\n\nWhen is a good time for a quick call this week? ${reach}`,
+    "hair-love-optin": `Hi ${first},\n\nThank you for grabbing my Hair Health Red Flags checklist! How did it go? If anything you checked surprised you, I'd love to hear about it.\n\nWhen you're ready, you can book a free 15-minute discovery call here: ${book}\n\n${reach}`,
+    "scalp-check": `Hi ${first},\n\nThank you for taking my Scalp Self-Check.${s.data.profile ? ` Your result was "${s.data.profile}".` : ""} I'd love to walk you through what that means for you on a free 15-minute discovery call: ${book}\n\n${reach}`,
+    "circle-join": `Hi ${first},\n\nThank you for joining the founding list for The H.A.I.R. Circle! You'll be the first to know when doors open, along with your founding-member price.\n\nIn the meantime, ${reach.toLowerCase()}`,
+  };
+  const t: Template[] = [
+    { key: "follow", label: "Thank you + follow-up", subject: `Thank you, ${first}`, body: followUp[s.form] ?? `Hi ${first},\n\nThank you for reaching out! I'd love to help.\n\n${reach}` },
+    { key: "call", label: "Book a discovery call", subject: "Let's talk about your hair", body: `Hi ${first},\n\nI'd love to hear your story and tell you honestly what I see. Book your free 15-minute discovery call here: ${book}\n\nIf none of the times work, reply with what's best for you and I'll make it happen.` },
+    { key: "checklist", label: "Send the checklist again", subject: "Your Hair Health Red Flags checklist", body: `Hi ${first},\n\nHere's your Hair Health Red Flags checklist again: ${checklist}\n\nSet aside five quiet minutes and go through it honestly. ${reach}` },
+  ];
+  if (s.form === "pilot-application")
+    t.push({ key: "accepted", label: "Accepted to the 30-day program", subject: `You're in, ${first}!`, body: `Hi ${first},\n\nCongratulations, you've been accepted into the founding group of ${funnel.pilot.name}!\n\nI'm so excited to take this journey with you. Next, I'll send your enrollment details and everything you need to get ready for ${funnel.pilot.when}.\n\nIf you have any questions before then, ${reach.toLowerCase()}` });
+  t.push({ key: "blank", label: "Blank email", subject: "", body: `Hi ${first},\n\n` });
+  return t;
+}
+
 const card = "rounded-[1.4rem] bg-white shadow-[0_1px_2px_rgba(36,19,42,0.05),0_18px_40px_-28px_rgba(36,19,42,0.35)]";
 const chip = "inline-flex min-h-10 items-center gap-2 rounded-full border border-plum-800/15 bg-white px-4 text-[0.86rem] text-plum-900 transition hover:border-amethyst hover:text-amethyst";
 
@@ -65,7 +91,7 @@ function Contact({ s }: { s: Submission }) {
   );
 }
 
-function Person({ s, back, showForm }: { s: Submission; back: string; showForm: boolean }) {
+function Person({ s, back, showForm, connected }: { s: Submission; back: string; showForm: boolean; connected: boolean }) {
   const def = FORMS[s.form];
   const Icon = ICONS[s.form] ?? Inbox;
   const fields = Object.entries(s.data).filter(([k, v]) => v && !HIDE.has(k));
@@ -93,6 +119,11 @@ function Person({ s, back, showForm }: { s: Submission; back: string; showForm: 
         <div className="border-t border-plum-800/8 px-4 pb-5 pt-4 sm:px-5">
           <span className={`mb-3 inline-block rounded-full px-3 py-1 text-[0.7rem] font-medium uppercase tracking-[0.1em] sm:hidden ${statusTone(s.status)}`}>{s.status}</span>
           <Contact s={s} />
+          {s.email && (
+            <div className="mt-3">
+              <EmailComposer form={s.form} id={s.id} to={s.email} back={back} templates={templatesFor(s)} connected={connected} canMarkContacted={s.status === "New" && !!FORMS[s.form]?.statuses.includes("Contacted")} />
+            </div>
+          )}
           <p className="mt-3 break-all text-[0.86rem] text-plum-700">
             {s.email}
             {s.phone && ` · ${s.phone}`}
@@ -139,9 +170,10 @@ function Person({ s, back, showForm }: { s: Submission; back: string; showForm: 
   );
 }
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ form?: string; q?: string }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ form?: string; q?: string; view?: string; msg?: string; sent?: string }> }) {
   if (!(await isAdmin())) redirect("/admin/login");
-  const { form: rawForm, q: rawQ } = await searchParams;
+  const { form: rawForm, q: rawQ, view, msg, sent } = await searchParams;
+  const files = view === "files";
   const form = rawForm && FORMS[rawForm] ? rawForm : "";
   const q = (rawQ ?? "").trim().toLowerCase();
 
@@ -190,15 +222,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const portrait = img("iisha-portrait");
   const ready = {
     saving: backend().kind === "blobs",
-    email: !!process.env.RESEND_API_KEY,
+    email: emailMode() !== "off",
     square: !!process.env.SQUARE_ACCESS_TOKEN,
   };
 
   const NavItem = ({ f, text, n }: { f: string; text: string; n?: number }) => {
-    const Icon = f ? ICONS[f] ?? Inbox : LayoutDashboard;
-    const active = form === f;
+    const Icon = f === "__files" ? FolderOpen : f ? ICONS[f] ?? Inbox : LayoutDashboard;
+    const active = f === "__files" ? files : !files && form === f;
     return (
-      <Link href={f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
+      <Link href={f === "__files" ? "/admin?view=files" : f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
         <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.6} aria-hidden="true" />
         <span className="flex-1 truncate">{text}</span>
         {n ? <span className={`rounded-full px-2 text-[0.7rem] tabular-nums ${active ? "bg-bone/25" : "bg-white/10"}`}>{n}</span> : null}
@@ -238,11 +270,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </div>
           <div className="relative z-10 px-4 pb-3 lg:hidden">
             <Suspense>
-              <MobileMenu current={form} items={[{ form: "", label: "Overview" }, ...formNames.map((f) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh }))]} />
+              <MobileMenu current={files ? "__files" : form} items={[{ form: "", label: "Overview" }, { form: "__files", label: "Deliverables" }, ...formNames.map((f) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh }))]} />
             </Suspense>
           </div>
           <nav aria-label="Dashboard" className="hidden lg:mt-6 lg:flex lg:flex-col lg:gap-1 [@media(min-width:1024px)_and_(max-height:860px)]:mt-3">
             <NavItem f="" text="Overview" />
+            <NavItem f="__files" text="Deliverables" />
             <p className="mt-4 hidden px-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40 lg:block [@media(min-width:1024px)_and_(max-height:860px)]:mt-2">Your people</p>
             {formNames.map((f) => <NavItem key={f} f={f} text={FORMS[f].tab} n={counts[f].total} />)}
           </nav>
@@ -258,12 +291,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <main className="min-w-0 px-4 pb-16 pt-4 lg:px-2 lg:pt-2">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{form ? FORMS[form].label : `${greet}, Iisha`}</h1>
+              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{files ? "Deliverables" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
               <p className="text-[0.9rem] text-plum-700">
-                {form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
+                {files ? "Your files from Couture House, plus anything you upload" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className={`items-center gap-2 ${files ? "hidden" : "flex"}`}>
               <form className={`flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white px-4 sm:w-72 sm:flex-none ${card}`} role="search">
                 {form && <input type="hidden" name="form" value={form} />}
                 <Search className="h-4 w-4 shrink-0 text-plum-700" aria-hidden="true" />
@@ -275,7 +308,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             </div>
           </div>
 
-          {!form && !q && (
+          {sent && (
+            <p role="status" className={`mt-5 flex items-start gap-2 rounded-2xl px-4 py-3 text-[0.9rem] ${sent === "ok" ? "bg-[#e3efe8] text-[#24603f]" : "bg-[#f8e6e1] text-[#8a3a26]"}`}>
+              {sent === "ok" ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />}
+              {{ ok: "Sent from your Gmail. You'll find it in your Sent folder.", notconnected: "Not sent: your Gmail isn't connected yet.", failed: "Not sent: Gmail didn't accept it. Check the app password in Netlify.", empty: "Add a subject and a message first.", missing: "That person couldn't be found." }[sent] ?? "Done."}
+            </p>
+          )}
+          {files && <DeliverablesView msg={msg} />}
+
+          {!files && !form && !q && (
             <>
               <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Totals">
                 <Kpi f="pilot-application" tone="plum" title="30-Day applications" value={counts["pilot-application"].total} sub={`${counts["pilot-application"].fresh} waiting on you`} ring={pilot.length ? pilotFollowed / pilot.length : 0} ringLabel={`${pilot.length ? Math.round((pilotFollowed / pilot.length) * 100) : 0}%`} />
@@ -384,10 +425,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             </>
           )}
 
-          {rows.length === 0 ? (
+          {files ? null : rows.length === 0 ? (
             <p className={`${card} mt-4 p-6 text-plum-700`}>{q ? "No one matches that search." : "No one here yet. They'll appear the moment someone fills out the form."}</p>
           ) : (
-            <ul className="mt-4 space-y-3">{rows.map((s) => <Person key={s.id} s={s} back={back} showForm={!form} />)}</ul>
+            <ul className="mt-4 space-y-3">{rows.map((s) => <Person key={s.id} s={s} back={back} showForm={!form} connected={emailMode() !== "off"} />)}</ul>
           )}
         </main>
 
@@ -422,7 +463,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             <ul className="mt-3 space-y-2.5 text-[0.86rem]">
               {[
                 { ok: ready.saving, t: "Sign-ups saving", off: "Preview storage" },
-                { ok: ready.email, t: "Confirmation & alert emails", off: "Emails not set up yet" },
+                { ok: ready.email, t: emailMode() === "gmail" ? "Emails sending from your Gmail" : "Confirmation & alert emails", off: "Gmail not connected yet" },
                 { ok: ready.square, t: "Adding people to Square", off: "Square not connected yet" },
               ].map((r) => (
                 <li key={r.t} className="flex items-start gap-2.5">
