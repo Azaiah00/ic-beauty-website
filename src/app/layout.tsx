@@ -4,6 +4,7 @@ import { cormorant, jost } from "./fonts";
 import { SITE_URL, business } from "@/lib/site";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { DemoBar } from "@/components/demo/DemoBar";
+import { getHours } from "@/lib/server/squareLive";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, businessNode, personNode, websiteNode, methodNode } from "@/lib/schema";
 
@@ -57,14 +58,15 @@ export const viewport: Viewport = {
 /** Runs before paint: enables motion styles only when JS + motion are OK; safety net un-hides content if hydration stalls. */
 const motionBoot = `(function(){try{var d=document.documentElement;if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion');setTimeout(function(){if(!window.__icbReady)d.classList.remove('js-motion')},3500)}}catch(e){}})();`;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { hours } = await getHours();
   return (
     <html lang="en-US" className={`${cormorant.variable} ${jost.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: motionBoot }} />
       </head>
       <body className="min-h-dvh bg-bone">
-        <JsonLd data={graph(businessNode(), personNode(), websiteNode(), methodNode())} />
+        <JsonLd data={graph(businessNode(hours), personNode(), websiteNode(), methodNode())} />
         {children}
         <SmoothScroll />
         <DemoBar />

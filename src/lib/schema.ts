@@ -22,7 +22,8 @@ const dayMap: Record<string, string> = {
 
 const sameAs = [links.instagram, links.facebook, links.youtube, links.tiktok];
 
-export function businessNode() {
+/** `hours` = live Square hours when connected (see src/lib/server/squareLive.ts), else the site file. */
+export function businessNode(hours: readonly { day: string; open: string | null; close: string | null }[] = business.hours) {
   return {
     "@type": ["HairSalon", "HealthAndBeautyBusiness"],
     "@id": ids.business,
@@ -47,7 +48,7 @@ export function businessNode() {
     },
     geo: { "@type": "GeoCoordinates", latitude: business.geo.lat, longitude: business.geo.lng },
     hasMap: business.mapsUrl,
-    openingHoursSpecification: business.hours
+    openingHoursSpecification: hours
       .filter((h) => h.open)
       .map((h) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: dayMap[h.day], opens: h.open, closes: h.close })),
     areaServed: business.areaServed.map((a) => ({ "@type": a.startsWith("Virtual") ? "Place" : "City", name: a })),

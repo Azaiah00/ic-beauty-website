@@ -15,6 +15,7 @@ import { clientOffers, familyClasses, askYourself, faqs, pillars } from "@/lib/c
 import { bookHref, business } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb, faqNode, serviceNode } from "@/lib/schema";
+import { getServices, groupServices } from "@/lib/server/squareLive";
 
 export const metadata: Metadata = {
   title: "Hair Loss Recovery & Scalp Analysis in Richmond, VA",
@@ -25,7 +26,8 @@ export const metadata: Metadata = {
 
 const redFlags = ["Sudden or patchy hair loss", "Smooth, shiny, or scarred skin where hair used to grow", "Pain, burning, or open sores on the scalp", "Crusting, pus, or spreading redness"];
 
-export default function ClientProgramsPage() {
+export default async function ClientProgramsPage() {
+  const menu = groupServices(await getServices());
   const recoveryFaq = faqs[0].items;
   return (
     <>
@@ -150,6 +152,36 @@ export default function ClientProgramsPage() {
           <p className="mt-6 flex items-center gap-2 text-[0.92rem] text-plum-700"><Clock className="h-4 w-4 text-amethyst" aria-hidden="true" strokeWidth={1.5} />{business.bookingNote}</p>
         </div>
       </section>
+
+      {/* Live service menu: names, prices and lengths come straight from Iisha's Square (hidden until Square is connected). */}
+      {menu.length > 0 && (
+        <section id="menu" className="scroll-mt-24 bg-bone py-24 sm:py-32" aria-labelledby="menu-title">
+          <div className="container-x">
+            <SectionHead id="menu-title" eyebrow="Services & prices" title={<>The service menu, <span className="italic-accent text-amethyst">always current.</span></>} lede="Every service you can book with Iisha, with today's prices and appointment lengths. New here? Start with a complimentary discovery call first." />
+            <div className="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-x-16">
+              {menu.map((g) => (
+                <div key={g.category} data-reveal="fade">
+                  <h3 className="eyebrow text-brass-deep">{g.category}</h3>
+                  <ul className="mt-4 divide-y divide-plum-800/10 border-y border-plum-800/10">
+                    {g.items.map((sv) => (
+                      <li key={sv.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-1 py-5">
+                        <p className="font-display text-[1.45rem] leading-snug text-plum-900">{sv.name}</p>
+                        <p className="text-right font-display text-[1.45rem] leading-snug text-plum-900">{sv.price}</p>
+                        {sv.description ? <p className="line-clamp-2 text-[0.9rem] text-plum-700">{sv.description}</p> : <span />}
+                        <p className="text-right text-[0.82rem] uppercase tracking-[0.12em] text-plum-700">{sv.duration}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="mt-12 flex flex-wrap items-center gap-4" data-reveal>
+              <Btn href="/book?service=all">Book a service</Btn>
+              <Btn href={bookHref} variant="text">New client? Request a complimentary discovery call</Btn>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Growth cycle */}
       <section className="bg-mist py-24 sm:py-32" aria-labelledby="cycle-title">

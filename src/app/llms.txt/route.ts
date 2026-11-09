@@ -1,12 +1,14 @@
 import { SITE_URL, business, METHOD_DEFINITION, DISCLAIMER } from "@/lib/site";
 import { articles } from "@/lib/articles";
 import { faqs } from "@/lib/content";
+import { getHours } from "@/lib/server/squareLive";
 
-export const dynamic = "force-static";
+export const revalidate = 900;
 
 /** llms.txt (llmstxt.org) — a clean, factual brief for AI agents. Hygiene, not a ranking lever. */
-export function GET() {
-  const hrs = business.hours.map((h) => `${h.day}: ${h.open ? `${h.open}–${h.close}` : "Closed"}`).join("; ");
+export async function GET() {
+  const { hours } = await getHours();
+  const hrs = hours.map((h) => `${h.day}: ${h.open ? `${h.open}–${h.close}` : "Closed"}`).join("; ");
   const body = `# I.C. Beauty — Iisha C. Silver
 
 > I.C. Beauty LLC is a scalp wellness and hair recovery practice in Henrico (Richmond), Virginia, led by Iisha C. Silver, Hair Wellness Coach, Educator, and creator of The H.A.I.R. Wellness Method™. It serves women interested in hair wellness, prevention, and maintenance, as well as those experiencing hair loss, thinning, shedding, or scalp concerns. Tagline: "Where hair, health & education connect."

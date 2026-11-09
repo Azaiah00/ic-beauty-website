@@ -15,6 +15,7 @@ import { pillars, homeAskYourself, hubItems, faqs, testimonialsPlaceholder } fro
 import { articles } from "@/lib/articles";
 import { business, bookHref, formatHour, METHOD_DEFINITION } from "@/lib/site";
 import { funnel } from "@/lib/funnel";
+import { getHours } from "@/lib/server/squareLive";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, faqNode } from "@/lib/schema";
 
@@ -62,7 +63,8 @@ const arms = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { hours } = await getHours();
   const homeFaqs = faqs[0].items.slice(0, 4).concat(faqs[1].items.slice(0, 1));
   const featured = hubItems.filter((h) => ["Radiance Rewired", "Hair Health Checklist", "It's a WIN WIN Membership"].includes(h.name));
   return (
@@ -341,7 +343,7 @@ export default function HomePage() {
               <p className="mt-4 font-display text-[1.9rem] leading-tight">{business.address.street}<br />{business.address.city}, VA {business.address.postalCode}</p>
               <p className="mt-2 text-[0.9rem] text-lilac">Richmond&apos;s West End, minutes from Short Pump and Glen Allen.</p>
               <dl className="mt-7 space-y-1 text-[0.92rem]">
-                {business.hours.map((h) => (
+                {hours.map((h) => (
                   <div key={h.day} className="flex justify-between border-b border-lilac/10 py-2">
                     <dt className="text-lilac">{h.day}</dt>
                     <dd>{h.open ? `${formatHour(h.open)} – ${formatHour(h.close)}` : "Closed"}</dd>

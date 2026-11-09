@@ -3,9 +3,11 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { InstagramIcon as Instagram, FacebookIcon as Facebook, YoutubeIcon as Youtube, TikTokIcon } from "@/components/ui/SocialIcons";
 import { business, links, nav, formatHour, DISCLAIMER, bookHref } from "@/lib/site";
 import { ICMark } from "@/components/brand/ICMark";
+import { getHours } from "@/lib/server/squareLive";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
-export function Footer() {
+export async function Footer() {
+  const { hours } = await getHours();
   const year = new Date().getFullYear();
   const socials = [
     { href: links.instagram, label: "Instagram", Icon: Instagram },
@@ -79,7 +81,7 @@ export function Footer() {
               </a>
             </address>
             <dl className="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[0.85rem]">
-              {business.hours.map((h) => (
+              {hours.map((h) => (
                 <div key={h.day} className="contents">
                   <dt className="text-lilac/75">{h.short}</dt>
                   <dd className="text-bone/85">{h.open ? `${formatHour(h.open)} – ${formatHour(h.close)}` : "Closed"}</dd>

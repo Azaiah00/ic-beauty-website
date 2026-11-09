@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { business, formatHour } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
+import { getHours } from "@/lib/server/squareLive";
 
 export const metadata: Metadata = {
   title: "Contact I.C. Beauty in Henrico, VA",
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { hours } = await getHours();
   return (
     <>
       <JsonLd data={graph(breadcrumb([{ name: "Contact", path: "/contact" }]), { "@type": "ContactPage", name: "Contact I.C. Beauty" })} />
@@ -29,7 +31,7 @@ export default function ContactPage() {
             <div className="rounded-card bg-plum-950 p-7 text-bone">
               <p className="eyebrow flex items-center gap-2 text-brass-soft"><Clock className="h-4 w-4" aria-hidden="true" />Hours of operation</p>
               <dl className="mt-4 space-y-1.5 text-[0.95rem]">
-                {business.hours.map((h) => (
+                {hours.map((h) => (
                   <div key={h.day} className="flex justify-between border-b border-lilac/10 py-1.5"><dt className="text-lilac/70">{h.day}</dt><dd>{h.open ? `${formatHour(h.open)} – ${formatHour(h.close)}` : "Closed"}</dd></div>
                 ))}
               </dl>

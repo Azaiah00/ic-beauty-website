@@ -18,6 +18,7 @@ import { MobileMenu } from "./MobileMenu";
 import { DeliverablesView } from "./Deliverables";
 import { EmailComposer, type Template } from "./EmailComposer";
 import { emailMode } from "@/lib/server/email";
+import { getHours, getServices } from "@/lib/server/squareLive";
 import { SITE_URL, business } from "@/lib/site";
 import { Avatar, Ring, AreaChart, DotBar, Bars, TZ } from "./ui";
 
@@ -225,6 +226,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     email: emailMode() !== "off",
     square: !!process.env.SQUARE_ACCESS_TOKEN,
   };
+  const [live, liveServices] = files ? [null, []] : await Promise.all([getHours(), getServices()]);
 
   const NavItem = ({ f, text, n }: { f: string; text: string; n?: number }) => {
     const Icon = f === "__files" ? FolderOpen : f ? ICONS[f] ?? Inbox : LayoutDashboard;
@@ -314,6 +316,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               {{ ok: "Sent from your Gmail. You'll find it in your Sent folder.", notconnected: "Not sent: your Gmail isn't connected yet.", failed: "Not sent: Gmail didn't accept it. Check the app password in Netlify.", empty: "Add a subject and a message first.", missing: "That person couldn't be found." }[sent] ?? "Done."}
             </p>
           )}
+          {!files && msg && (
+            <p role="status" className="mt-5 flex items-start gap-2 rounded-2xl bg-[#e3efe8] px-4 py-3 text-[0.9rem] text-[#24603f]">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              {msg}
+            </p>
+          )}
           {files && <DeliverablesView msg={msg} />}
 
           {!files && !form && !q && (
@@ -325,6 +333,27 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 <Kpi f="circle-join" tone="light" title="Circle founding list" value={counts["circle-join"].total} sub="H.A.I.R. Circle" ring={counts["circle-join"].total ? 1 : 0} ringLabel={`${counts["circle-join"].total}`} />
               </section>
               <p className="mt-2 text-[0.75rem] text-plum-700/80">Rings show how many you&apos;ve already followed up with.</p>
+
+              <section className={`${card} mt-5 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6`} aria-label="Hours, services and prices">
+                <div className="flex min-w-0 items-start gap-3">
+                  {live?.live ? <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-[#2f6b4f]" aria-hidden="true" /> : <AlertTriangle className="mt-1 h-5 w-5 shrink-0 text-brass-deep" aria-hidden="true" />}
+                  <div className="min-w-0">
+                    <h2 className="font-display text-[1.3rem] leading-tight text-plum-900">Hours, services &amp; prices</h2>
+                    <p className="text-[0.88rem] text-plum-700">
+                      {live?.live
+                        ? `Coming from your Square account: your hours${liveServices.length ? ` and ${liveServices.length} bookable service${liveServices.length === 1 ? "" : "s"}` : ""}. Change them in Square and the website follows.`
+                        : ready.square
+                          ? "Square is connected, but no business hours came through. Check Square → Settings → Locations → Business hours."
+                          : "Not linked to Square yet. The website shows the hours saved with it until Square is connected."}
+                    </p>
+                  </div>
+                </div>
+                {ready.square && (
+                  <form method="post" action="/api/admin/square-refresh" className="shrink-0">
+                    <button className="inline-flex min-h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-plum-900 px-5 text-[0.74rem] font-medium uppercase tracking-[0.12em] text-bone transition hover:bg-amethyst sm:w-auto">Refresh from Square</button>
+                  </form>
+                )}
+              </section>
 
               <section className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
                 <div className={`${card} p-5 sm:p-6`}>
@@ -465,6 +494,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 { ok: ready.saving, t: "Sign-ups saving", off: "Preview storage" },
                 { ok: ready.email, t: emailMode() === "gmail" ? "Emails sending from your Gmail" : "Confirmation & alert emails", off: "Gmail not connected yet" },
                 { ok: ready.square, t: "Adding people to Square", off: "Square not connected yet" },
+                { ok: !!live?.live, t: "Hours & prices from Square", off: "Hours saved on the site" },
               ].map((r) => (
                 <li key={r.t} className="flex items-start gap-2.5">
                   {r.ok ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#2f6b4f]" aria-hidden="true" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-brass-deep" aria-hidden="true" />}
