@@ -17,8 +17,8 @@ const QUESTIONS: Q[] = [
     options: [
       { label: "I'm noticing changes in my own hair or scalp", tags: ["client"] },
       { label: "I want to prevent problems before they start", tags: ["client", "prevent"] },
-      { label: "I'm a stylist and want to serve my clients better", tags: ["stylist"] },
-      { label: "I'm planning an event for my organization", tags: ["org"] },
+      // Stylist and organization paths are paused until Professional Education and Speaking relaunch (2026-11-08).
+      // To restore: add them back here as options 3 and 4; the routing and result screens below still exist.
     ],
   },
   {
@@ -96,14 +96,14 @@ const PROFILES: Record<string, Profile> = {
     name: "Tension Signals",
     headline: "Your answers point to tension. Your edges are asking for a break.",
     body: "Styles that pull, combined with changes at the hairline, are one of the most common patterns Iisha sees. The earlier you change course, the more options you have.",
-    next: ["Loosen up: if a style hurts while it's installed, ask your stylist to stop and redo it.", "Give your hairline regular breaks between long-wear styles.", "Book a discovery call so Iisha can look at your hairline under magnification."],
+    next: ["Loosen up: if a style hurts while it's installed, ask your stylist to stop and redo it.", "Give your hairline regular breaks between long-wear styles.", "Request a complimentary discovery call so Iisha can look at your hairline under magnification."],
   },
   inside: {
     key: "inside",
     name: "Inside-Out Signals",
     headline: "Your answers point inward. Your hair may be reflecting what your body is going through.",
     body: "Stress, life changes, digestion, and nutrition can all show up as shedding or overall thinning, often months after the trigger. This is exactly why the H.A.I.R. Method starts with your whole history.",
-    next: ["Write down when the shedding started and what was happening a few months before it.", "Read 'Can gut health and nutrition affect your hair?' in the Library.", "Book a discovery call to map your history and decide if a full analysis makes sense."],
+    next: ["Write down when the shedding started and what was happening a few months before it.", "Read 'Can gut health and nutrition affect your hair?' in the Library.", "Request a complimentary discovery call to map your history and decide if a full analysis makes sense."],
   },
   scalp: {
     key: "scalp",
@@ -273,7 +273,7 @@ export function ScalpCheck() {
                 ))}
               </ol>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={`/book?profile=${encodeURIComponent(result.profile.name)}`} className="rounded-pill bg-bone px-6 py-3.5 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-plum-900 hover:bg-white">Book my free discovery call</Link>
+                <Link href={`/book?profile=${encodeURIComponent(result.profile.name)}`} className="rounded-pill bg-bone px-6 py-3.5 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-plum-900 hover:bg-white">Request a complimentary discovery call</Link>
                 <button onClick={restart} className="inline-flex items-center gap-2 rounded-pill border border-lilac/30 px-6 py-3.5 text-lilac hover:text-bone"><RotateCcw className="h-4 w-4" aria-hidden="true" />Retake</button>
               </div>
               <p className="mt-6 text-[0.78rem] text-lilac/75">This self-check is educational. It is not a diagnosis or medical advice.</p>

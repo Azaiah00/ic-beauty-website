@@ -7,11 +7,11 @@ import { img } from "@/lib/images";
 export function CTABand({
   title = (
     <>
-      The sooner you start, <span className="italic-accent text-brass-soft">the sooner you heal.</span>
+      Your hair has a story. <span className="italic-accent text-brass-soft">Let&apos;s read it together.</span>
     </>
   ),
-  body = "Book your complimentary 15-minute discovery call. A compassionate, no-pressure conversation, because you don't have to do this alone.",
-  primary = { label: "Book my free discovery call", href: bookHref },
+  body = "Request your complimentary 15-minute discovery call. Share a few details and Iisha will personally reach out to schedule a compassionate, no-pressure conversation.",
+  primary = { label: "Request a complimentary discovery call", href: bookHref },
   secondary = { label: "Take the Scalp Self-Check", href: "/scalp-check" },
   image = "studio",
 }: {

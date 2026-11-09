@@ -11,9 +11,10 @@ import { CTABand } from "@/components/sections/CTABand";
 import { FAQList } from "@/components/sections/FAQList";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { Needs } from "@/components/ui/Needs";
-import { pillars, askYourself, hubItems, faqs, testimonialsPlaceholder } from "@/lib/content";
+import { pillars, homeAskYourself, hubItems, faqs, testimonialsPlaceholder } from "@/lib/content";
 import { articles } from "@/lib/articles";
 import { business, bookHref, formatHour, METHOD_DEFINITION } from "@/lib/site";
+import { funnel } from "@/lib/funnel";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, faqNode } from "@/lib/schema";
 
@@ -21,36 +22,43 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+/**
+ * Three ways into the H.A.I.R. Wellness Method. Professional Education and Speaking cards were
+ * replaced at Iisha's request (2026-11-08); those pages relaunch later.
+ */
 const arms = [
   {
     n: "I",
     title: "Client Programs",
-    sub: "Personalized hair wellness & self-care education",
-    body: "Thinning, shedding, tender edges, an unhappy scalp. Begin with a complimentary discovery call, then a microscopic scalp analysis and a plan built from the inside out.",
+    sub: "Personalized hair wellness & scalp care",
+    body: "For healthy hair you want to keep healthy, and for thinning, shedding or an unhappy scalp. Begin with a complimentary discovery call, then a microscopic scalp analysis and a plan built from the inside out.",
     href: "/client-programs",
     cta: "Explore client programs",
     image: "scalp-ritual",
     alt: "A client relaxing during a scalp care ritual at the shampoo bowl",
+    position: undefined as string | undefined,
   },
   {
     n: "II",
-    title: "Professional Education",
-    sub: "For stylists ready to elevate the chair",
-    body: "Mastering the Consultation, Color with Confidence, and the H.A.I.R. Method for stylists. Turn your consultations into currency.",
-    href: "/professional-education",
-    cta: "See classes for stylists",
-    image: "classroom",
-    alt: "Stylists practicing sectioning on natural hair during a class",
+    title: "The 30-Day Program",
+    sub: `${funnel.pilot.format} · Pilot ${funnel.pilot.when}`,
+    body: `${funnel.pilot.name} Four weeks, four phases, and one new relationship with your hair. Founding seats are open now.`,
+    href: "/hair-love/30-days",
+    cta: "See the 30-day program",
+    image: "funnel-community",
+    alt: "A woman smiling as she joins a live virtual hair wellness class from home",
+    position: "22% 50%",
   },
   {
     n: "III",
-    title: "Speaking & Workshops",
-    sub: "Organizations, HBCUs & professional audiences",
-    body: "Keynotes and hands-on workshops that make hair a wellness conversation and leave your audience with healthy awareness.",
-    href: "/speaking",
-    cta: "Book Iisha to speak",
-    image: "speaker",
-    alt: "An engaged audience at a hair wellness talk",
+    title: "Learn & The Hub",
+    sub: "Free education, guides & tools",
+    body: "The Hair Wellness Library, the free Hair Health Red Flags checklist, Iisha's guides, and curated tools, so you keep learning and caring for your hair between visits.",
+    href: "/learn",
+    cta: "Start learning",
+    image: "funnel-routine",
+    alt: "Hands gently combing through natural hair during an at-home hair care routine",
+    position: "70% 45%",
   },
 ];
 
@@ -68,16 +76,16 @@ export default function HomePage() {
           <div className="lg:col-span-6">
             <p className="eyebrow flex items-center gap-4 text-amethyst rise" style={{ ["--d" as string]: 1 }}>
               <span className="h-px w-10 bg-brass" aria-hidden="true" />
-              Hair loss & scalp wellness · Richmond, VA
+              <span>Scalp Wellness &amp; Recovery<br />Richmond, Virginia</span>
             </p>
             <h1 className="mt-7 text-[clamp(3.1rem,1.7rem+4.6vw,6.4rem)] leading-[0.98] text-plum-900 rise" style={{ ["--d" as string]: 2 }}>
               Where hair, health <span className="italic-accent text-amethyst">&amp; education</span> connect.
             </h1>
             <p className="mt-8 max-w-xl text-lede text-plum-700 rise" style={{ ["--d" as string]: 3 }}>
-              I&apos;m Iisha C. Silver, hair and scalp specialist, educator, and creator of <span className="text-plum-900">The H.A.I.R. Wellness Method™</span>. I help you understand what your scalp has been trying to tell you, then teach you to care for it with confidence.
+              I&apos;m Iisha C. Silver, Hair Wellness Coach, Educator, and creator of <span className="text-plum-900">the H.A.I.R. Wellness Method™</span>. I help you understand what your scalp has been trying to tell you and confidently care for your hair.
             </p>
             <div className="mt-10 flex flex-wrap gap-3 rise" style={{ ["--d" as string]: 4 }}>
-              <Btn href={bookHref} size="lg">Book a free discovery call</Btn>
+              <Btn href={bookHref} size="lg">Request a complimentary discovery call</Btn>
               <Btn href="/scalp-check" variant="outline" size="lg">Take the Scalp Self-Check</Btn>
             </div>
             <dl className="mt-14 grid max-w-xl grid-cols-3 gap-6 border-t border-plum-800/10 pt-8 rise" style={{ ["--d" as string]: 5 }}>
@@ -87,7 +95,7 @@ export default function HomePage() {
                 ["In studio", "or virtual, anywhere"],
               ].map(([k, v]) => (
                 <div key={k}>
-                  <dt className="font-display text-[1.7rem] leading-none text-plum-900">{k}</dt>
+                  <dt className="font-display text-[1.3rem] leading-none text-plum-900 sm:text-[1.7rem]">{k}</dt>
                   <dd className="mt-2 text-[0.82rem] leading-snug text-plum-700">{v}</dd>
                 </div>
               ))}
@@ -97,7 +105,7 @@ export default function HomePage() {
             <div aria-hidden="true" className="arch absolute -right-4 top-6 -bottom-4 left-4 border border-brass/60" />
             <PhotoSlot
               src={img("iisha-portrait")}
-              alt="Iisha C. Silver, hair and scalp specialist and founder of I.C. Beauty, in her white coat in front of the I.C. Beauty logo"
+              alt="Iisha C. Silver, Hair Wellness Coach and founder of I.C. Beauty, in her white coat in front of the I.C. Beauty logo"
               label="Signature portrait of Iisha"
               shape="arch"
               ratio="aspect-[4/5]"
@@ -107,7 +115,7 @@ export default function HomePage() {
             />
             <div className="absolute -bottom-8 -left-2 max-w-[17rem] rounded-card bg-paper/95 p-5 shadow-[0_24px_60px_-30px_rgba(58,29,69,0.45)] backdrop-blur sm:-left-10 rise" style={{ ["--d" as string]: 6 }}>
               <p className="font-display text-[1.35rem] leading-tight text-plum-900">Iisha C. Silver</p>
-              <p className="mt-1 text-[0.8rem] leading-snug text-plum-700">Hair & Scalp Specialist · Educator · Speaker</p>
+              <p className="mt-1 text-[0.8rem] leading-snug text-plum-700">Hair Wellness Coach · Educator</p>
               <p className="mt-3 border-t border-plum-800/10 pt-3 text-[0.78rem] italic text-amethyst">Creator of The H.A.I.R. Wellness Method™</p>
             </div>
           </div>
@@ -131,13 +139,13 @@ export default function HomePage() {
           <div className="lg:col-span-6 lg:col-start-7">
             <SectionHead
               id="ask-title"
-              eyebrow="You're not alone"
-              title={<>Hair loss can feel like <span className="italic-accent text-amethyst">an emotional rollercoaster.</span></>}
-              lede="On the days my hair looked good, I felt good. When it starts thinning, it takes your confidence with it. With proper guidance, healing is possible."
+              eyebrow="Beyond the good hair day"
+              title={<>Your relationship with your hair deserves <span className="italic-accent text-amethyst">more than a good hair day.</span></>}
+              lede="Whether you want to keep healthy hair healthy, prevent problems before they start, or you're noticing shedding, thinning, or an unhappy scalp, your hair is telling you something. With the right guidance, you can understand it and care for it with confidence."
             />
             <p className="eyebrow mt-12 text-brass-deep" data-reveal>Ask yourself</p>
             <ul className="mt-4 divide-y divide-plum-800/10 border-y border-plum-800/10">
-              {askYourself.map((q) => (
+              {homeAskYourself.map((q) => (
                 <li key={q} className="flex gap-5 py-4" data-reveal>
                   <span className="mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-brass" aria-hidden="true" />
                   <p className="font-display text-[1.35rem] leading-snug text-plum-900">{q}</p>
@@ -145,8 +153,8 @@ export default function HomePage() {
               ))}
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-6" data-reveal>
-              <Btn href={bookHref}>Book your discovery call</Btn>
-              <Btn href="/client-programs" variant="text">How hair recovery works</Btn>
+              <Btn href={bookHref}>Request a complimentary discovery call</Btn>
+              <Btn href="/client-programs" variant="text">How client programs work</Btn>
             </div>
           </div>
         </div>
@@ -158,14 +166,14 @@ export default function HomePage() {
           <SectionHead
             id="paths-title"
             align="center"
-            eyebrow="One method · three paths"
-            title={<>The H.A.I.R. Wellness Method, <span className="italic-accent text-amethyst">for you, your chair, and your community.</span></>}
+            eyebrow="One signature method · three ways in"
+            title={<>The H.A.I.R. Wellness Method, <span className="italic-accent text-amethyst">in the studio, online, and at your own pace.</span></>}
             lede={METHOD_DEFINITION}
           />
           <div className="mt-20 grid gap-10 lg:grid-cols-3 lg:gap-8">
             {arms.map((a, i) => (
               <Link key={a.title} href={a.href} className={`group block ${i === 1 ? "lg:mt-16" : ""}`}>
-                <PhotoSlot src={img(a.image)} alt={a.alt} label={a.title} shape="arch" ratio="aspect-[4/5]" sizes="(min-width: 1024px) 30vw, 100vw" />
+                <PhotoSlot src={img(a.image)} alt={a.alt} label={a.title} shape="arch" ratio="aspect-[4/5]" position={a.position} sizes="(min-width: 1024px) 30vw, 100vw" />
                 <div className="mt-8" data-reveal>
                   <p className="font-display text-[1.1rem] italic text-brass-deep">{a.n}.</p>
                   <h3 className="mt-1 font-display text-[2.3rem] leading-tight text-plum-900 transition-colors group-hover:text-amethyst">{a.title}</h3>
@@ -191,7 +199,7 @@ export default function HomePage() {
               id="method-title"
               eyebrow="Signature method"
               title={<>Healthy <span className="italic-accent text-brass-soft">Awareness</span> Is Rare.</>}
-              lede="Your hair loss didn't happen overnight, and it won't regrow overnight. Four guided phases take you from questions to confident care."
+              lede="Healthy hair isn't luck, and it isn't one product. Four guided phases take you from questions to confident care, whether you're maintaining, preventing, or recovering."
             />
             <div data-reveal><Btn href="/the-hair-method" variant="outline-light">Explore the method</Btn></div>
           </div>
@@ -237,7 +245,7 @@ export default function HomePage() {
             <SectionHead
               id="proof-title"
               eyebrow="Resilience with receipts"
-              title={<>Recovery is a journey. <span className="italic-accent text-amethyst">Every step, documented.</span></>}
+              title={<>Hair wellness is a journey. <span className="italic-accent text-amethyst">Every step, documented.</span></>}
               lede="Progress photos at every check-in, shared only with permission, so you can see the change for yourself."
             />
             <div data-reveal><Needs>Client-consented progress photos</Needs></div>
@@ -245,7 +253,7 @@ export default function HomePage() {
           <div className="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
             {["Week 1", "Week 8", "Month 6", "Year 1"].map((w, wi) => (
               <div key={w}>
-                <PhotoSlot src={img(`progress-${wi + 1}`)} ratio="aspect-square" label={`Client progress, ${w}`} alt={`Client hair recovery progress, ${w}`} />
+                <PhotoSlot src={img(`progress-${wi + 1}`)} ratio="aspect-square" label={`Client progress, ${w}`} alt={`Client hair wellness progress, ${w}`} />
                 <p className="eyebrow mt-3 text-amethyst">{w}</p>
               </div>
             ))}

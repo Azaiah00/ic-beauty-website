@@ -30,7 +30,7 @@ export function businessNode() {
     legalName: business.legalName,
     slogan: "Where hair, health & education connect.",
     description:
-      "Holistic hair loss and scalp wellness practice in Henrico (Richmond), Virginia, led by Iisha C. Silver, creator of The H.A.I.R. Wellness Method. Hair recovery consultations, microscopic scalp analysis, stylist education, and speaking.",
+      "Scalp wellness and hair recovery practice in Henrico (Richmond), Virginia, led by Iisha C. Silver, Hair Wellness Coach, Educator, and creator of The H.A.I.R. Wellness Method. Hair wellness consultations, microscopic scalp analysis, personalized hair wellness programs, and hair wellness education.",
     url: SITE_URL,
     logo: `${SITE_URL}/brand/ic-mark-on-plum.png`,
     image: `${SITE_URL}/og.png`,
@@ -53,7 +53,7 @@ export function businessNode() {
     areaServed: business.areaServed.map((a) => ({ "@type": a.startsWith("Virtual") ? "Place" : "City", name: a })),
     founder: { "@id": ids.person },
     employee: { "@id": ids.person },
-    knowsAbout: ["Hair loss", "Scalp health", "Trichology", "Textured hair care", "Hair recovery", "Stylist education"],
+    knowsAbout: ["Hair wellness", "Scalp health", "Hair loss", "Trichology", "Textured hair care", "Hair recovery", "Hair wellness education"],
     sameAs,
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -64,7 +64,6 @@ export function businessNode() {
         { name: "Hair Recovery Program", desc: "Ongoing personalized plan with in-studio services, home care, and check-ins." },
         { name: "Virtual Hair Health Appointment", desc: "Hair-wellness guidance and regimen building by video." },
         { name: "Child Hair-Care Class", desc: "Hands-on natural hair care class for parents." },
-        { name: "Mastering the Consultation (stylist class)", desc: "Consultation, retention, and communication training for stylists." },
       ].map((s) => ({
         "@type": "Offer",
         ...(s.price ? { price: s.price, priceCurrency: "USD" } : {}),
@@ -83,7 +82,7 @@ export function personNode() {
     alternateName: "Iisha Silver",
     jobTitle: business.owner.title,
     description:
-      "Iisha C. Silver is a holistic hair recovery practitioner, service educator, and speaker in Richmond, Virginia, and the creator of The H.A.I.R. Wellness Method.",
+      "Iisha C. Silver is a Hair Wellness Coach and Educator in Richmond, Virginia, and the creator of The H.A.I.R. Wellness Method.",
     url: `${SITE_URL}/about`,
     image: `${SITE_URL}/og.png`,
     worksFor: { "@id": ids.business },

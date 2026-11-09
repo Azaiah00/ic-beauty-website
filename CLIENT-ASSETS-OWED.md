@@ -3,7 +3,9 @@
 Every item below shows on the site as a dashed **NEEDS…** marker until it's supplied. Find them all with `grep -rn "Needs\|NEEDS" src`.
 
 ## Must-have before launch
-- [ ] **More photos of Iisha.** We currently have one: the white-coat portrait, edited with her I.C. logo on the wall and the coat embroidery corrected to "Iisha Silver" (**confirm she approves the edit**). Still needed: a teaching shot, a speaking shot, a shot at the scalp microscope, and real studio photos to replace the hyper-realistic placeholders (see the README image table).
+- [ ] **New professional photos from Iisha's upcoming photoshoot** (her request, 2026-11-08). They replace the current homepage and page images; drop them into `/public/images` with the same file names and they swap in automatically.
+- [ ] **H.A.I.R. Method page language:** Iisha will revisit the detailed wording separately (2026-11-08). The page and its four-phase layout stay as they are until then.
+- [ ] **More photos of Iisha.** We currently have one: the white-coat portrait, edited with her I.C. logo on the wall and the coat embroidery corrected to "Iisha Silver" (**confirm she approves the edit**). Still needed: a teaching shot, a shot at the scalp microscope, and real studio photos to replace the hyper-realistic placeholders (see the README image table).
 - [ ] **Booking link** for the Phase 1 discovery call (Square Appointments or Calendly URL), to paste into `links.phase1Scheduler`.
 - [ ] **Prices** for the Phase 2 Full Hair & Scalp Consultation, the Hair Recovery Program, the Virtual Hair Health Appointment, the parent classes (Child Hair-Care, Shampooing & Flat Ironing, Shampooing & Twisting), Mastering the Consultation, and Color with Confidence.
 - [ ] **Real reviews:** 2–3 verbatim Google reviews (with permission), 1–2 stylist class testimonials, and 1 organizer quote.
@@ -17,8 +19,8 @@ Every item below shows on the site as a dashed **NEEDS…** marker until it's su
 
 ## Strongly recommended (trust + SEO)
 - [ ] Before/after **progress photos** (Week 1 / Week 8 / Month 6 / Year 1) with **signed photo consent**.
-- [ ] **Speaker one-sheet PDF** saved to `/public/iisha-silver-speaker-one-sheet.pdf`, plus logos of organizations she has spoken for.
-- [ ] A 60–90 second **sizzle reel** for the Speaking page.
+- [ ] (Paused with the Speaking page, 2026-11-08) **Speaker one-sheet PDF** saved to `/public/iisha-silver-speaker-one-sheet.pdf`, plus logos of organizations she has spoken for.
+- [ ] (Paused with the Speaking page) A 60–90 second **sizzle reel** for the Speaking page.
 - [ ] **Google Business Profile:** set the primary category to "Trichologist" if it's available, otherwise "Hair salon" with "Trichologist" as a secondary. Use NAP *exactly* as on the site and post weekly.
 - [ ] **Trademark:** run a USPTO search for "H.A.I.R. Wellness Method". The site uses ™ until it's registered.
 - [ ] Ask every recovery client for a Google review at their check-in (review velocity is how she beats local competitors).

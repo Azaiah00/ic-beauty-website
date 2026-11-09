@@ -58,13 +58,13 @@ function templatesFor(s: Submission): Template[] {
   const reach = `Just reply to this email, or call or text me at ${business.phone}.`;
   const followUp: Record<string, string> = {
     "pilot-application": `Hi ${first},\n\nThank you so much for applying for the founding group of ${funnel.pilot.name}. I read your application and I'd love to talk with you about it.\n\nWhen is a good time for a quick call this week? ${reach}`,
-    "hair-love-optin": `Hi ${first},\n\nThank you for grabbing my Hair Health Red Flags checklist! How did it go? If anything you checked surprised you, I'd love to hear about it.\n\nWhen you're ready, you can book a free 15-minute discovery call here: ${book}\n\n${reach}`,
-    "scalp-check": `Hi ${first},\n\nThank you for taking my Scalp Self-Check.${s.data.profile ? ` Your result was "${s.data.profile}".` : ""} I'd love to walk you through what that means for you on a free 15-minute discovery call: ${book}\n\n${reach}`,
+    "hair-love-optin": `Hi ${first},\n\nThank you for grabbing my Hair Health Red Flags checklist! How did it go? If anything you checked surprised you, I'd love to hear about it.\n\nWhen you're ready, you can request a complimentary 15-minute discovery call here and I'll personally reach out to schedule it: ${book}\n\n${reach}`,
+    "scalp-check": `Hi ${first},\n\nThank you for taking my Scalp Self-Check.${s.data.profile ? ` Your result was "${s.data.profile}".` : ""} I'd love to walk you through what that means for you on a complimentary 15-minute discovery call. Request it here and I'll reach out to schedule: ${book}\n\n${reach}`,
     "circle-join": `Hi ${first},\n\nThank you for joining the founding list for The H.A.I.R. Circle! You'll be the first to know when doors open, along with your founding-member price.\n\nIn the meantime, ${reach.toLowerCase()}`,
   };
   const t: Template[] = [
     { key: "follow", label: "Thank you + follow-up", subject: `Thank you, ${first}`, body: followUp[s.form] ?? `Hi ${first},\n\nThank you for reaching out! I'd love to help.\n\n${reach}` },
-    { key: "call", label: "Book a discovery call", subject: "Let's talk about your hair", body: `Hi ${first},\n\nI'd love to hear your story and tell you honestly what I see. Book your free 15-minute discovery call here: ${book}\n\nIf none of the times work, reply with what's best for you and I'll make it happen.` },
+    { key: "call", label: "Schedule a discovery call", subject: "Let's schedule your discovery call", body: `Hi ${first},\n\nThank you for reaching out. I'd love to hear your story and tell you honestly what I see. Here are a few times for your complimentary 15-minute discovery call:\n\n- [Day, date, time]\n- [Day, date, time]\n\nReply with the one that works best for you. If none of them fit, tell me what's better and I'll make it happen.` },
     { key: "checklist", label: "Send the checklist again", subject: "Your Hair Health Red Flags checklist", body: `Hi ${first},\n\nHere's your Hair Health Red Flags checklist again: ${checklist}\n\nSet aside five quiet minutes and go through it honestly. ${reach}` },
   ];
   if (s.form === "pilot-application")

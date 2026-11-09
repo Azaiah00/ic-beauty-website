@@ -27,7 +27,10 @@ const nextConfig: NextConfig = {
     // Old Square Online URLs -> new pages (preserves any link equity + bookmarks)
     return [
       { source: "/road-to-hair-recovery", destination: "/client-programs", permanent: true },
-      { source: "/classes", destination: "/professional-education", permanent: true },
+      { source: "/classes", destination: "/client-programs#classes", permanent: false },
+      // Paused at Iisha's request (2026-11-08) until she relaunches them. Page code is kept; delete these two lines to bring them back.
+      { source: "/professional-education", destination: "/", permanent: false },
+      { source: "/speaking", destination: "/", permanent: false },
       { source: "/privacy-policy", destination: "/policies", permanent: true },
       { source: "/privacy", destination: "/policies", permanent: true },
       { source: "/terms", destination: "/policies", permanent: true },

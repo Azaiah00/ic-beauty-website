@@ -19,7 +19,7 @@ import { graph, breadcrumb, faqNode, serviceNode } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Hair Loss Recovery & Scalp Analysis in Richmond, VA",
   description:
-    "Thinning, shedding, or tender edges? Start with a free 15-minute discovery call, then a microscopic scalp analysis and personalized hair recovery plan with Iisha C. Silver in Henrico / Richmond, VA. Virtual options available.",
+    "Thinning, shedding, or tender edges? Start with a complimentary 15-minute discovery call, then a microscopic scalp analysis and personalized hair recovery plan with Iisha C. Silver in Henrico / Richmond, VA. Virtual options available.",
   alternates: { canonical: "/client-programs" },
 };
 
@@ -43,7 +43,7 @@ export default function ClientProgramsPage() {
         lede={<p>Personalized hair wellness and self-care education for thinning, shedding, tender edges, and an unhappy scalp. We find what&apos;s happening beneath the surface, then build a plan made for you.</p>}
         image={{ src: img("consultation"), alt: "A smiling client during a hair and scalp consultation", label: "Consultation" }}
       >
-        <Btn href={bookHref}>Book a free discovery call</Btn>
+        <Btn href={bookHref}>Request a complimentary discovery call</Btn>
         <Btn href="/scalp-check" variant="outline">Scalp Self-Check</Btn>
       </PageHero>
 

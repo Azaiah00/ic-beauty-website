@@ -18,9 +18,9 @@ export const shareCards: Record<string, Share> = {
   },
   "/event": {
     title: "So glad we met: start here with Iisha",
-    description: "Book your free 15-minute discovery call, or grab the free Hair Health Red Flags checklist.",
+    description: "Request your complimentary 15-minute discovery call, or grab the free Hair Health Red Flags checklist.",
     image: "/og/event.jpg",
-    alt: "I.C. Beauty event page with two choices: book a discovery call or get the free checklist",
+    alt: "I.C. Beauty event page with two choices: request a discovery call or get the free checklist",
   },
   "/hair-love": {
     title: "Free: Hair Health Red Flags Most People Ignore",

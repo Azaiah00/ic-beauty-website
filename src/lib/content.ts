@@ -63,6 +63,15 @@ export const pillars: Pillar[] = [
   },
 ];
 
+/** Homepage version: speaks to wellness, prevention and maintenance as well as hair loss (Iisha, 2026-11-08). */
+export const homeAskYourself = [
+  "Do you know what your hair and scalp actually need, or are you still guessing?",
+  "Is your routine built for healthy hair for life, or just for a good hair day?",
+  "Are you noticing more shedding, or is your crown or hairline beginning to thin?",
+  "Does your scalp itch, burn, or feel overly sensitive?",
+  "Do stress, anxiety, or gut issues seem to show up in your hair?",
+];
+
 export const askYourself = [
   "Are you noticing more shedding than usual?",
   "Is your crown or hairline beginning to thin or space out?",
@@ -93,7 +102,7 @@ export const clientOffers: Offer[] = [
       "A compassionate, no-pressure chat to understand your concerns and decide whether a deeper consultation is the right next step.",
     price: "Complimentary",
     duration: "15 minutes · phone or virtual",
-    cta: { label: "Request your discovery call", href: "/book" },
+    cta: { label: "Request a complimentary discovery call", href: "/book" },
   },
   {
     id: "consultation",
@@ -379,8 +388,8 @@ export const faqs: { group: string; items: QA[] }[] = [
         a: "Every person's hair loss is different, and so is every budget. Iisha believes everyone deserves a chance to heal and regrow their hair. Recovery takes an investment of time, effort, and money, and your plan is designed to fit your needs where you are. Pricing is shared after your complimentary discovery call.",
       },
       {
-        q: "What happens on the free discovery call?",
-        a: "It's a compassionate, no-pressure 15-minute conversation about what you're noticing, how long it has been happening, and what you've tried. Together you decide whether a full consultation is the right next step. Nothing is sold to you on the call.",
+        q: "What happens on the complimentary discovery call?",
+        a: "Request your call with a short form, and Iisha will personally reach out to schedule it. It's a compassionate, no-pressure 15-minute conversation about your hair goals, what you're noticing, and what you've tried. Together you decide whether a full consultation is the right next step. Nothing is sold to you on the call.",
       },
       {
         q: "What is included in the full consultation?",
@@ -418,26 +427,30 @@ export const faqs: { group: string; items: QA[] }[] = [
     ],
   },
   {
-    group: "Classes & speaking",
+    group: "Classes",
     items: [
-      {
-        q: "Do you teach classes for stylists?",
-        a: "Yes. Mastering the Consultation is a live group class, and Color with Confidence is a one-on-one session tailored to your weak spots. Every class includes take-home material and a product kit so you can put your new skills to work right away.",
-      },
       {
         q: "Do you teach parents how to care for their child's natural hair?",
         a: "Yes. The hands-on Child Hair-Care class covers product selection for your child's hair type, proper shampoo technique, detangling without the tears, and styling options. Classes are small so every parent gets customized guidance.",
-      },
-      {
-        q: "Can I book Iisha to speak at my event?",
-        a: "Yes. Iisha speaks to HBCUs, sororities, churches, women's organizations, beauty schools, and professional audiences on hair wellness, the H.A.I.R. Wellness Method, and turning consultations into currency. Send an inquiry from the Speaking page with your date, audience, and format.",
       },
     ],
   },
 ];
 
+/** Paused with the For Stylists and Speaking pages (2026-11-08). Move back into `faqs` when they relaunch. */
+export const professionalFaqs: QA[] = [
+  {
+    q: "Do you teach classes for stylists?",
+    a: "Yes. Mastering the Consultation is a live group class, and Color with Confidence is a one-on-one session tailored to your weak spots. Every class includes take-home material and a product kit so you can put your new skills to work right away.",
+  },
+  {
+    q: "Can I book Iisha to speak at my event?",
+    a: "Yes. Iisha speaks to HBCUs, sororities, churches, women's organizations, beauty schools, and professional audiences on hair wellness, the H.A.I.R. Wellness Method, and turning consultations into currency. Send an inquiry from the Speaking page with your date, audience, and format.",
+  },
+];
+
 export const testimonialsPlaceholder = [
   { quote: "NEEDS REAL REVIEW — paste a verbatim Google review here (with the client's permission).", name: "Client name", detail: "Hair recovery client" },
-  { quote: "NEEDS REAL REVIEW — paste a verbatim stylist testimonial from Mastering the Consultation.", name: "Stylist name", detail: "Class graduate" },
-  { quote: "NEEDS REAL REVIEW — paste an organizer quote from a past workshop or talk.", name: "Organizer", detail: "Event host" },
+  { quote: "NEEDS REAL REVIEW — paste a verbatim review from a hair wellness or maintenance client.", name: "Client name", detail: "Hair wellness client" },
+  { quote: "NEEDS REAL REVIEW — paste a verbatim review from a virtual or scalp-care client.", name: "Client name", detail: "Scalp care client" },
 ];

@@ -16,7 +16,7 @@ export const business = {
     name: "Iisha C. Silver",
     shortName: "Iisha",
     nickname: "Indestructible Iish",
-    title: "Holistic Hair Recovery Practitioner & Service Educator",
+    title: "Hair Wellness Coach & Educator",
     roots: "Brooklyn, NY",
   },
   phone: "(804) 397-3340",
@@ -102,8 +102,7 @@ export const bookHref = links.phase1Scheduler || "/book";
 export const nav = [
   { label: "The H.A.I.R. Method", href: "/the-hair-method" },
   { label: "Client Programs", href: "/client-programs" },
-  { label: "For Stylists", href: "/professional-education" },
-  { label: "Speaking", href: "/speaking" },
+  // "For Stylists" (/professional-education) and "Speaking" (/speaking) are paused until Iisha relaunches them (her request, 2026-11-08).
   { label: "Learn", href: "/learn" },
   { label: "The Hub", href: "/hub" },
   { label: "About", href: "/about" },

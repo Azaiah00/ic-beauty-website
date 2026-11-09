@@ -14,7 +14,7 @@ import { graph, breadcrumb, personNode } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "About Iisha C. Silver, Hair Recovery Practitioner",
   description:
-    "Meet Iisha C. Silver: Brooklyn roots, Richmond-based hair and scalp specialist, service educator, and creator of The H.A.I.R. Wellness Method™. Founder of I.C. Beauty LLC.",
+    "Meet Iisha C. Silver: Brooklyn roots, Richmond-based Hair Wellness Coach, Educator, and creator of The H.A.I.R. Wellness Method™. Founder of I.C. Beauty LLC.",
   alternates: { canonical: "/about" },
   openGraph: { type: "profile" },
 };
@@ -29,7 +29,7 @@ export default function AboutPage() {
         crumbs={[{ name: "About Iisha", href: "/about" }]}
         eyebrow="Meet Iisha · Founder of I.C. Beauty LLC"
         title={<>I chase peace. <span className="italic-accent text-amethyst">Everything else comes naturally.</span></>}
-        lede={<p>Iisha C. Silver is a hair and scalp specialist, service educator, and speaker in Richmond, Virginia, and the creator of The H.A.I.R. Wellness Method™.</p>}
+        lede={<p>Iisha C. Silver is a Hair Wellness Coach and Educator in Richmond, Virginia, and the creator of The H.A.I.R. Wellness Method™.</p>}
         image={{ src: img("iisha-hero") ?? img("iisha-portrait"), alt: "Portrait of Iisha C. Silver in her white coat in front of the I.C. Beauty logo", label: "Signature portrait", position: "50% 18%" }}
       >
         <Btn href={bookHref}>Book with Iisha</Btn>

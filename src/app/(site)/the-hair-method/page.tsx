@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 const methodFaq = [
   { q: "What does H.A.I.R. stand for?", a: "H.A.I.R. stands for Healthy Awareness Is Rare. Its four phases are History, Analysis, Inside-out plan, and Restore & retain." },
-  { q: "Who created the H.A.I.R. Wellness Method?", a: "The H.A.I.R. Wellness Method™ was created by Iisha C. Silver, holistic hair recovery practitioner, educator, and founder of I.C. Beauty LLC in Henrico (Richmond), Virginia." },
+  { q: "Who created the H.A.I.R. Wellness Method?", a: "The H.A.I.R. Wellness Method™ was created by Iisha C. Silver, Hair Wellness Coach, Educator, and founder of I.C. Beauty LLC in Henrico (Richmond), Virginia." },
   { q: "Is the H.A.I.R. Method a medical treatment?", a: "No. It is a hair-wellness and education framework. It does not diagnose or treat medical conditions, and clients who show signs of a medical cause are referred to a board-certified dermatologist." },
 ];
 
@@ -36,9 +36,9 @@ const differences = [
 ];
 
 const rooms = [
-  { t: "For clients", d: "The full H.A.I.R. experience: discovery call, microscopic scalp analysis, personalized plan, and progress check-ins.", href: "/client-programs", c: "Client Programs", image: "consultation" },
-  { t: "For stylists", d: "Bring wellness-first awareness into your chair: spot early signs, have the conversation with care, and know when to refer out.", href: "/professional-education", c: "Professional Education", image: "classroom" },
-  { t: "For organizations", d: "Keynotes and workshops that turn hair into a wellness conversation for HBCUs, sororities, churches, and professional audiences.", href: "/speaking", c: "Speaking & Workshops", image: "speaker" },
+  { t: "For clients", d: "The full H.A.I.R. experience: discovery call, microscopic scalp analysis, personalized plan, and progress check-ins.", href: "/client-programs", c: "Client Programs", image: "consultation", pos: undefined as string | undefined },
+  { t: "In 30 days", d: "30 Days to a New Love Story with Your H.A.I.R.: a virtual program that applies the method across four weeks and four phases.", href: "/hair-love/30-days", c: "The 30-day program", image: "funnel-community", pos: "22% 50%" },
+  { t: "At your own pace", d: "The Hair Wellness Library, free guides, and The Hub, so you keep learning and caring for your hair between visits.", href: "/learn", c: "Learn", image: "funnel-routine", pos: "70% 45%" },
 ];
 
 export default function MethodPage() {
@@ -101,11 +101,11 @@ export default function MethodPage() {
 
       <section className="bg-bone py-24 sm:py-32" aria-labelledby="ways-title">
         <div className="container-x">
-          <SectionHead id="ways-title" align="center" eyebrow="One method · three rooms" title={<>Experience it, teach it, <span className="italic-accent text-amethyst">or bring it to your people.</span></>} />
+          <SectionHead id="ways-title" align="center" eyebrow="One method · three ways in" title={<>Experience it in the studio, <span className="italic-accent text-amethyst">online, or at your own pace.</span></>} />
           <div className="mt-16 grid gap-10 lg:grid-cols-3">
             {rooms.map((w) => (
               <Link key={w.t} href={w.href} className="group block">
-                <PhotoSlot src={img(w.image)} alt={w.c} label={w.c} shape="arch" ratio="aspect-[4/5]" sizes="(min-width: 1024px) 30vw, 100vw" />
+                <PhotoSlot src={img(w.image)} alt={w.c} label={w.c} shape="arch" ratio="aspect-[4/5]" position={w.pos} sizes="(min-width: 1024px) 30vw, 100vw" />
                 <div className="mt-7" data-reveal>
                   <h3 className="font-display text-[2rem] text-plum-900 group-hover:text-amethyst">{w.t}</h3>
                   <p className="mt-3 text-plum-700">{w.d}</p>

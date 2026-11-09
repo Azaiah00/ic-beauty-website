@@ -11,8 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["", 1, "weekly"],
     ["/the-hair-method", 0.9, "monthly"],
     ["/client-programs", 0.95, "monthly"],
-    ["/professional-education", 0.85, "monthly"],
-    ["/speaking", 0.85, "monthly"],
     ["/about", 0.8, "monthly"],
     ["/book", 0.9, "monthly"],
     ["/scalp-check", 0.8, "monthly"],

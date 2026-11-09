@@ -12,15 +12,15 @@ import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Book with Iisha: Free Discovery Call & Hair Wellness Services in Richmond, VA",
+  title: "Request a Complimentary Discovery Call | Hair Wellness Services in Richmond, VA",
   description:
-    "Book online with Iisha C. Silver in Henrico (Richmond), VA. New clients start with a free Phase 1 call. Hair recovery consultations, maintenance visits, education sessions and more. Virtual options available.",
+    "Book online with Iisha C. Silver in Henrico (Richmond), VA. New clients start by requesting a complimentary Phase 1 discovery call, and Iisha personally schedules it. Hair recovery consultations, maintenance visits, education sessions and more. Virtual options available.",
   alternates: { canonical: "/book" },
 };
 
 const steps = [
-  { i: ClipboardList, t: "Request your free call", d: "Answer a few quick questions about your hair and goals. It takes about 2 minutes." },
-  { i: Phone, t: "Free 15-minute discovery call", d: "Complimentary and no pressure. Iisha listens, asks the right questions and tells you honestly what she sees." },
+  { i: ClipboardList, t: "Request your complimentary call", d: "Answer a few quick questions about your hair and goals. It takes about 2 minutes." },
+  { i: Phone, t: "Iisha schedules your call", d: "She personally reaches out to set your complimentary 15-minute discovery call. No pressure: she listens, asks the right questions and tells you honestly what she sees." },
   { i: CalendarCheck, t: "Your plan and your appointment", d: "Iisha recommends the right next step and gets you on her calendar." },
 ];
 
@@ -35,9 +35,9 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
       <JsonLd data={graph(breadcrumb([{ name: "Book", path: "/book" }]))} />
       <PageHero
         crumbs={[{ name: "Book", href: "/book" }]}
-        eyebrow={classRequest ? "Family & parent classes" : "New clients start here · Free discovery call"}
+        eyebrow={classRequest ? "Family & parent classes" : "New clients start here · Complimentary discovery call"}
         title={<>You don&apos;t have to do this <span className="italic-accent text-amethyst">alone.</span></>}
-        lede={<p>Whether you&apos;re noticing thinning, dealing with an unhappy scalp or simply want to keep healthy hair healthy, it starts with a free 15-minute call with Iisha. Virtual clients welcome.</p>}
+        lede={<p>Whether you&apos;re noticing thinning, dealing with an unhappy scalp or simply want to keep healthy hair healthy, it starts with a complimentary 15-minute discovery call with Iisha. Request yours below and she will personally reach out to schedule it. Virtual clients welcome.</p>}
       />
       <section className="bg-bone py-16 sm:py-24">
         <div className="container-x grid gap-12 lg:grid-cols-12">

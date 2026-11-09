@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Check, X, Video, Library, CalendarCheck, Users } from "lucide-react";
 import { img } from "@/lib/images";
-import { funnel, pilotWeeks, pilotIncludes, pilotTiers, pilotFaq } from "@/lib/funnel";
+import { funnel, pilotJourney, pilotWeeks, pilotIncludes, pilotTiers, pilotFaq } from "@/lib/funnel";
 import { Needs } from "@/components/ui/Needs";
 import { FAQList } from "@/components/sections/FAQList";
 import { FunnelVideo, StickyCta } from "@/components/funnel/FunnelBits";
@@ -96,7 +96,8 @@ export default function PilotPage() {
         <div className="container-x">
           <div className="max-w-3xl">
             <p className="eyebrow text-amethyst" data-reveal>The 30-day journey · The H.A.I.R. Wellness Method™</p>
-            <h2 className="mt-5 text-title text-plum-900" data-reveal>Embrace. Understand. <span className="italic-accent text-amethyst">Confidently care.</span></h2>
+            <h2 className="mt-5 text-title text-plum-900" data-reveal>{pilotJourney.title}</h2>
+            <p className="mt-5 font-display text-[clamp(1.35rem,1.1rem+0.9vw,1.9rem)] italic leading-snug text-amethyst" data-reveal>{pilotJourney.subtitle}</p>
           </div>
           <ol className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {pilotWeeks.map((w, i) => (

@@ -63,7 +63,7 @@ export const articles: Article[] = [
       { label: "American Academy of Dermatology — Hair loss: Who gets and causes", url: "https://www.aad.org/public/diseases/hair-loss/causes/18-causes" },
       { label: "American Academy of Dermatology — Hairstyles that pull can lead to hair loss", url: "https://www.aad.org/public/diseases/hair-loss/causes/hairstyles" },
     ],
-    cta: { label: "Book a complimentary discovery call", href: "/book" },
+    cta: { label: "Request a complimentary discovery call", href: "/book" },
   },
   {
     slug: "how-often-should-black-women-shampoo",
@@ -205,7 +205,7 @@ export const articles: Article[] = [
       {
         h2: "When it's more than shedding",
         body: [
-          "If shedding doesn't settle, if your part is widening, or if your crown or hairline is spacing out, book a discovery call. A microscopic scalp analysis shows what is happening at the follicle so you are no longer guessing.",
+          "If shedding doesn't settle, if your part is widening, or if your crown or hairline is spacing out, request a complimentary discovery call. A microscopic scalp analysis shows what is happening at the follicle so you are no longer guessing.",
         ],
       },
     ],
@@ -213,7 +213,7 @@ export const articles: Article[] = [
       { label: "American Academy of Dermatology — Do you have hair loss or hair shedding?", url: "https://www.aad.org/public/diseases/hair-loss/insider/shedding" },
       { label: "Wolfram LJ. Human hair: a unique physicochemical composite. J Am Acad Dermatol. 2003 (via BioNumbers, Harvard)", url: "https://bionumbers.hms.harvard.edu/bionumber.aspx?id=114255" },
     ],
-    cta: { label: "Book a complimentary discovery call", href: "/book" },
+    cta: { label: "Request a complimentary discovery call", href: "/book" },
   },
   {
     slug: "what-is-the-hair-wellness-method",

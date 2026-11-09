@@ -9,9 +9,9 @@ import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb, faqNode, allFaqs } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "FAQ: Hair Loss Consultations, Pricing & Classes",
+  title: "FAQ: Hair Wellness Consultations, Pricing & Classes",
   description:
-    "Answers about hair recovery pricing, the free discovery call, the full scalp consultation, results timelines, virtual visits, classes for stylists and parents, and booking Iisha to speak.",
+    "Answers about hair wellness and recovery pricing, the complimentary discovery call, the full scalp consultation, results timelines, virtual visits, and hands-on classes for parents.",
   alternates: { canonical: "/faq" },
 };
 

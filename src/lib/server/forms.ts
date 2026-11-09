@@ -94,10 +94,10 @@ export const FORMS: Record<string, FormDef> = {
         `Your Scalp Self-Check result is <strong>${s.data.profile || "ready"}</strong>.`,
         s.data["refer-flag"] === "yes"
           ? "Some of your answers are worth checking with a board-certified dermatologist or your doctor. I'm happy to talk through what to ask and how we can support your scalp alongside that care."
-          : "The best next step is a free 15-minute discovery call, so I can hear your story and tell you honestly what I see.",
+          : "The best next step is a complimentary 15-minute discovery call, so I can hear your story and tell you honestly what I see. Request it with the button below and I'll personally reach out to schedule it.",
         "Mention your result on the call so we can start right where you are.",
       ],
-      cta: { label: "Book your free discovery call", href: BOOK },
+      cta: { label: "Request a complimentary discovery call", href: BOOK },
     }),
   },
   "discovery-call": {

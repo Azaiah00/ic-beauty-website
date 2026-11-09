@@ -16,7 +16,7 @@ export default function NotFound() {
         <p className="mt-5 max-w-md text-plum-700">The page may have changed when the site was refreshed. Let&apos;s get you where you were going.</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Btn href="/">Back home</Btn>
-          <Btn href="/book" variant="outline">Book a discovery call</Btn>
+          <Btn href="/book" variant="outline">Request a discovery call</Btn>
         </div>
       </div>
     </section>

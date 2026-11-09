@@ -16,7 +16,7 @@ import { InstagramIcon, TikTokIcon } from "@/components/ui/SocialIcons";
 export const metadata: Metadata = {
   ...shareMeta("/event"),
   title: "So glad we met: start here with Iisha",
-  description: "Book your free 15-minute discovery call with Iisha C. Silver, or grab the free Hair Health Red Flags checklist.",
+  description: "Request your complimentary 15-minute discovery call with Iisha C. Silver, or grab the free Hair Health Red Flags checklist.",
   alternates: { canonical: "/event" },
   robots: { index: false, follow: true },
 };
@@ -47,7 +47,7 @@ export default function EventPage() {
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-bone text-plum-900"><CalendarCheck className="h-6 w-6" aria-hidden="true" strokeWidth={1.4} /></span>
               <span className="flex-1">
                 <span className="eyebrow block text-brass-soft">I&apos;m ready to talk</span>
-                <span className="mt-1 block font-display text-[1.45rem] leading-tight">Book my free 15-minute discovery call</span>
+                <span className="mt-1 block font-display text-[1.45rem] leading-tight">Request my complimentary discovery call</span>
                 <span className="mt-1 block text-[0.9rem] text-bone/75">About 2 minutes. Virtual clients welcome.</span>
               </span>
               <ArrowRight className="h-5 w-5 shrink-0 transition group-hover:translate-x-1" aria-hidden="true" />

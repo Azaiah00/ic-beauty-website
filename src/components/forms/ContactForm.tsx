@@ -11,7 +11,7 @@ export function ContactForm() {
       <Input label="Name" name="name" required autoComplete="name" />
       <Input label="Email" name="email" type="email" required autoComplete="email" />
       <Input label="Phone" name="phone" type="tel" autoComplete="tel" hint="Optional" />
-      <Select label="Topic" name="topic" options={["Hair recovery", "Classes for stylists", "Parent / family classes", "Speaking & workshops", "Products / supplements", "Press & partnerships", "Something else"]} />
+      <Select label="Topic" name="topic" options={["Hair wellness & maintenance", "Hair recovery", "30-day program", "Parent / family classes", "Products / supplements", "Press & partnerships", "Something else"]} />
       <Textarea className="sm:col-span-2" label="Message" name="message" required rows={5} />
       <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center">
         <button type="submit" disabled={status === "sending"} className="h-14 rounded-pill bg-plum-900 px-8 font-sans text-[0.74rem] font-medium uppercase tracking-[0.16em] text-bone transition hover:bg-amethyst disabled:opacity-60">

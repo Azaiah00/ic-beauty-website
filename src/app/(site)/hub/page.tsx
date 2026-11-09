@@ -133,7 +133,7 @@ export default function HubPage() {
         title={<>Not sure where to start? <span className="italic-accent text-brass-soft">Start with awareness.</span></>}
         body="The 2-minute Scalp Self-Check points you to the right guide, tool, or appointment."
         primary={{ label: "Take the Scalp Self-Check", href: "/scalp-check" }}
-        secondary={{ label: "Book a discovery call", href: "/book" }}
+        secondary={{ label: "Request a discovery call", href: "/book" }}
       />
     </>
   );

@@ -126,7 +126,7 @@ export function Header({ mark }: { mark: React.ReactNode }) {
               <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
             </a>
             <Link href={bookHref} className="hidden h-11 items-center whitespace-nowrap rounded-pill min-[380px]:inline-flex bg-plum-900 px-5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.16em] text-bone transition hover:bg-amethyst">
-              Book<span className="hidden sm:inline xl:hidden 2xl:inline">&nbsp;a consultation</span>
+              Request<span className="hidden min-[430px]:inline">&nbsp;a call</span>
             </Link>
             <button
               type="button"
@@ -163,7 +163,7 @@ export function Header({ mark }: { mark: React.ReactNode }) {
             tabIndex={open ? 0 : -1}
             className="mt-8 flex w-full min-h-[3.75rem] items-center justify-center rounded-pill bg-amethyst px-6 font-sans text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_10px_28px_rgba(110,63,134,0.32)] transition-[background,box-shadow,transform] duration-300 hover:bg-plum-800 hover:shadow-[0_12px_32px_rgba(110,63,134,0.4)] active:scale-[0.99]"
           >
-            Book a free discovery call
+            Request a complimentary discovery call
           </Link>
           <div className="mt-auto pt-10 text-plum-700">
             <p className="eyebrow text-amethyst">Visit the studio</p>

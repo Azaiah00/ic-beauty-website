@@ -8,7 +8,7 @@ import { Btn } from "@/components/ui/Btn";
 import { Needs } from "@/components/ui/Needs";
 import { PhotoSlot } from "@/components/ui/PhotoSlot";
 import { WaitlistForm } from "@/components/forms/WaitlistForm";
-import { stylistClasses, faqs } from "@/lib/content";
+import { stylistClasses, professionalFaqs } from "@/lib/content";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb, courseNodes } from "@/lib/schema";
 
@@ -109,7 +109,7 @@ export default function ProEdPage() {
           <div className="lg:col-span-5">
             <SectionHead id="wl-title" eyebrow="Seats are limited" title={<>Be first when <span className="italic-accent text-amethyst">dates are announced.</span></>} lede="Class dates go to the waitlist before they're posted anywhere else. Small groups mean every stylist gets real attention." />
             <div className="mt-8 text-[0.98rem] text-plum-700" data-reveal>
-              {faqs[2].items.slice(0, 1).map((f) => (
+              {professionalFaqs.slice(0, 1).map((f) => (
                 <p key={f.q}><span className="text-plum-900">{f.q}</span> {f.a}</p>
               ))}
             </div>

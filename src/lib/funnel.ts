@@ -64,35 +64,43 @@ export const funnel = {
   },
 } as const;
 
-/** The four weeks map 1:1 to her method phases and her "Embrace, Understand, Confidently Care" promise. */
+/**
+ * The four pillars of the 30-day program, word for word from Iisha (email, 2026-11-08).
+ * The program is one application of the H.A.I.R. Wellness Method, not the method itself.
+ */
+export const pilotJourney = {
+  title: "30 Days to a New Love Story with Your H.A.I.R.",
+  subtitle: "Four Weeks. Four Phases. One New Relationship with Your Hair.",
+} as const;
+
 export const pilotWeeks = [
   {
     week: "Week 1",
     theme: "Embrace",
     phase: "H — History",
-    title: "Meet your hair where it is",
-    body: "We start with your story: your hair history, the styles, products and seasons that shaped it. You'll take a baseline photo, learn your hair's real needs, and let go of the guilt.",
+    title: "Rewrite the story you tell yourself.",
+    body: "Your hair has a history, and so do your beliefs about it. Explore the experiences, expectations, and habits that shaped your relationship with your hair. Learn to embrace where you are without shame or comparison.",
   },
   {
     week: "Week 2",
     theme: "Understand",
     phase: "A — Analysis",
-    title: "Learn what your scalp is saying",
-    body: "Shedding vs. breakage, flakes vs. dryness, tension vs. texture. You'll learn to read the signs yourself, so you stop guessing and start choosing on purpose.",
+    title: "Learn what your hair needs.",
+    body: "Discover your hair’s characteristics, scalp needs, and common warning signs. Understand shedding versus breakage and recognize changes so you can make informed decisions instead of guessing.",
   },
   {
     week: "Week 3",
-    theme: "Nourish",
-    phase: "I — Inside-out plan",
-    title: "Care from the inside out",
-    body: "Food, gut, stress and sleep, the parts of hair health most routines skip. You'll build simple, realistic habits that support your hair from the inside.",
+    theme: "Intentional Choices",
+    phase: "I — Inside-Out Plan",
+    title: "Make choices that support healthy hair.",
+    body: "Understand how styling, heat, tension, nutrition, stress, and everyday habits influence hair wellness. Learn to make practical choices that support your hair and fit your lifestyle.",
   },
   {
     week: "Week 4",
-    theme: "Confidently care",
-    phase: "R — Restore & retain",
-    title: "Your routine, for life",
-    body: "Wash day, protective styling, low-tension habits and product choices, put together into one routine you can actually keep. You leave with a plan, not a pile of products.",
+    theme: "Confidently Care",
+    phase: "R — Restore & Retain",
+    title: "Your routine, your confidence.",
+    body: "Bring it all together with a personalized hair wellness blueprint. From wash day to styling and between-visit maintenance, build a realistic routine you can confidently maintain long after the program ends.",
   },
 ] as const;
 

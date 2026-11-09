@@ -9,7 +9,7 @@ import { InstagramIcon, TikTokIcon, YoutubeIcon, FacebookIcon } from "@/componen
 
 export const metadata: Metadata = {
   title: "Links: Book, Learn & Shop with Iisha",
-  description: "Every I.C. Beauty link in one place: book a discovery call, take the Scalp Self-Check, digital guides, supplements, classes, and speaking.",
+  description: "Every I.C. Beauty link in one place: request a complimentary discovery call, take the Scalp Self-Check, digital guides, supplements, and classes.",
   alternates: { canonical: "/links" },
 };
 
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 const groups = [
   {
     title: "Client bookings",
-    note: "Every new client starts with a free discovery call · virtual clients welcome",
+    note: "Every new client starts with a complimentary discovery call · virtual clients welcome",
     items: [
-      { t: "New clients start here: free 15-minute discovery call", h: bookHref, primary: true },
+      { t: "New clients: request a complimentary discovery call", h: bookHref, primary: true },
       { t: "Returning clients: book a service", h: "/book?service=all" },
       { t: "Take the free Scalp Self-Check", h: "/scalp-check" },
     ],
@@ -47,11 +47,8 @@ const groups = [
     ],
   },
   {
-    title: "Work with Iisha",
-    items: [
-      { t: "Classes for stylists", h: "/professional-education" },
-      { t: "Book Iisha to speak", h: "/speaking" },
-    ],
+    title: "Classes",
+    items: [{ t: "Hands-on hair care classes for parents", h: "/client-programs#classes" }],
   },
 ];
 

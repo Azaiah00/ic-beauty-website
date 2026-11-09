@@ -39,7 +39,7 @@ export const demoSteps: DemoStep[] = [
   {
     path: "/hair-love/30-days", funnel: 1, title: "30-day pilot sales page",
     say: [
-      "The hook, the video, the 4 weeks mapped to Embrace, Understand, Nourish and Confidently care.",
+      "The hook, the video, the 4 weeks mapped to Embrace, Understand, Intentional Choices and Confidently Care.",
       "Core and VIP side by side; the dashed boxes are where your prices and dates go.",
       "She applies (5 quick questions), so you choose who's in the February pilot.",
     ],

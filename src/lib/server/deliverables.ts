@@ -26,7 +26,7 @@ export const PRIVATE_DIR = path.join(process.cwd(), "private", "deliverables");
 
 /** Couture House deliverables bundled with the site. Newest groups first. */
 const BUNDLED: Omit<Deliverable, "size" | "source">[] = [
-  { id: "qr-banner-event.png", title: "QR code: banner & events", note: "Opens icbeautyinyou.com/event (book a free call or get the checklist). High-res PNG.", file: "IC Beauty QR - Banner (event).png", type: "image/png", group: "QR codes", date: "2026-11-08T17:00:00Z" },
+  { id: "qr-banner-event.png", title: "QR code: banner & events", note: "Opens icbeautyinyou.com/event (request a complimentary discovery call or get the checklist). High-res PNG.", file: "IC Beauty QR - Banner (event).png", type: "image/png", group: "QR codes", date: "2026-11-08T17:00:00Z" },
   { id: "qr-banner-event.svg", title: "QR code: banner & events (vector)", note: "Same code as a vector SVG for printers and designers.", file: "IC Beauty QR - Banner (event).svg", type: "image/svg+xml", group: "QR codes", date: "2026-11-08T17:00:00Z" },
   { id: "qr-card-links.png", title: "QR code: business card", note: "Opens icbeautyinyou.com/links (everything in one place). High-res PNG.", file: "IC Beauty QR - Business card (links).png", type: "image/png", group: "QR codes", date: "2026-11-08T17:00:00Z" },
   { id: "qr-card-links.svg", title: "QR code: business card (vector)", note: "Same code as a vector SVG for printers and designers.", file: "IC Beauty QR - Business card (links).svg", type: "image/svg+xml", group: "QR codes", date: "2026-11-08T17:00:00Z" },

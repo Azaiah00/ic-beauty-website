@@ -10,11 +10,11 @@ import { graph, businessNode, personNode, websiteNode, methodNode } from "@/lib/
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Hair Loss Specialist & Hair Wellness Educator in Richmond, VA | I.C. Beauty",
+    default: "Scalp Wellness & Recovery in Richmond, VA | I.C. Beauty",
     template: "%s | I.C. Beauty",
   },
   description:
-    "Iisha C. Silver, holistic hair recovery practitioner in Henrico (Richmond), VA. Microscopic scalp analysis, hair loss recovery programs, stylist education, and speaking. Creator of The H.A.I.R. Wellness Method™.",
+    "Iisha C. Silver, Hair Wellness Coach and Educator in Henrico (Richmond), VA. Scalp wellness, hair loss prevention and recovery, microscopic scalp analysis, and personalized hair wellness programs. Creator of The H.A.I.R. Wellness Method™.",
   applicationName: "I.C. Beauty",
   authors: [{ name: business.owner.name, url: `${SITE_URL}/about` }],
   creator: business.owner.name,
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     "Black hair loss specialist Virginia",
     "traction alopecia help Richmond",
     "hair recovery program",
-    "stylist education Richmond",
-    "hair wellness speaker",
+    "hair wellness coach Richmond VA",
+    "scalp wellness Richmond VA",
     "H.A.I.R. Wellness Method",
   ],
   alternates: { canonical: "/" },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "I.C. Beauty",
     title: "I.C. Beauty — Where hair, health & education connect",
-    description: "Hair loss recovery, scalp wellness, stylist education, and speaking with Iisha C. Silver, creator of The H.A.I.R. Wellness Method™. Henrico / Richmond, VA.",
+    description: "Scalp wellness, hair recovery, and hair wellness education with Iisha C. Silver, creator of The H.A.I.R. Wellness Method™. Henrico / Richmond, VA.",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "I.C. Beauty — Where hair, health & education connect" }],
   },
   twitter: { card: "summary_large_image", title: "I.C. Beauty — Where hair, health & education connect", images: ["/og.png"] },
