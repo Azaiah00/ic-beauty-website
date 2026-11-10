@@ -12,14 +12,25 @@ import { funnel } from "@/lib/funnel";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
 import { shareMeta } from "@/lib/share";
+import { Storefronts } from "@/components/shop/Storefronts";
+import { SalonProducts } from "@/components/shop/SalonProducts";
+import { OrderNotice } from "@/components/shop/OrderNotice";
 
 export const metadata: Metadata = {
   ...shareMeta("/shop"),
-  title: "Shop: Hair Wellness Guides, Downloads & Membership",
+  title: "Shop: In-Salon Haircare, Topicals, Wellness Tools & Supplements",
   description:
-    "Iisha C. Silver's hair wellness guides and tools: the free Hair Health Red Flags checklist, The Scalp-Calm Kitchen food guide, Radiance Rewired, Custom Sound Therapy and The H.A.I.R. Circle membership.",
+    "Shop I.C. Beauty: in-salon haircare from Iisha's Henrico studio, plus her picks for topicals and home maintenance, home wellness tools, supplements, and hair wellness guides.",
   alternates: { canonical: "/shop" },
 };
+
+const jump = [
+  { href: "#salon", t: "In-salon products" },
+  { href: "#picks", t: "Topicals & home maintenance" },
+  { href: "#picks", t: "Home wellness tools" },
+  { href: "#picks", t: "Supplements" },
+  { href: "#guides", t: "Guides & membership" },
+];
 
 export default function ShopPage() {
   const free = products.filter((p) => p.freeHref);
@@ -32,20 +43,44 @@ export default function ShopPage() {
         eyebrow="The I.C. Beauty Shop"
         title={
           <>
-            Guides made to be <span className="italic-accent text-amethyst">used, not skimmed.</span>
+            Everything Iisha recommends, <span className="italic-accent text-amethyst">in one place.</span>
           </>
         }
-        lede="Everything here comes from the same H.A.I.R. Wellness Method Iisha uses with her clients: practical, beautifully made, and built to change how you care for your hair at home."
+        lede="Haircare from the studio, the topicals and tools she trusts for home maintenance, and supplements that support your hair from the inside out."
+        image={{ src: img("product-shelf"), alt: "Curated haircare and scalp-care products on a studio shelf", label: "The studio shelf" }}
       >
         <div className="mt-9 flex flex-wrap gap-3">
-          <Btn href={funnel.basePath}>Start free</Btn>
-          <Btn href={`${funnel.basePath}/30-days`} variant="outline">The 30-day program</Btn>
+          <Btn href="#salon">Shop in-salon products</Btn>
+          <Btn href="#picks" variant="outline">Shop Iisha&apos;s picks</Btn>
         </div>
       </PageHero>
 
-      <section aria-labelledby="free-title" className="bg-paper py-20 lg:py-28">
+      <nav aria-label="Shop sections" className="sticky top-[84px] z-30 border-y border-plum-800/10 bg-bone/90 backdrop-blur-md">
+        <ul className="container-x flex gap-8 overflow-x-auto py-3.5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.18em]" data-scroll-inner>
+          {jump.map((j) => (
+            <li key={j.t} className="shrink-0"><a href={j.href} className="link-underline whitespace-nowrap text-plum-800">{j.t}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <section id="salon" aria-labelledby="salon-title" className="scroll-mt-32 bg-paper py-20 lg:py-28">
         <div className="container-x">
-          <SectionHead id="free-title" eyebrow="Start here · Free" title={<>Two free guides, <span className="italic-accent text-amethyst">one inbox away.</span></>} lede="Get the checklist and, as a bonus, The Scalp-Calm Kitchen, delivered instantly." />
+          <SectionHead id="salon-title" eyebrow="From the studio" title={<>In-salon products, <span className="italic-accent text-amethyst">ready to order.</span></>} lede="The cleansers, conditioners, stylers, and treatments Iisha uses and carries in her Henrico studio." />
+          <OrderNotice />
+          <SalonProducts />
+        </div>
+      </section>
+
+      <section id="picks" aria-labelledby="picks-title" className="scroll-mt-32 bg-bone py-20 lg:py-28">
+        <div className="container-x">
+          <SectionHead id="picks-title" eyebrow="Iisha's picks" title={<>Shop topicals, tools <span className="italic-accent text-amethyst">&amp; supplements.</span></>} lede="Her trusted favorites from the brands she partners with. Each one opens her storefront in a new tab." />
+          <div className="mt-12"><Storefronts /></div>
+        </div>
+      </section>
+
+      <section id="guides" aria-labelledby="free-title" className="scroll-mt-32 bg-paper py-20 lg:py-28">
+        <div className="container-x">
+          <SectionHead id="free-title" eyebrow="Guides · Start free" title={<>Two free guides, <span className="italic-accent text-amethyst">one inbox away.</span></>} lede="Get the checklist and, as a bonus, The Scalp-Calm Kitchen, delivered instantly." />
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {free.map((p) => (
               <Link key={p.slug} href={p.freeHref!} className="group grid gap-6 rounded-card border border-plum-800/10 bg-bone p-5 transition hover:border-amethyst sm:grid-cols-[9rem_1fr] sm:p-6" data-reveal>

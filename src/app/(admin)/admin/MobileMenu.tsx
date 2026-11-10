@@ -6,12 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
-  Inbox, Menu, X, Globe, LogOut, ChevronDown, FolderOpen,
+  Inbox, Menu, X, Globe, LogOut, ChevronDown, FolderOpen, Store,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Sparkles> = {
   "": LayoutDashboard,
   __files: FolderOpen,
+  __shop: Store,
   "pilot-application": Sparkles,
   "hair-love-optin": ClipboardCheck,
   "circle-join": Users,
@@ -91,7 +92,7 @@ export function MobileMenu({ items, current }: { items: MenuItem[]; current: str
                 <li key={i.form || "overview"}>
                   {idx === 2 && <p className="px-3 pb-1 pt-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40">Your people</p>}
                   <Link
-                    href={i.form === "__files" ? "/admin?view=files" : i.form ? `/admin?form=${i.form}` : "/admin"}
+                    href={i.form === "__files" ? "/admin?view=files" : i.form === "__shop" ? "/admin?view=shop" : i.form ? `/admin?form=${i.form}` : "/admin"}
                     aria-current={active ? "page" : undefined}
                     className={`flex min-h-12 items-center gap-3 rounded-xl px-3 text-[0.95rem] transition ${active ? "bg-amethyst text-bone" : "text-bone/85 hover:bg-white/8"}`}
                   >

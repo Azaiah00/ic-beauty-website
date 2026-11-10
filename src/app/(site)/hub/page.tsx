@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import { img } from "@/lib/images";
-import { ArrowUpRight, Info, ShoppingBag } from "lucide-react";
+import { ArrowUpRight, Info } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { SectionHead } from "@/components/sections/SectionHead";
 import { CTABand } from "@/components/sections/CTABand";
 import { Btn } from "@/components/ui/Btn";
-import { Needs } from "@/components/ui/Needs";
-import { hubItems, retail, type HubItem } from "@/lib/content";
-import { links, AFFILIATE_NOTE } from "@/lib/site";
+import { hubItems, type HubItem } from "@/lib/content";
+import { Storefronts } from "@/components/shop/Storefronts";
+import { AFFILIATE_NOTE } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, breadcrumb } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "The Hub: Hair Wellness Guides, Supplements & Tools",
   description:
-    "Everything for your hair recovery journey in one place: Radiance Rewired, the free Hair Health Checklist, the WIN WIN membership, Iisha's recommended supplements and tools, and professional haircare.",
+    "Everything for your hair wellness journey in one place: Radiance Rewired, the free Hair Health Red Flags checklist, The H.A.I.R. Circle, Iisha's recommended supplements and home wellness tools, and her shop.",
   alternates: { canonical: "/hub" },
 };
 
 function Card({ h }: { h: HubItem }) {
-  const ext = /^https?:\/\//.test(h.href);
+  const ext = /^https?:\/\//.test(h.href) || h.href.startsWith("/go/");
   return (
     <a href={h.href} {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="group flex flex-col border-t border-plum-800/15 pt-7 transition-colors duration-500 hover:border-amethyst" data-reveal>
       <div className="flex items-center justify-between gap-3">
@@ -42,12 +42,11 @@ function Card({ h }: { h: HubItem }) {
 
 const groups: { id: string; title: string; eyebrow: string; filter: (h: HubItem) => boolean; note?: boolean }[] = [
   { id: "digital", eyebrow: "Learn at home", title: "Guides, downloads & membership", filter: (h) => ["Digital guide", "Free download", "Membership", "Video series"].includes(h.type) },
-  { id: "supplements", eyebrow: "From the inside out", title: "Supplements & wellness", filter: (h) => ["Supplement", "Wellness scan"].includes(h.type) || h.name === "Red Light Therapy" || h.name.startsWith("Blood Type"), note: true },
+  { id: "supplements", eyebrow: "From the inside out", title: "Supplements & wellness", filter: (h) => ["Supplement", "Wellness scan", "Wellness tool"].includes(h.type), note: true },
   { id: "tools", eyebrow: "Iisha's favorite tools", title: "Tools for the journey", filter: (h) => h.type === "Hair tool", note: true },
 ];
 
 export default function HubPage() {
-  const retailGroups = ["Cleanse", "Condition", "Style", "Treat"] as const;
   return (
     <>
       <JsonLd data={graph(breadcrumb([{ name: "The Hub", path: "/hub" }]))} />
@@ -64,12 +63,12 @@ export default function HubPage() {
       >
         <Btn href="#digital">Guides & downloads</Btn>
         <Btn href="#supplements" variant="outline">Supplements</Btn>
-        <Btn href="#shop" variant="outline">Haircare</Btn>
+        <Btn href="/shop" variant="outline">Shop products</Btn>
       </PageHero>
 
       <nav aria-label="Hub sections" className="sticky top-[84px] z-30 border-b border-plum-800/10 bg-bone/90 backdrop-blur-md">
         <ul className="container-x flex gap-8 overflow-x-auto py-3.5 font-sans text-[0.7rem] font-medium uppercase tracking-[0.18em]" data-scroll-inner>
-          {[...groups.map((g) => ({ id: g.id, t: g.title.split(" ")[0].replace(",", "") })), { id: "shop", t: "Haircare" }].map((g) => (
+          {[...groups.map((g) => ({ id: g.id, t: g.title.split(" ")[0].replace(",", "") })), { id: "shop", t: "Shop" }].map((g) => (
             <li key={g.id} className="shrink-0"><a href={`#${g.id}`} className="link-underline text-plum-800">{g.t}</a></li>
           ))}
         </ul>
@@ -97,35 +96,13 @@ export default function HubPage() {
       <section id="shop" className="scroll-mt-32 bg-plum-950 py-20 text-bone sm:py-28" aria-labelledby="shop-title">
         <div className="container-x">
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-            <SectionHead tone="dark" id="shop-title" eyebrow="Professional haircare" title={<>Shop by <span className="italic-accent text-brass-soft">what your hair needs.</span></>} lede="The cleansers, conditioners, stylers, and treatments Iisha carries in the studio. Order from the online store, or ask at your next visit." />
-            <div className="flex flex-col items-start gap-3" data-reveal>
-              <Btn href={links.shop} variant="light">Shop the full store</Btn>
-              <Needs tone="light">Prices from current store, confirm before launch</Needs>
+            <SectionHead tone="dark" id="shop-title" eyebrow="The shop" title={<>Shop what Iisha <span className="italic-accent text-brass-soft">trusts.</span></>} lede="Order in-salon products online for pickup at the studio, or shop her storefronts for topicals, home wellness tools, and supplements." />
+            <div className="flex flex-wrap gap-3" data-reveal>
+              <Btn href="/shop#salon" variant="light">Shop in-salon products</Btn>
+              <Btn href="/shop" variant="outline-light">Visit the shop</Btn>
             </div>
           </div>
-          <div className="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-            {retailGroups.map((grp) => (
-              <div key={grp} data-reveal>
-                <h3 className="flex items-center gap-2 font-display text-[1.7rem]">
-                  <ShoppingBag className="h-5 w-5 text-brass-soft" aria-hidden="true" strokeWidth={1.25} />
-                  {grp}
-                </h3>
-                <ul className="mt-5 divide-y divide-lilac/10 border-y border-lilac/10">
-                  {retail
-                    .filter((r) => r.group === grp)
-                    .map((r) => (
-                      <li key={r.name} className="flex items-baseline justify-between gap-4 py-3 text-[0.95rem]">
-                        <span className={r.status === "Out of stock" ? "text-lilac/75" : "text-lilac"}>
-                          {r.name}
-                          {r.status && <span className="ml-2 text-[0.7rem] uppercase tracking-wider text-brass-soft">{r.status}</span>}
-                        </span>
-                        <span className="shrink-0 font-mono text-[0.85rem] text-bone">{r.price}</span>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <div className="mt-14"><Storefronts tone="dark" /></div>
         </div>
       </section>
 

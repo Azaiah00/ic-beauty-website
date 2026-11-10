@@ -85,10 +85,13 @@ export const links = {
   phase1Scheduler: "" as string,
   /** On-site shop (the old Square Online store went offline at the 2026-10-30 DNS cut-over; /s/shop redirects here). */
   shop: "/shop",
-  supplementsStore: "https://www.optimalhealthsystems.com/collections/all/",
-  digestiveEnzyme: "https://www.optimalhealthsystems.com/cart/49244690350382:1",
-  aoYouth: "https://shop.solexnation.com/Icbeauty/product/1463",
-  redLight: "https://shop.solexnation.com/Icbeauty/product/748",
+  /** Her three affiliate storefronts (Iisha, 2026-11-09). AO Youth + the single red-light link were removed at her request (both live on her Solex store). */
+  amazonStorefront: "https://a.co/d/0fwzp0lL", // Amazon "Beauty, Health & Wealth" storefront (icbeauty05)
+  solexStore: "https://shop.solexnation.com/Icbeauty",
+  // TEMPORARY (2026-11-09): her full-store OHS referral link is pending from Iisha. Until then this uses her
+  // credited Digest-A-Meal link so every click carries code=ICBEAUTY. Swap in her "shop everything" link when it arrives.
+  supplementsStore: "https://ohs.direct/aff/dam-offer?code=ICBEAUTY",
+  digestiveEnzyme: "https://ohs.direct/aff/dam-offer?code=ICBEAUTY", // $1 Digest-A-Meal offer, her referral code
   amazonBloodTypeKit: "https://amzn.to/44EVfSq",
   amazonBloodTypeDiet: "https://amzn.to/3XcFtwy",
   amazonScalpMassager: "https://amzn.to/3yMlVos",
@@ -96,6 +99,16 @@ export const links = {
   frequencyVideo: "https://youtu.be/-MWHhgwO1l4",
   linktree: "https://linktr.ee/I.C.Beauty",
 } as const;
+
+/**
+ * In-salon product orders from the website (Square checkout links). Pickup at the studio until
+ * Iisha confirms she ships. NEEDS CLIENT CONFIRMATION: pickup only, or shipping too?
+ */
+export const retailOrders = {
+  fulfillment: "pickup" as "pickup" | "ship",
+  note: "Order online and pick up at the studio. Iisha will let you know when your order is ready.",
+  paymentNote: "Website order: pickup at the studio",
+};
 
 export const bookHref = links.phase1Scheduler || "/book";
 
@@ -105,6 +118,7 @@ export const nav = [
   // "For Stylists" (/professional-education) and "Speaking" (/speaking) are paused until Iisha relaunches them (her request, 2026-11-08).
   { label: "Learn", href: "/learn" },
   { label: "The Hub", href: "/hub" },
+  { label: "Shop", href: "/shop" },
   { label: "About", href: "/about" },
 ] as const;
 

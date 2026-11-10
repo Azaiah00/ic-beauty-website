@@ -3,6 +3,9 @@
 Every item below shows on the site as a dashed **NEEDS…** marker until it's supplied. Find them all with `grep -rn "Needs\|NEEDS" src`.
 
 ## Must-have before launch
+- [ ] **Shop orders: pickup only, or shipping too?** Website "Buy now" orders are set to pickup at the studio. If Iisha ships, tell us and we'll turn on the shipping address at checkout (2026-11-09).
+- [ ] **Supplement store link with her referral code.** The "Shop supplements" link goes to the Optimal Health Systems collection; please send her affiliate link for the full store (like the ohs.direct link she sent for Digest-A-Meal) so every order credits her.
+- [ ] **Square items to hide from the website:** every active item in her Square item library shows in the shop (photos, prices and stock come from Square). Anything she doesn't want sold online (e.g. AO Scan pass, Home Exosome Topical) should be set to hidden in her Square Online item settings, or tell us which.
 - [ ] **New professional photos from Iisha's upcoming photoshoot** (her request, 2026-11-08). They replace the current homepage and page images; drop them into `/public/images` with the same file names and they swap in automatically.
 - [ ] **H.A.I.R. Method page language:** Iisha will revisit the detailed wording separately (2026-11-08). The page and its four-phase layout stay as they are until then.
 - [ ] **More photos of Iisha.** We currently have one: the white-coat portrait, edited with her I.C. logo on the wall and the coat embroidery corrected to "Iisha Silver" (**confirm she approves the edit**). Still needed: a teaching shot, a shot at the scalp microscope, and real studio photos to replace the hyper-realistic placeholders (see the README image table).

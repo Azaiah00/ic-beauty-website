@@ -1,3 +1,4 @@
+import { links } from "@/lib/site";
 /**
  * All page content in Iisha's own voice. Phrases in quotes below are lifted from her
  * own site / Instagram / notebook so the brand never sounds corporate.
@@ -227,6 +228,50 @@ export const talks = [
   },
 ];
 
+/** The shop's storefront tiles (Iisha, 2026-11-09). Photos: real products, restaged in the brand look (Kie). */
+export const storefronts = [
+  {
+    id: "amazon",
+    eyebrow: "Amazon storefront",
+    title: "Topicals & home maintenance",
+    blurb: "The scalp serums and sprays, shampoos, conditioners, and salon tools Iisha recommends for keeping your hair healthy between visits.",
+    cta: "Shop topicals & home maintenance",
+    href: links.amazonStorefront,
+    image: "shop-amazon-topicals",
+    alt: "Advanced Trichology HairStem Serum and HairStem Peptide Follicle Spray with Joico Moisture Recovery shampoo and conditioner on a brass tray",
+  },
+  {
+    id: "solex",
+    eyebrow: "Solex",
+    title: "Home wellness tools",
+    blurb: "Red light therapy, AO frequency tools, and the at-home wellness devices Iisha uses and recommends.",
+    cta: "Shop home wellness tools",
+    href: links.solexStore,
+    image: "shop-solex-tools",
+    alt: "An AO Infinity wand and a wearable red light device resting on linen",
+  },
+  {
+    id: "supplements",
+    eyebrow: "Optimal Health Systems",
+    title: "Supplements",
+    blurb: "Whole-food supplements Iisha recommends to support your hair from the inside out.",
+    cta: "Shop supplements",
+    href: links.supplementsStore,
+    image: "shop-supplements",
+    alt: "Optimal Health Systems Whole Food Vitamin Mineral, Fulvic Minerals and Digest-A-Meal supplements",
+  },
+  {
+    id: "enzyme",
+    eyebrow: "Featured · $1 offer",
+    title: "Digest-A-Meal digestive enzyme",
+    blurb: "Iisha's favorite digestive enzyme, available through her link for $1 while the offer lasts.",
+    cta: "Claim the $1 offer",
+    href: links.digestiveEnzyme,
+    image: "shop-enzyme",
+    alt: "A bottle of Optimal One Digest-A-Meal with its green travel pouch",
+  },
+] as const;
+
 export const audiences = ["HBCUs", "Sororities", "Women's organizations", "Churches", "Corporate ERGs", "Beauty schools", "Stylist associations", "Health fairs", "Parent groups", "Professional audiences"];
 
 export type HubItem = {
@@ -273,37 +318,37 @@ export const hubItems: HubItem[] = [
     cta: "Join the membership",
   },
   {
-    name: "Digestive Enzyme",
+    name: "Digest-A-Meal Digestive Enzyme",
     type: "Supplement",
     price: "$1 offer",
-    blurb: "Iisha's current $1 digestive enzyme deal from Optimal Health Systems.",
-    href: "https://www.optimalhealthsystems.com/cart/49244690350382:1",
+    blurb: "Iisha's $1 offer on Optimal One Digest-A-Meal from Optimal Health Systems.",
+    href: "/go/enzyme",
     affiliate: true,
-    cta: "Claim the $1 deal",
+    cta: "Claim the $1 offer",
   },
   {
     name: "Supplement Collection",
     type: "Supplement",
     blurb: "The full Optimal Health Systems collection Iisha recommends to clients on a hair recovery journey.",
-    href: "https://www.optimalhealthsystems.com/collections/all/",
+    href: "/go/supplements",
     affiliate: true,
     cta: "Browse supplements",
   },
   {
-    name: "AO Youth Collagen Booster",
-    type: "Supplement",
-    blurb: "A collagen-boosting supplement Iisha shares with clients.",
-    href: "https://shop.solexnation.com/Icbeauty/product/1463",
+    name: "Home Wellness Tools (Solex)",
+    type: "Wellness tool",
+    blurb: "Iisha's Solex store: red light therapy, AO frequency tools and more for your wellness routine at home.",
+    href: "/go/solex",
     affiliate: true,
-    cta: "View product",
+    cta: "Shop home wellness tools",
   },
   {
-    name: "Red Light Therapy",
-    type: "Wellness tool",
-    blurb: "An at-home red light device for clients who want to keep their routine going between sessions.",
-    href: "https://shop.solexnation.com/Icbeauty/product/748",
+    name: "Iisha's Amazon Storefront",
+    type: "Hair tool",
+    blurb: "Topicals, shampoos, conditioners and the salon and scalp tools Iisha recommends for home maintenance.",
+    href: "/go/amazon",
     affiliate: true,
-    cta: "View device",
+    cta: "Shop topicals & home care",
   },
   {
     name: "AO Scan · 6-Day Pass",

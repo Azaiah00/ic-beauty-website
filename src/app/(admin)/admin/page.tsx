@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
-  LogOut, Download, Search, FolderOpen, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
+  LogOut, Download, Search, FolderOpen, Store, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS, formNames } from "@/lib/server/forms";
@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import { ICMark } from "@/components/brand/ICMark";
 import { MobileMenu } from "./MobileMenu";
 import { DeliverablesView } from "./Deliverables";
+import { ShopView } from "./ShopView";
 import { EmailComposer, type Template } from "./EmailComposer";
 import { emailMode } from "@/lib/server/email";
 import { getHours, getServices } from "@/lib/server/squareLive";
@@ -175,6 +176,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   if (!(await isAdmin())) redirect("/admin/login");
   const { form: rawForm, q: rawQ, view, msg, sent } = await searchParams;
   const files = view === "files";
+  const shopView = view === "shop";
+  const other = files || shopView;
   const form = rawForm && FORMS[rawForm] ? rawForm : "";
   const q = (rawQ ?? "").trim().toLowerCase();
 
@@ -226,13 +229,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     email: emailMode() !== "off",
     square: !!process.env.SQUARE_ACCESS_TOKEN,
   };
-  const [live, liveServices] = files ? [null, []] : await Promise.all([getHours(), getServices()]);
+  const [live, liveServices] = other ? [null, []] : await Promise.all([getHours(), getServices()]);
 
   const NavItem = ({ f, text, n }: { f: string; text: string; n?: number }) => {
-    const Icon = f === "__files" ? FolderOpen : f ? ICONS[f] ?? Inbox : LayoutDashboard;
-    const active = f === "__files" ? files : !files && form === f;
+    const Icon = f === "__files" ? FolderOpen : f === "__shop" ? Store : f ? ICONS[f] ?? Inbox : LayoutDashboard;
+    const active = f === "__files" ? files : f === "__shop" ? shopView : !other && form === f;
     return (
-      <Link href={f === "__files" ? "/admin?view=files" : f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
+      <Link href={f === "__files" ? "/admin?view=files" : f === "__shop" ? "/admin?view=shop" : f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
         <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.6} aria-hidden="true" />
         <span className="flex-1 truncate">{text}</span>
         {n ? <span className={`rounded-full px-2 text-[0.7rem] tabular-nums ${active ? "bg-bone/25" : "bg-white/10"}`}>{n}</span> : null}
@@ -272,11 +275,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </div>
           <div className="relative z-10 px-4 pb-3 lg:hidden">
             <Suspense>
-              <MobileMenu current={files ? "__files" : form} items={[{ form: "", label: "Overview" }, { form: "__files", label: "Deliverables" }, ...formNames.map((f) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh }))]} />
+              <MobileMenu current={files ? "__files" : shopView ? "__shop" : form} items={[{ form: "", label: "Overview" }, { form: "__shop", label: "Shop & orders" }, { form: "__files", label: "Deliverables" }, ...formNames.map((f) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh }))]} />
             </Suspense>
           </div>
           <nav aria-label="Dashboard" className="hidden lg:mt-6 lg:flex lg:flex-col lg:gap-1 [@media(min-width:1024px)_and_(max-height:860px)]:mt-3">
             <NavItem f="" text="Overview" />
+            <NavItem f="__shop" text="Shop & orders" />
             <NavItem f="__files" text="Deliverables" />
             <p className="mt-4 hidden px-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40 lg:block [@media(min-width:1024px)_and_(max-height:860px)]:mt-2">Your people</p>
             {formNames.map((f) => <NavItem key={f} f={f} text={FORMS[f].tab} n={counts[f].total} />)}
@@ -293,12 +297,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <main className="min-w-0 px-4 pb-16 pt-4 lg:px-2 lg:pt-2">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{files ? "Deliverables" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
+              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{files ? "Deliverables" : shopView ? "Shop & orders" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
               <p className="text-[0.9rem] text-plum-700">
-                {files ? "Your files from Couture House, plus anything you upload" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
+                {files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
-            <div className={`items-center gap-2 ${files ? "hidden" : "flex"}`}>
+            <div className={`items-center gap-2 ${other ? "hidden" : "flex"}`}>
               <form className={`flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white px-4 sm:w-72 sm:flex-none ${card}`} role="search">
                 {form && <input type="hidden" name="form" value={form} />}
                 <Search className="h-4 w-4 shrink-0 text-plum-700" aria-hidden="true" />
@@ -316,15 +320,16 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
               {{ ok: "Sent from your Gmail. You'll find it in your Sent folder.", notconnected: "Not sent: your Gmail isn't connected yet.", failed: "Not sent: Gmail didn't accept it. Check the app password in Netlify.", empty: "Add a subject and a message first.", missing: "That person couldn't be found." }[sent] ?? "Done."}
             </p>
           )}
-          {!files && msg && (
+          {!other && msg && (
             <p role="status" className="mt-5 flex items-start gap-2 rounded-2xl bg-[#e3efe8] px-4 py-3 text-[0.9rem] text-[#24603f]">
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
               {msg}
             </p>
           )}
           {files && <DeliverablesView msg={msg} />}
+          {shopView && <ShopView msg={msg} />}
 
-          {!files && !form && !q && (
+          {!other && !form && !q && (
             <>
               <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Totals">
                 <Kpi f="pilot-application" tone="plum" title="30-Day applications" value={counts["pilot-application"].total} sub={`${counts["pilot-application"].fresh} waiting on you`} ring={pilot.length ? pilotFollowed / pilot.length : 0} ringLabel={`${pilot.length ? Math.round((pilotFollowed / pilot.length) * 100) : 0}%`} />
@@ -349,9 +354,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                   </div>
                 </div>
                 {ready.square && (
-                  <form method="post" action="/api/admin/square-refresh" className="shrink-0">
+                  <div className="flex shrink-0 flex-wrap gap-2">
+                  <Link href="/admin?view=shop" className="inline-flex min-h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-plum-800/15 px-5 text-[0.74rem] font-medium uppercase tracking-[0.12em] text-plum-900 transition hover:border-amethyst sm:w-auto"><Store className="h-4 w-4" aria-hidden="true" /> Shop &amp; orders</Link>
+                  <form method="post" action="/api/admin/square-refresh" className="w-full sm:w-auto">
                     <button className="inline-flex min-h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-plum-900 px-5 text-[0.74rem] font-medium uppercase tracking-[0.12em] text-bone transition hover:bg-amethyst sm:w-auto">Refresh from Square</button>
                   </form>
+                  </div>
                 )}
               </section>
 
@@ -454,7 +462,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             </>
           )}
 
-          {files ? null : rows.length === 0 ? (
+          {other ? null : rows.length === 0 ? (
             <p className={`${card} mt-4 p-6 text-plum-700`}>{q ? "No one matches that search." : "No one here yet. They'll appear the moment someone fills out the form."}</p>
           ) : (
             <ul className="mt-4 space-y-3">{rows.map((s) => <Person key={s.id} s={s} back={back} showForm={!form} connected={emailMode() !== "off"} />)}</ul>

@@ -16,6 +16,7 @@ import { articles } from "@/lib/articles";
 import { business, bookHref, formatHour, METHOD_DEFINITION } from "@/lib/site";
 import { funnel } from "@/lib/funnel";
 import { getHours } from "@/lib/server/squareLive";
+import { Storefronts } from "@/components/shop/Storefronts";
 import { JsonLd } from "@/components/JsonLd";
 import { graph, faqNode } from "@/lib/schema";
 
@@ -66,7 +67,7 @@ const arms = [
 export default async function HomePage() {
   const { hours } = await getHours();
   const homeFaqs = faqs[0].items.slice(0, 4).concat(faqs[1].items.slice(0, 1));
-  const featured = hubItems.filter((h) => ["Radiance Rewired", "Hair Health Checklist", "It's a WIN WIN Membership"].includes(h.name));
+  const featured = hubItems.filter((h) => ["Radiance Rewired", "Hair Health Red Flags Checklist", "The H.A.I.R. Circle"].includes(h.name));
   return (
     <>
       <JsonLd data={graph(faqNode(homeFaqs, "/"))} />
@@ -305,6 +306,25 @@ export default async function HomePage() {
           <div className="lg:col-span-5 lg:col-start-8">
             <PhotoSlot src={img("product-shelf")} alt="Curated haircare and scalp-care tools on a studio shelf" label="Studio product shelf" shape="arch" ratio="aspect-[4/5]" parallax={6} />
           </div>
+        </div>
+      </section>
+
+      {/* ============ SHOP ============ */}
+      <section className="bg-mist py-24 sm:py-36" aria-labelledby="shop-title">
+        <div className="container-x">
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <SectionHead
+              id="shop-title"
+              eyebrow="The shop"
+              title={<>Shop the products <span className="italic-accent text-amethyst">Iisha trusts.</span></>}
+              lede="Order in-salon haircare online and pick it up at the studio, or shop her favorite topicals, home wellness tools, and supplements."
+            />
+            <div className="flex flex-wrap gap-3" data-reveal>
+              <Btn href="/shop#salon">Shop in-salon products</Btn>
+              <Btn href="/shop" variant="outline">Visit the shop</Btn>
+            </div>
+          </div>
+          <div className="mt-14"><Storefronts /></div>
         </div>
       </section>
 

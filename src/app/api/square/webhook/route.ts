@@ -33,6 +33,6 @@ export async function POST(req: Request) {
   try {
     type = (JSON.parse(raw) as { type?: string }).type ?? "";
   } catch {}
-  if (type.startsWith("catalog.") || type.startsWith("location.")) revalidateTag(SQUARE_TAG, { expire: 0 });
+  if (type.startsWith("catalog.") || type.startsWith("location.") || type.startsWith("inventory.")) revalidateTag(SQUARE_TAG, { expire: 0 });
   return NextResponse.json({ ok: true });
 }

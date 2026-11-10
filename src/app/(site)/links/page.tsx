@@ -36,13 +36,20 @@ const groups = [
     ],
   },
   {
+    title: "Shop",
+    items: [
+      { t: "Shop in-salon products", h: "/shop#salon" },
+      { t: "Shop topicals & home maintenance (Amazon)", h: "/go/amazon" },
+      { t: "Shop home wellness tools (Solex)", h: "/go/solex" },
+      { t: "Shop supplements", h: "/go/supplements" },
+      { t: "Digest-A-Meal digestive enzyme: $1 offer", h: "/go/enzyme" },
+    ],
+  },
+  {
     title: "Holistic solutions",
     items: [
-      { t: "Digestive enzyme deal: $1", h: links.digestiveEnzyme },
       { t: "Custom sound therapy", h: "/shop/custom-sound-therapy" },
       { t: "What is frequency energy medicine?", h: links.frequencyVideo },
-      { t: "AO Youth collagen-boosting supplement", h: links.aoYouth },
-      { t: "Red light therapy", h: links.redLight },
       { t: "Everything in The Hub", h: "/hub" },
     ],
   },
@@ -77,7 +84,7 @@ export default function LinksPage() {
             {g.note && <p className="mt-1 text-[0.85rem] text-plum-700">{g.note}</p>}
             <ul className="mt-3 space-y-2.5">
               {g.items.map((it) => {
-                const ext = it.h.startsWith("http");
+                const ext = it.h.startsWith("http") || it.h.startsWith("/go/");
                 const cls = `flex min-h-[3.5rem] items-center justify-between gap-3 rounded-2xl border px-5 py-3 transition ${"primary" in it && it.primary ? "border-plum-900 bg-plum-900 font-medium text-bone hover:bg-amethyst" : "border-plum-900/12 bg-paper hover:border-plum-900/40"}`;
                 return (
                   <li key={it.t}>

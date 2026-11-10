@@ -11,15 +11,15 @@
 import { business } from "@/lib/site";
 
 export const SQUARE_TAG = "square";
-const REVALIDATE = 900;
-const VERSION = "2025-01-23";
-const LOCATION = process.env.SQUARE_LOCATION_ID || "EVVWFXT0K865D"; // from her Square booking link
-const base = () => process.env.SQUARE_API_BASE || (process.env.SQUARE_ENV === "sandbox" ? "https://connect.squareupsandbox.com" : "https://connect.squareup.com"); // SQUARE_API_BASE: local testing only
+export const REVALIDATE = 900;
+export const VERSION = "2025-01-23";
+export const LOCATION = process.env.SQUARE_LOCATION_ID || "EVVWFXT0K865D"; // from her Square booking link
+export const base = () => process.env.SQUARE_API_BASE || (process.env.SQUARE_ENV === "sandbox" ? "https://connect.squareupsandbox.com" : "https://connect.squareup.com"); // SQUARE_API_BASE: local testing only
 
 export type DayHours = { day: string; short: string; open: string | null; close: string | null };
 export type LiveService = { id: string; name: string; description: string; category: string; price: string; duration: string };
 
-async function get<T>(path: string): Promise<T | null> {
+export async function get<T>(path: string): Promise<T | null> {
   if (!process.env.SQUARE_ACCESS_TOKEN) return null;
   try {
     const res = await fetch(`${base()}${path}`, {
@@ -61,12 +61,21 @@ export async function getHours(): Promise<{ hours: DayHours[]; live: boolean }> 
 /* --------------------------------- Services -------------------------------- */
 
 type Money = { amount?: number; currency?: string };
-type Variation = {
+export type Variation = {
   id: string;
   is_deleted?: boolean;
-  item_variation_data?: { name?: string; pricing_type?: "FIXED_PRICING" | "VARIABLE_PRICING"; price_money?: Money; service_duration?: number; available_for_booking?: boolean };
+  item_variation_data?: {
+    name?: string;
+    pricing_type?: "FIXED_PRICING" | "VARIABLE_PRICING";
+    price_money?: Money;
+    service_duration?: number;
+    available_for_booking?: boolean;
+    track_inventory?: boolean;
+    sellable?: boolean;
+    location_overrides?: { location_id?: string; track_inventory?: boolean; sold_out?: boolean }[];
+  };
 };
-type CatalogObject = {
+export type CatalogObject = {
   type: string;
   id: string;
   is_deleted?: boolean;
@@ -74,6 +83,7 @@ type CatalogObject = {
   present_at_location_ids?: string[];
   absent_at_location_ids?: string[];
   category_data?: { name?: string };
+  image_data?: { url?: string; name?: string };
   item_data?: {
     name?: string;
     description?: string;
@@ -82,14 +92,17 @@ type CatalogObject = {
     is_archived?: boolean;
     category_id?: string;
     categories?: { id: string }[];
+    reporting_category?: { id: string };
+    image_ids?: string[];
+    ecom_visibility?: string;
     variations?: Variation[];
   };
 };
 
-const atLocation = (o: CatalogObject) =>
+export const atLocation = (o: CatalogObject) =>
   o.present_at_all_locations ? !(o.absent_at_location_ids ?? []).includes(LOCATION) : (o.present_at_location_ids ?? []).includes(LOCATION);
 
-const usd = (cents: number) => `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
+export const usd = (cents: number) => `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
 
 function priceLabel(vs: Variation[]) {
   const fixed = vs.filter((v) => v.item_variation_data?.pricing_type !== "VARIABLE_PRICING" && v.item_variation_data?.price_money?.amount != null);
@@ -112,17 +125,24 @@ function durationLabel(vs: Variation[]) {
   return lo === hi ? fmt(lo) : `${fmt(lo)} – ${fmt(hi)}`;
 }
 
-/** Her bookable Square services (Appointments), grouped by category order in Square. Empty when not connected. */
-export async function getServices(): Promise<LiveService[]> {
+/** Her whole Square catalog (items, categories, images), shared by the service menu and the shop. null = not connected. */
+export async function listCatalog(): Promise<CatalogObject[] | null> {
   const objects: CatalogObject[] = [];
   let cursor: string | undefined;
   for (let page = 0; page < 10; page++) {
-    const data = await get<{ objects?: CatalogObject[]; cursor?: string }>(`/v2/catalog/list?types=ITEM,CATEGORY${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
-    if (!data) return [];
+    const data = await get<{ objects?: CatalogObject[]; cursor?: string }>(`/v2/catalog/list?types=ITEM,CATEGORY,IMAGE${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
+    if (!data) return null;
     objects.push(...(data.objects ?? []));
     if (!data.cursor) break;
     cursor = data.cursor;
   }
+  return objects;
+}
+
+/** Her bookable Square services (Appointments), grouped by category order in Square. Empty when not connected. */
+export async function getServices(): Promise<LiveService[]> {
+  const objects = await listCatalog();
+  if (!objects) return [];
   const categories = new Map(objects.filter((o) => o.type === "CATEGORY" && !o.is_deleted).map((o) => [o.id, o.category_data?.name ?? ""]));
   return objects
     .filter((o) => o.type === "ITEM" && !o.is_deleted && o.item_data?.product_type === "APPOINTMENTS_SERVICE" && !o.item_data.is_archived && atLocation(o))
