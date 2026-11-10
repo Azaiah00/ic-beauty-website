@@ -101,14 +101,29 @@ export const links = {
 } as const;
 
 /**
- * In-salon product orders from the website (Square checkout links). Pickup at the studio until
- * Iisha confirms she ships. NEEDS CLIENT CONFIRMATION: pickup only, or shipping too?
+ * In-salon product orders from the website (Square checkout links). Shoppers choose pickup (free) or shipping.
+ * Square checkout links take one shipping charge per order, so the fee is set here by how many items are in the
+ * order (a stand-in for weight: her products are similar-size bottles and jars).
+ * Fees set from Iisha's real shipping cost (2026-11-10). Change the three numbers below to adjust.
  */
 export const retailOrders = {
-  fulfillment: "pickup" as "pickup" | "ship",
-  note: "Order online and pick up at the studio. Iisha will let you know when your order is ready.",
-  paymentNote: "Website order: pickup at the studio",
+  note: "Pick up at the studio for free, or have it shipped. Iisha will let you know when your order is ready or on its way.",
+  paymentNote: "Website order",
+  shipping: {
+    enabled: true,
+    // Iisha (2026-11-10): shipping 2 items costs her about $13–$14. 1 item $9.95, 2 items $13.95, 3 items $17.95.
+    firstItemCents: 995, // first item
+    eachAdditionalCents: 400, // each additional item in the same order
+    freeOverCents: 15000, // free shipping when the order subtotal is $150 or more (0 = never free)
+  },
 };
+
+/** Shipping charge in cents for an order of `qty` items totalling `subtotalCents`. */
+export function shippingCents(qty: number, subtotalCents: number) {
+  const s = retailOrders.shipping;
+  if (s.freeOverCents && subtotalCents >= s.freeOverCents) return 0;
+  return s.firstItemCents + Math.max(0, qty - 1) * s.eachAdditionalCents;
+}
 
 export const bookHref = links.phase1Scheduler || "/book";
 

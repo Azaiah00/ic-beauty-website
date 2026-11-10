@@ -63,7 +63,7 @@ export async function getClicks() {
 }
 
 export type OrderMark = { status: string; notes: string; updatedAt: string };
-export const ORDER_STATUSES = ["New", "Ready for pickup", "Picked up"] as const;
+export const ORDER_STATUSES = ["New", "Ready for pickup", "Picked up", "Shipped"] as const;
 
 export const getOrderMarks = async (ids: string[]) => {
   const store = kv();

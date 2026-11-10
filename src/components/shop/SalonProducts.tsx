@@ -6,6 +6,9 @@ import { ShoppingBag, Phone } from "lucide-react";
 import { getRetail, groupRetail, type RetailItem } from "@/lib/server/squareShop";
 import { retail } from "@/lib/content";
 import { business, retailOrders } from "@/lib/site";
+
+const money = (c: number) => `$${(c / 100).toFixed(c % 100 ? 2 : 0)}`;
+const SHIP = retailOrders.shipping;
 import { ICMark } from "@/components/brand/ICMark";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -42,6 +45,15 @@ function Product({ p }: { p: RetailItem }) {
           ) : (
             <input type="hidden" name="v" value={p.variations[0].id} />
           )}
+          {SHIP.enabled && (
+            <label className="w-full">
+              <span className="sr-only">Pickup or shipping for {p.name}</span>
+              <select name="m" defaultValue="pickup" className="min-h-10 w-full rounded-pill border border-plum-800/15 bg-white px-3 text-[0.88rem] text-plum-900">
+                <option value="pickup">Pick up at the studio · free</option>
+                <option value="ship">Ship to me · from {money(SHIP.firstItemCents)}</option>
+              </select>
+            </label>
+          )}
           <label>
             <span className="sr-only">Quantity of {p.name}</span>
             <select name="q" defaultValue="1" className="min-h-10 rounded-pill border border-plum-800/15 bg-white px-3 text-[0.88rem] text-plum-900">
@@ -77,7 +89,9 @@ export async function SalonProducts() {
           </div>
         ))}
         <p className="mt-12 max-w-3xl text-[0.88rem] text-plum-700">
-          {retailOrders.note} Secure checkout by Square. Questions? Call or text <a href={business.phoneHref} className="link-underline text-plum-900">{business.phone}</a>.
+          {retailOrders.note}
+          {SHIP.enabled && ` Shipping is ${money(SHIP.firstItemCents)} for one item${SHIP.eachAdditionalCents ? ` plus ${money(SHIP.eachAdditionalCents)} for each additional item` : ""}${SHIP.freeOverCents ? `, and free on orders of ${money(SHIP.freeOverCents)} or more` : ""}.`}{" "}
+          Secure checkout by Square. Questions? Call or text <a href={business.phoneHref} className="link-underline text-plum-900">{business.phone}</a>.
         </p>
       </>
     );

@@ -17,13 +17,14 @@ const prettyPhone = (p: string) => {
   return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : p;
 };
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: TZ, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
-const STATUS_TONE: Record<string, string> = { New: "bg-[#fbeee0] text-[#8a5a1f]", "Ready for pickup": "bg-mist text-amethyst", "Picked up": "bg-[#e3efe8] text-[#24603f]" };
+const STATUS_TONE: Record<string, string> = { New: "bg-[#fbeee0] text-[#8a5a1f]", "Ready for pickup": "bg-mist text-amethyst", "Picked up": "bg-[#e3efe8] text-[#24603f]", Shipped: "bg-[#e3efe8] text-[#24603f]" };
+const DONE = new Set(["Picked up", "Shipped"]);
 
 export async function ShopView({ msg }: { msg?: string }) {
   const connected = !!process.env.SQUARE_ACCESS_TOKEN;
   const [orders, products, clicks] = await Promise.all([getWebsiteOrders(), getRetail(), getClicks()]);
   const marks = await getOrderMarks((orders ?? []).map((o) => o.id));
-  const waiting = (orders ?? []).filter((o) => (marks.get(o.id)?.status ?? "New") !== "Picked up").length;
+  const waiting = (orders ?? []).filter((o) => !DONE.has(marks.get(o.id)?.status ?? "New")).length;
   const soldOut = products.filter((p) => p.soldOut);
   const totalClicks = Object.values(clicks.thisMonth).reduce((a, b) => a + b, 0);
 
@@ -65,7 +66,7 @@ export async function ShopView({ msg }: { msg?: string }) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 id="orders-title" className="font-display text-[1.45rem] leading-tight text-plum-900">Website orders</h2>
-            <p className="text-[0.85rem] text-plum-700">Paid through your website&apos;s Buy buttons. Square emails you each one too. Customers pick up at the studio.</p>
+            <p className="text-[0.85rem] text-plum-700">Paid through your website&apos;s Buy buttons. Square emails you each one too. Each order shows whether it&apos;s pickup or shipping.</p>
           </div>
           <a href="https://app.squareup.com/dashboard/orders/overview" target="_blank" rel="noopener" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-plum-800/15 px-4 text-[0.8rem] text-plum-900 hover:border-amethyst">
             All orders in Square <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -87,11 +88,15 @@ export async function ShopView({ msg }: { msg?: string }) {
                       <p className="font-medium text-plum-900">{o.customer.name || "Website customer"}</p>
                       <p className="text-[0.8rem] text-plum-700">{when(o.createdAt)} · {o.total}</p>
                     </div>
-                    <span className={`rounded-full px-3 py-1 text-[0.75rem] font-medium ${STATUS_TONE[status] ?? STATUS_TONE.New}`}>{status}</span>
+                    <span className="flex flex-wrap gap-2">
+                      <span className="rounded-full border border-plum-800/15 px-3 py-1 text-[0.75rem] font-medium text-plum-900">{o.method === "ship" ? "Ship" : "Pickup"}</span>
+                      <span className={`rounded-full px-3 py-1 text-[0.75rem] font-medium ${STATUS_TONE[status] ?? STATUS_TONE.New}`}>{status}</span>
+                    </span>
                   </div>
                   <ul className="mt-3 space-y-1 text-[0.9rem] text-plum-900">
                     {o.items.map((it, i) => <li key={i}>{it.qty} × {it.name}</li>)}
                   </ul>
+                  {o.method === "ship" && o.shipTo && <p className="mt-2 text-[0.85rem] text-plum-700"><span className="font-medium text-plum-900">Ship to:</span> {o.shipTo}</p>}
                   {(o.customer.email || o.customer.phone) && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {o.customer.phone && <a href={`sms:${o.customer.phone}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-mist px-3 text-[0.8rem] text-plum-900"><Phone className="h-3.5 w-3.5" aria-hidden="true" /> Text {prettyPhone(o.customer.phone)}</a>}
@@ -103,7 +108,7 @@ export async function ShopView({ msg }: { msg?: string }) {
                     <label>
                       <span className="sr-only">Pickup status</span>
                       <select name="status" defaultValue={status} className="min-h-10 w-full rounded-full border border-plum-800/15 bg-white px-3 text-[0.88rem] text-plum-900">
-                        {ORDER_STATUSES.map((s) => <option key={s}>{s}</option>)}
+                        {ORDER_STATUSES.filter((s) => (o.method === "ship" ? s !== "Ready for pickup" && s !== "Picked up" : s !== "Shipped")).map((s) => <option key={s}>{s}</option>)}
                       </select>
                     </label>
                     <label>

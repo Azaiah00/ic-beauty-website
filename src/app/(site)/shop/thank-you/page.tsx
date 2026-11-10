@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import { Btn } from "@/components/ui/Btn";
-import { business, retailOrders } from "@/lib/site";
+import { business } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Thank You for Your Order",
@@ -20,7 +20,7 @@ export default function ThankYouPage() {
           Thank you. <span className="italic-accent text-amethyst">Your order is in.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-[1.05rem] text-plum-700">
-          Square has emailed your receipt. {retailOrders.note} Questions? Call or text{" "}
+          Square has emailed your receipt. Iisha will let you know when your order is ready for pickup or on its way. Questions? Call or text{" "}
           <a href={business.phoneHref} className="link-underline text-plum-900">{business.phone}</a>.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">

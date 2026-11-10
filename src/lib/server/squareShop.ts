@@ -8,6 +8,7 @@
  * Cached 15 minutes under the "square" tag (webhook + dashboard button refresh it).
  */
 import { unstable_cache } from "next/cache";
+import { shippingCents } from "@/lib/site";
 import { base, VERSION, LOCATION, SQUARE_TAG, REVALIDATE, listCatalog, atLocation, usd, type CatalogObject, type Variation } from "./squareLive";
 
 export type RetailVariation = { id: string; name: string; price: string; cents: number; soldOut: boolean };
@@ -110,12 +111,13 @@ export function groupRetail(list: RetailItem[]) {
  * Square checkout link for one product. Only variations currently listed on the site can be bought,
  * so nobody can craft a link to a hidden or archived item.
  */
-export async function createCheckout(variationId: string, quantity: number, redirectUrl: string, note: string) {
+export async function createCheckout(variationId: string, quantity: number, redirectUrl: string, note: string, ship = false) {
   const list = await load(); // fresh read: never sell from a stale "in stock"
   const item = list.find((i) => i.variations.some((v) => v.id === variationId));
   const v = item?.variations.find((x) => x.id === variationId);
   if (!item || !v) return { ok: false as const, reason: "missing" };
   if (v.soldOut) return { ok: false as const, reason: "soldout" };
+  const fee = ship ? shippingCents(quantity, v.cents * quantity) : 0;
   const res = await fetch(`${base()}/v2/online-checkout/payment-links`, {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.SQUARE_ACCESS_TOKEN}`, "Square-Version": VERSION, "Content-Type": "application/json" },
@@ -123,8 +125,12 @@ export async function createCheckout(variationId: string, quantity: number, redi
       idempotency_key: crypto.randomUUID(),
       description: `Website order: ${item.name}`,
       order: { location_id: LOCATION, reference_id: "website", metadata: { channel: "website" }, line_items: [{ catalog_object_id: variationId, quantity: String(quantity) }] },
-      checkout_options: { redirect_url: redirectUrl, ask_for_shipping_address: false },
-      payment_note: note,
+      checkout_options: {
+        redirect_url: redirectUrl,
+        ask_for_shipping_address: ship,
+        ...(ship && fee > 0 ? { shipping_fee: { name: "Shipping", charge: { amount: fee, currency: "USD" } } } : {}),
+      },
+      payment_note: `${note}: ${ship ? "ship to customer" : "pickup at the studio"}`,
     }),
     signal: AbortSignal.timeout(10000),
   });
@@ -146,6 +152,15 @@ export type WebsiteOrder = {
   items: { name: string; qty: string }[];
   customer: { name: string; email: string; phone: string };
   state: string;
+  method: "pickup" | "ship";
+  shipTo: string;
+};
+
+type Recipient = {
+  display_name?: string;
+  email_address?: string;
+  phone_number?: string;
+  address?: { address_line_1?: string; address_line_2?: string; locality?: string; administrative_district_level_1?: string; postal_code?: string };
 };
 
 type SqOrder = {
@@ -159,7 +174,11 @@ type SqOrder = {
   net_amount_due_money?: { amount?: number };
   total_money?: { amount?: number };
   line_items?: { name?: string; variation_name?: string; quantity?: string }[];
-  fulfillments?: { pickup_details?: { recipient?: { display_name?: string; email_address?: string; phone_number?: string } }; shipment_details?: { recipient?: { display_name?: string; email_address?: string; phone_number?: string } } }[];
+  fulfillments?: {
+    type?: string;
+    pickup_details?: { recipient?: Recipient };
+    shipment_details?: { recipient?: Recipient };
+  }[];
 };
 
 /** Paid orders placed through the website's Buy buttons, newest first (last 90 days). null = Square not connected. */
@@ -196,14 +215,19 @@ export async function getWebsiteOrders(): Promise<WebsiteOrder[] | null> {
     );
     return orders.map((o) => {
       const cid = o.customer_id ?? o.tenders?.find((t) => t.customer_id)?.customer_id;
-      const r = o.fulfillments?.[0]?.pickup_details?.recipient ?? o.fulfillments?.[0]?.shipment_details?.recipient;
+      const f = o.fulfillments?.[0];
+      const r = f?.shipment_details?.recipient ?? f?.pickup_details?.recipient;
+      const a = f?.shipment_details?.recipient?.address;
+      const shipTo = a ? [[a.address_line_1, a.address_line_2].filter(Boolean).join(" "), [a.locality, a.administrative_district_level_1].filter(Boolean).join(", "), a.postal_code].filter(Boolean).join(" · ") : "";
       return {
         id: o.id,
         createdAt: o.created_at,
         state: o.state,
         total: usd(o.total_money?.amount ?? 0),
         items: (o.line_items ?? []).map((l) => ({ name: [l.name, l.variation_name && l.variation_name !== "Regular" ? l.variation_name : ""].filter(Boolean).join(" · "), qty: l.quantity ?? "1" })),
-        customer: (cid && customers.get(cid)) || { name: r?.display_name ?? "", email: r?.email_address ?? "", phone: r?.phone_number ?? "" },
+        customer: { name: r?.display_name || (cid && customers.get(cid)?.name) || "", email: r?.email_address || (cid && customers.get(cid)?.email) || "", phone: r?.phone_number || (cid && customers.get(cid)?.phone) || "" },
+        method: f?.type === "SHIPMENT" || f?.shipment_details ? "ship" : "pickup",
+        shipTo,
       };
     });
   } catch (e) {
