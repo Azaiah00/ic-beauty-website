@@ -10,6 +10,7 @@ import { business, retailOrders } from "@/lib/site";
 const money = (c: number) => `$${(c / 100).toFixed(c % 100 ? 2 : 0)}`;
 const SHIP = retailOrders.shipping;
 import { ICMark } from "@/components/brand/ICMark";
+import { ShipChoice } from "./ShipChoice";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -45,15 +46,7 @@ function Product({ p }: { p: RetailItem }) {
           ) : (
             <input type="hidden" name="v" value={p.variations[0].id} />
           )}
-          {SHIP.enabled && (
-            <label className="w-full">
-              <span className="sr-only">Pickup or shipping for {p.name}</span>
-              <select name="m" defaultValue="pickup" className="min-h-10 w-full rounded-pill border border-plum-800/15 bg-white px-3 text-[0.88rem] text-plum-900">
-                <option value="pickup">Pick up at the studio · free</option>
-                <option value="ship">Ship to me · from {money(SHIP.firstItemCents)}</option>
-              </select>
-            </label>
-          )}
+          {SHIP.enabled && <ShipChoice product={p.name} fee={money(SHIP.firstItemCents)} />}
           <label>
             <span className="sr-only">Quantity of {p.name}</span>
             <select name="q" defaultValue="1" className="min-h-10 rounded-pill border border-plum-800/15 bg-white px-3 text-[0.88rem] text-plum-900">

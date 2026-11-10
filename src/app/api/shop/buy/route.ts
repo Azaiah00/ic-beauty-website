@@ -12,7 +12,10 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const u = new URL(req.url);
   const v = (u.searchParams.get("v") ?? "").slice(0, 64);
-  const ship = u.searchParams.get("m") === "ship" && retailOrders.shipping.enabled;
+  const m = u.searchParams.get("m");
+  // Shoppers must choose pickup or shipping before checkout (the form requires it; this guards direct links).
+  if (retailOrders.shipping.enabled && m !== "pickup" && m !== "ship") return NextResponse.redirect(new URL("/shop?order=choose#salon", req.url), 303);
+  const ship = m === "ship" && retailOrders.shipping.enabled;
   const q = Math.min(10, Math.max(1, Number.parseInt(u.searchParams.get("q") ?? "1", 10) || 1));
   const back = (reason: string) => NextResponse.redirect(new URL(`/shop?order=${reason}#salon`, req.url), 303);
   if (!process.env.SQUARE_ACCESS_TOKEN || !/^[A-Z0-9]+$/i.test(v)) return back("unavailable");

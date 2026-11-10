@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 
 const MESSAGES: Record<string, string> = {
+  choose: "Please select pickup at the studio or shipping before you check out.",
   soldout: "Sorry, that product just sold out. Please choose another or ask Iisha at your next visit.",
   missing: "That product isn't available online right now. Please call or text the studio to order.",
   unavailable: "Online ordering is getting set up. Please call or text the studio to order.",
