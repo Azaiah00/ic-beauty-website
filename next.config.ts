@@ -47,7 +47,7 @@ const nextConfig: NextConfig = {
       // Old Stan store links → on-site shop
       { source: "/stan", destination: "/shop", permanent: true },
       // New-client front door: Iisha's Jotform discovery-call form (default tab on /book). Good for TikTok bio.
-      { source: "/start", destination: "/book", permanent: false },
+      // (/start is NOT redirected: it is the business-card QR welcome page, src/app/(site)/start.)
       { source: "/discovery", destination: "/book", permanent: false },
       // Latest newsletter (update when the next issue ships)
       { source: "/newsletter", destination: "/newsletter/2026-11", permanent: false },

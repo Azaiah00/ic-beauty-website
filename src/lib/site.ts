@@ -64,6 +64,8 @@ export const links = {
    */
   discoveryFormId: "262988873070067",
   discoveryForm: "https://form.jotform.com/262988873070067",
+  // H.A.I.R. Shift Masterclass registration (Iisha, Nov 2026). Shown on /masterclass; link people to /masterclass, not this form.
+  masterclassFormId: "263171318807054",
   pathwayIntakes: {
     maintenanceStyle: "https://form.jotform.com/263017559235055",
   },
