@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
+  LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck, Video,
   LogOut, Download, Search, FolderOpen, Store, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
@@ -37,6 +37,7 @@ const ICONS: Record<string, typeof Sparkles> = {
   "class-waitlist": GraduationCap,
   "product-request": ShoppingBag,
   newsletter: Newspaper,
+  masterclass: Video,
 };
 
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: TZ, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -62,6 +63,7 @@ function templatesFor(s: Submission): Template[] {
     "pilot-application": `Hi ${first},\n\nThank you so much for applying for the founding group of ${funnel.pilot.name}. I read your application and I'd love to talk with you about it.\n\nWhen is a good time for a quick call this week? ${reach}`,
     "hair-love-optin": `Hi ${first},\n\nThank you for grabbing my Hair Health Red Flags checklist! How did it go? If anything you checked surprised you, I'd love to hear about it.\n\nWhen you're ready, you can request a complimentary 15-minute discovery call here and I'll personally reach out to schedule it: ${book}\n\n${reach}`,
     "scalp-check": `Hi ${first},\n\nThank you for taking my Scalp Self-Check.${s.data.profile ? ` Your result was "${s.data.profile}".` : ""} I'd love to walk you through what that means for you on a complimentary 15-minute discovery call. Request it here and I'll reach out to schedule: ${book}\n\n${reach}`,
+    masterclass: `Hi ${first},\n\nThank you for registering for my free H.A.I.R. Shift Masterclass! I'm so glad you're joining me. Keep an eye on your inbox for the Zoom link before class.\n\nIn the meantime, here's my free Hair Health Red Flags checklist, a great warm-up: ${checklist}\n\n${reach}`,
     "circle-join": `Hi ${first},\n\nThank you for joining the founding list for The H.A.I.R. Circle! You'll be the first to know when doors open, along with your founding-member price.\n\nIn the meantime, ${reach.toLowerCase()}`,
   };
   const t: Template[] = [

@@ -22,6 +22,12 @@ export const shareCards: Record<string, Share> = {
     image: "/og/event.jpg",
     alt: "I.C. Beauty event page with two choices: request a discovery call or get the free checklist",
   },
+  "/masterclass": {
+    title: "The H.A.I.R. Shift Masterclass: free live class with Iisha",
+    description: "Think Differently. Care Differently. A free live Zoom class with Iisha C. Silver on what healthy hair really requires, beyond products and styling.",
+    image: "/og/masterclass.jpg",
+    alt: "The H.A.I.R. Shift Masterclass registration page from I.C. Beauty",
+  },
   "/hair-love": {
     title: "Free: Hair Health Red Flags Most People Ignore",
     description: "Your hair has been talking. A free 5-minute self-check from hair wellness educator Iisha C. Silver.",

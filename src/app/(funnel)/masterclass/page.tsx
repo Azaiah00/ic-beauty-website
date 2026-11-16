@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CheckCircle2, Video } from "lucide-react";
 import { img } from "@/lib/images";
 import { links } from "@/lib/site";
+import { shareMeta } from "@/lib/share";
 import { JotformEmbed } from "@/components/forms/JotformEmbed";
 
 /**
@@ -12,6 +13,7 @@ import { JotformEmbed } from "@/components/forms/JotformEmbed";
  * No date or time on the page at Iisha's request (Nov 15): the Jotform carries the details.
  */
 export const metadata: Metadata = {
+  ...shareMeta("/masterclass"),
   title: "The H.A.I.R. Shift Masterclass: free live class with Iisha",
   description: "Think Differently. Care Differently. Join Iisha C. Silver for a free live Zoom class on what healthy hair really requires, beyond products and styling.",
   alternates: { canonical: "/masterclass" },

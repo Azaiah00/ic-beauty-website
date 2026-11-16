@@ -65,6 +65,15 @@ export const FORMS: Record<string, FormDef> = {
       ],
     }),
   },
+  // Registrations arrive from the embedded Jotform on /masterclass via the webhook at /api/jotform
+  // (Jotform sends the person's confirmation itself, so no confirmation email here).
+  masterclass: {
+    label: "H.A.I.R. Shift Masterclass registrations",
+    tab: "Masterclass",
+    required: ["email"],
+    group: "Website: H.A.I.R. Shift Masterclass",
+    statuses: ["Registered", "Contacted", "Attended", "No-show"],
+  },
   "circle-join": {
     label: "H.A.I.R. Circle sign-ups",
     tab: "Circle",
