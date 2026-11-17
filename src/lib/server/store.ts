@@ -7,7 +7,7 @@
  *
  * Keys are `${form}/${id}` and ids start with a sortable timestamp, so a prefix listing is chronological.
  */
-import { getStore } from "@netlify/blobs";
+import { blobStore } from "@/lib/server/blobs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -39,7 +39,7 @@ type Backend = {
 
 function blobsBackend(): Backend | null {
   try {
-    const s = getStore({ name: STORE, consistency: "strong" });
+    const s = blobStore(STORE);
     return {
       set: async (k, v) => {
         await s.setJSON(k, v);
