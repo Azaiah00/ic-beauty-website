@@ -197,7 +197,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   // Community section (?view=community…): its own views, numbers and banner live in ./community.
   const community = isCommunityView(view) ? view : "";
   const communityMeta = COMMUNITY_VIEWS.find((v) => v.view === community);
-  const needs = await communityNeeds().catch(() => null);
+  // The dashboard never waits on the community: if its numbers are slow or unavailable, carry on without the badges.
+  const needs = await Promise.race([communityNeeds().catch((e) => (console.error("[admin] community numbers failed", e), null)), new Promise<null>((r) => setTimeout(() => r(null), 5000))]);
   const communityBadge = (v: string) => (v === "community-members" ? needs?.pending : v === "community-posts" ? needs?.reported : undefined);
   const other = files || shopView || !!community;
   const form = rawForm && FORMS[rawForm] ? rawForm : "";
