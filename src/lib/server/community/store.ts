@@ -10,7 +10,7 @@
  * // notifications, messages, purchases, audit) + row-level security. The service layer and every screen
  * // keep the same function signatures, so going live is a backend-only change.
  */
-import { getStore } from "@netlify/blobs";
+import { blobStore } from "../blobs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -28,7 +28,7 @@ type KV = {
 
 function blobsKV(): KV | null {
   try {
-    const s = getStore({ name: STORE, consistency: "strong" });
+    const s = blobStore(STORE);
     return {
       get: async (k) => (await s.get(k, { type: "json" })) ?? null,
       set: async (k, v) => {

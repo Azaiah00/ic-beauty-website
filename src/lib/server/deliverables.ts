@@ -4,7 +4,7 @@
  *    signed-in owner through /api/admin/files). Add a file there + a line below to publish it.
  *  - Uploads (by Iisha, or by Couture House from her dashboard) live in Netlify Blobs ("files" store).
  */
-import { getStore } from "@netlify/blobs";
+import { blobStore } from "@/lib/server/blobs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -44,7 +44,7 @@ export const MAX_UPLOAD = 4 * 1024 * 1024; // Netlify function request limit is 
 
 function uploads() {
   try {
-    return getStore({ name: "files", consistency: "strong" });
+    return blobStore("files");
   } catch {
     return null;
   }
