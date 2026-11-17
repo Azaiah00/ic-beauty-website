@@ -49,7 +49,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ action:
       const authed = await isAdmin();
       const dashboard = authed && str(args._as) === "dashboard";
       const actor = dashboard ? await getDashboardActor() : await getActor();
-      if (dashboard && !actor && action !== "who") r = fail(403, "First choose who's using the dashboard, at the top of the Community page.");
+      if (dashboard && !actor && action !== "who" && action !== "view-as") r = fail(403, "First choose who's using the dashboard, at the top of the Community page.");
       else {
         const ctx = { actor, args, now: new Date(), authed };
         const decision = await def.allow(ctx);

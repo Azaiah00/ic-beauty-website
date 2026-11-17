@@ -285,7 +285,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     <div className="min-h-dvh bg-[#f3eef2] bg-[radial-gradient(60rem_30rem_at_100%_-10%,rgba(110,63,134,0.12),transparent),radial-gradient(40rem_24rem_at_-10%_110%,rgba(184,149,90,0.10),transparent)] text-ink lg:p-4">
       <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[15.5rem_minmax(0,1fr)] 2xl:grid-cols-[15.5rem_minmax(0,1fr)_19rem]">
         {/* Sidebar */}
-        <aside className="sticky top-0 z-30 min-w-0 bg-plum-950 text-bone lg:top-4 lg:flex lg:h-[calc(100dvh-2rem)] lg:flex-col lg:overflow-y-auto lg:rounded-[1.6rem] lg:p-4 lg:[scrollbar-width:thin]">
+        <aside data-lenis-prevent className="sticky top-0 z-30 min-w-0 bg-plum-950 text-bone lg:top-4 lg:flex lg:h-[calc(100dvh-2rem)] lg:flex-col lg:overflow-y-auto lg:rounded-[1.6rem] lg:p-4 lg:[scrollbar-width:thin]">
           <div className="flex items-center justify-between gap-3 px-4 py-3 lg:px-2 lg:py-2">
             <Link href="/admin" className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8a55a6,#6E3F86)] text-bone shadow-[0_6px_18px_-6px_rgba(155,114,176,0.9)]"><ICMark className="h-7 w-auto" title="" /></span>
@@ -321,6 +321,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             {formNames.map((f) => <NavItem key={f} f={f} text={FORMS[f].tab} n={counts[f].total} />)}
           </nav>
           <div className="hidden space-y-1 border-t border-white/10 pt-3 lg:mt-auto lg:block">
+            <form method="post" action="/api/community/view-as" target="_blank">
+              <input type="hidden" name="_as" value="dashboard" />
+              <button className="flex min-h-11 w-full items-center gap-3 rounded-xl bg-white/10 px-3 text-left text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-bone hover:bg-amethyst"><Users className="h-[18px] w-[18px] text-brass-soft" strokeWidth={1.6} aria-hidden="true" /> Open member portal</button>
+            </form>
             <a href="/" target="_blank" className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-bone/75 hover:bg-white/8 hover:text-bone"><Globe className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> View website</a>
             <form method="post" action="/api/admin/logout">
               <button className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-[#e8a4a0] hover:bg-white/8"><LogOut className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> Sign out</button>
@@ -337,6 +341,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                 {communityMeta ? communityMeta.sub : files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
+            <form method="post" action="/api/community/view-as" target="_blank" className="shrink-0 sm:order-last">
+              <input type="hidden" name="_as" value="dashboard" />
+              <button className="inline-flex min-h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-amethyst px-5 text-[0.74rem] font-medium uppercase tracking-[0.12em] text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)] transition hover:bg-plum-900 sm:w-auto"><Users className="h-4 w-4" aria-hidden="true" /> Open member portal</button>
+            </form>
             <div className={`items-center gap-2 ${other ? "hidden" : "flex"}`}>
               <form className={`flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white px-4 sm:w-72 sm:flex-none ${card}`} role="search">
                 {form && <input type="hidden" name="form" value={form} />}

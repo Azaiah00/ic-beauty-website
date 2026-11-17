@@ -39,6 +39,8 @@ const browser = await chromium.launch({ channel: fs.existsSync("C:/Program Files
 async function as(persona, viewport = { width: 1280, height: 900 }) {
   const ctx = await browser.newContext({ viewport, baseURL: BASE });
   if (persona) {
+    // Team personas are only available to someone signed in to the owner dashboard.
+    if (["iisha", "team-admin", "azaiah", "fred"].includes(persona)) await ctx.request.post("/api/admin/login", { form: { password: adminPassword() } });
     const r = await ctx.request.post("/api/community/login", { data: { id: persona } });
     if (!r.ok()) throw new Error(`could not sign in as ${persona}`);
   }

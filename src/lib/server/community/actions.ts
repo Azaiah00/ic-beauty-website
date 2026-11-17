@@ -103,11 +103,12 @@ export const ACTIONS: Record<string, Def> = {
   // ─────────────────────────── Sign-in (demo) ───────────────────────────
   login: {
     allow: () => (DEMO ? yes : no("Sign-in opens when the community launches.")),
-    run: async ({ args }) => {
+    run: async ({ args, authed }) => {
       const id = str(args.id);
       if (id === "guest") return ok(undefined, { goto: "/community/about", cookies: [{ name: COMM_COOKIE, value: "", maxAge: 0 }] });
       const m = await db.member(id);
       if (!m) return missing("That person");
+      if (m.role !== "member" && !authed) return fail(403, "To preview as Iisha or her team, sign in to the owner dashboard first, then use Open member portal.");
       return ok(undefined, { goto: str(args.next).startsWith("/community") && isLive(m) ? str(args.next) : landing(m), cookies: [sessionCookie(m.id)] });
     },
   },
@@ -117,8 +118,9 @@ export const ACTIONS: Record<string, Def> = {
   },
   "view-as": {
     allow: (c) => (c.authed ? yes : no("Please sign in to the owner dashboard first.")),
-    run: async ({ args }) => {
-      const m = await db.member(str(args.id));
+    run: async ({ actor, args }) => {
+      // No member chosen ("Open member portal"): open it as the team member using the dashboard, or Iisha.
+      const m = str(args.id) ? await db.member(str(args.id)) : actor ?? (await db.members()).find((x) => x.role === "owner") ?? null;
       if (!m) return missing("That member");
       return ok(undefined, { goto: landing(m), cookies: [sessionCookie(m.id)] });
     },

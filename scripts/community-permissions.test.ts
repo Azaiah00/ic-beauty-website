@@ -2,7 +2,8 @@
  * Permission tests for The H.A.I.R. Circle Community.
  *
  *   npx tsx scripts/community-permissions.test.ts                 (matrix only)
- *   npx tsx scripts/community-permissions.test.ts http://localhost:3002   (matrix + every API route as every persona)
+ *   npx tsx scripts/community-permissions.test.ts http://localhost:3002   (matrix + every API route as every persona;
+ *                                                                          set ADMIN_PASSWORD to include the team personas)
  *
  * Part 1 checks can() for every row and column of the permission matrix (build prompt, section 3.5).
  * Part 2 signs in as each demo persona and calls every POST /api/community/<action> with `_dry: 1`
@@ -186,10 +187,21 @@ async function api(base: string) {
   const covered = new Set(API.map((a) => a[0]));
   for (const name of ACTION_NAMES) expect(`api · every action is covered · ${name}`, covered.has(name), true);
 
+  // Team personas can only be previewed by someone signed in to the owner dashboard.
+  let dash = "";
+  if (process.env.ADMIN_PASSWORD) {
+    const r = await fetch(`${base}/api/admin/login`, { method: "POST", redirect: "manual", body: new URLSearchParams({ password: process.env.ADMIN_PASSWORD }) });
+    dash = (r.headers.get("set-cookie") ?? "").split(";")[0];
+  }
   for (const persona of Object.keys(P) as Persona[]) {
     let cookie = "";
     if (persona !== "guest") {
-      const res = await fetch(`${base}/api/community/login`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: persona }) });
+      const team = ["admin", "owner"].includes(col(persona));
+      if (team && !dash) {
+        console.log(`  (skipped ${persona}: team personas need the dashboard password. Set ADMIN_PASSWORD to include them.)`);
+        continue;
+      }
+      const res = await fetch(`${base}/api/community/login`, { method: "POST", headers: { "Content-Type": "application/json", ...(team ? { Cookie: dash } : {}) }, body: JSON.stringify({ id: persona }) });
       cookie = (res.headers.get("set-cookie") ?? "").split(";")[0];
       expect(`api · sign in as ${persona}`, res.status === 200 && cookie.startsWith("icb_comm="), true);
     }

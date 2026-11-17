@@ -4,6 +4,7 @@ import { roleLabel } from "@/components/community/Shell";
 import { MemberAvatar, MemberName, btn, card } from "@/components/community/ui";
 import { DEMO, levelFor } from "@/lib/community/config";
 import { PERSONAS } from "@/lib/community/seed";
+import { isAdmin } from "@/lib/server/auth";
 import { getMembers, getSettings } from "@/lib/server/community/queries";
 
 export const metadata: Metadata = { title: "Sign in" };
@@ -16,8 +17,9 @@ export const dynamic = "force-dynamic";
  */
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ removed?: string; next?: string }> }) {
   const { removed, next } = await searchParams;
-  const [members, s] = await Promise.all([getMembers(), getSettings()]);
-  const personas = PERSONAS.map((id) => members.find((m) => m.id === id)).filter((m) => !!m);
+  const [members, s, team] = await Promise.all([getMembers(), getSettings(), isAdmin()]);
+  // Team personas only show to someone signed in to the owner dashboard.
+  const personas = PERSONAS.map((id) => members.find((m) => m.id === id)).filter((m) => !!m).filter((m) => team || m.role === "member");
   return (
     <div className="mx-auto max-w-3xl">
       <div className={`${card} p-6 text-center sm:p-10`}>
@@ -69,6 +71,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
               </li>
             ))}
           </ul>
+          {!team && (
+            <p className="mt-4 rounded-xl bg-mist px-4 py-3 text-[0.92rem] text-plum-900">
+              On Iisha&apos;s team? <a href="/admin" className="font-medium text-amethyst underline underline-offset-2">Sign in to the owner dashboard</a>, then tap <strong>Open member portal</strong> to come in as yourself.
+            </p>
+          )}
         </section>
       )}
     </div>
