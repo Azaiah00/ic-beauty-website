@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck, Video,
   LogOut, Download, Search, FolderOpen, Store, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
+  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS, formNames } from "@/lib/server/forms";
@@ -22,6 +23,8 @@ import { emailMode } from "@/lib/server/email";
 import { getHours, getServices } from "@/lib/server/squareLive";
 import { SITE_URL, business } from "@/lib/site";
 import { Avatar, Ring, AreaChart, DotBar, Bars, TZ } from "./ui";
+import { CommunityView, COMMUNITY_VIEWS, isCommunityView } from "./community";
+import { communityNeeds } from "@/lib/server/community/admin";
 
 export const metadata: Metadata = { title: "Owner dashboard", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -38,6 +41,18 @@ const ICONS: Record<string, typeof Sparkles> = {
   "product-request": ShoppingBag,
   newsletter: Newspaper,
   masterclass: Video,
+};
+
+/** Icons for the Community group (keys are the ?view= values). */
+const COMMUNITY_ICONS: Record<string, typeof Sparkles> = {
+  community: HeartHandshake,
+  "community-members": UsersRound,
+  "community-posts": Flag,
+  "community-classroom": BookOpen,
+  "community-calendar": CalendarDays,
+  "community-plans": Tag,
+  "community-settings": Settings2,
+  "community-log": History,
 };
 
 const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: TZ, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -174,12 +189,17 @@ function Person({ s, back, showForm, connected }: { s: Submission; back: string;
   );
 }
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ form?: string; q?: string; view?: string; msg?: string; sent?: string }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ form?: string; q?: string; view?: string; msg?: string; sent?: string; err?: string; undo?: string; filter?: string; cat?: string }> }) {
   if (!(await isAdmin())) redirect("/admin/login");
-  const { form: rawForm, q: rawQ, view, msg, sent } = await searchParams;
+  const { form: rawForm, q: rawQ, view, msg, sent, err, undo, filter, cat } = await searchParams;
   const files = view === "files";
   const shopView = view === "shop";
-  const other = files || shopView;
+  // Community section (?view=community…): its own views, numbers and banner live in ./community.
+  const community = isCommunityView(view) ? view : "";
+  const communityMeta = COMMUNITY_VIEWS.find((v) => v.view === community);
+  const needs = await communityNeeds().catch(() => null);
+  const communityBadge = (v: string) => (v === "community-members" ? needs?.pending : v === "community-posts" ? needs?.reported : undefined);
+  const other = files || shopView || !!community;
   const form = rawForm && FORMS[rawForm] ? rawForm : "";
   const q = (rawQ ?? "").trim().toLowerCase();
 
@@ -265,7 +285,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
     <div className="min-h-dvh bg-[#f3eef2] bg-[radial-gradient(60rem_30rem_at_100%_-10%,rgba(110,63,134,0.12),transparent),radial-gradient(40rem_24rem_at_-10%_110%,rgba(184,149,90,0.10),transparent)] text-ink lg:p-4">
       <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[15.5rem_minmax(0,1fr)] 2xl:grid-cols-[15.5rem_minmax(0,1fr)_19rem]">
         {/* Sidebar */}
-        <aside className="sticky top-0 z-30 min-w-0 bg-plum-950 text-bone lg:top-4 lg:flex lg:h-[calc(100dvh-2rem)] lg:flex-col lg:overflow-y-auto lg:rounded-[1.6rem] lg:p-4 lg:[scrollbar-width:thin]">
+        <aside data-lenis-prevent className="sticky top-0 z-30 min-w-0 bg-plum-950 text-bone lg:top-4 lg:flex lg:h-[calc(100dvh-2rem)] lg:flex-col lg:overflow-y-auto lg:rounded-[1.6rem] lg:p-4 lg:[scrollbar-width:thin]">
           <div className="flex items-center justify-between gap-3 px-4 py-3 lg:px-2 lg:py-2">
             <Link href="/admin" className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#8a55a6,#6E3F86)] text-bone shadow-[0_6px_18px_-6px_rgba(155,114,176,0.9)]"><ICMark className="h-7 w-auto" title="" /></span>
@@ -277,17 +297,34 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </div>
           <div className="relative z-10 px-4 pb-3 lg:hidden">
             <Suspense>
-              <MobileMenu current={files ? "__files" : shopView ? "__shop" : form} items={[{ form: "", label: "Overview" }, { form: "__shop", label: "Shop & orders" }, { form: "__files", label: "Deliverables" }, ...formNames.map((f) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh }))]} />
+              <MobileMenu current={community || (files ? "__files" : shopView ? "__shop" : form)} items={[{ form: "", label: "Overview" }, { form: "__shop", label: "Shop & orders" }, { form: "__files", label: "Deliverables" }, ...COMMUNITY_VIEWS.map((v, i) => ({ form: v.view, label: v.label, href: `/admin?view=${v.view}`, fresh: communityBadge(v.view), ...(i === 0 ? { heading: "Community" } : {}) })), ...formNames.map((f, i) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh, ...(i === 0 ? { heading: "Your people" } : {}) }))]} />
             </Suspense>
           </div>
           <nav aria-label="Dashboard" className="hidden lg:mt-6 lg:flex lg:flex-col lg:gap-1 [@media(min-width:1024px)_and_(max-height:860px)]:mt-3">
             <NavItem f="" text="Overview" />
             <NavItem f="__shop" text="Shop & orders" />
             <NavItem f="__files" text="Deliverables" />
+            <p className="mt-4 hidden px-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40 lg:block [@media(min-width:1024px)_and_(max-height:860px)]:mt-2">Community</p>
+            {COMMUNITY_VIEWS.map((v) => {
+              const Icon = COMMUNITY_ICONS[v.view];
+              const active = community === v.view;
+              const n = communityBadge(v.view);
+              return (
+                <Link key={v.view} href={`/admin?view=${v.view}`} aria-current={active ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
+                  <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.6} aria-hidden="true" />
+                  <span className="flex-1 truncate">{v.label}</span>
+                  {n ? <span className="rounded-full bg-brass-soft px-2 text-[0.7rem] font-medium tabular-nums text-plum-950">{n}</span> : null}
+                </Link>
+              );
+            })}
             <p className="mt-4 hidden px-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40 lg:block [@media(min-width:1024px)_and_(max-height:860px)]:mt-2">Your people</p>
             {formNames.map((f) => <NavItem key={f} f={f} text={FORMS[f].tab} n={counts[f].total} />)}
           </nav>
           <div className="hidden space-y-1 border-t border-white/10 pt-3 lg:mt-auto lg:block">
+            <form method="post" action="/api/community/view-as" target="_blank">
+              <input type="hidden" name="_as" value="dashboard" />
+              <button className="flex min-h-11 w-full items-center gap-3 rounded-xl bg-white/10 px-3 text-left text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-bone hover:bg-amethyst"><Users className="h-[18px] w-[18px] text-brass-soft" strokeWidth={1.6} aria-hidden="true" /> Open member portal</button>
+            </form>
             <a href="/" target="_blank" className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-bone/75 hover:bg-white/8 hover:text-bone"><Globe className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> View website</a>
             <form method="post" action="/api/admin/logout">
               <button className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 text-[#e8a4a0] hover:bg-white/8"><LogOut className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> Sign out</button>
@@ -299,11 +336,15 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <main className="min-w-0 px-4 pb-16 pt-4 lg:px-2 lg:pt-2">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{files ? "Deliverables" : shopView ? "Shop & orders" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
+              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{communityMeta ? communityMeta.title : files ? "Deliverables" : shopView ? "Shop & orders" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
               <p className="text-[0.9rem] text-plum-700">
-                {files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
+                {communityMeta ? communityMeta.sub : files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
+            <form method="post" action="/api/community/view-as" target="_blank" className="shrink-0 sm:order-last">
+              <input type="hidden" name="_as" value="dashboard" />
+              <button className="inline-flex min-h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-amethyst px-5 text-[0.74rem] font-medium uppercase tracking-[0.12em] text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)] transition hover:bg-plum-900 sm:w-auto"><Users className="h-4 w-4" aria-hidden="true" /> Open member portal</button>
+            </form>
             <div className={`items-center gap-2 ${other ? "hidden" : "flex"}`}>
               <form className={`flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white px-4 sm:w-72 sm:flex-none ${card}`} role="search">
                 {form && <input type="hidden" name="form" value={form} />}
@@ -330,6 +371,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           )}
           {files && <DeliverablesView msg={msg} />}
           {shopView && <ShopView msg={msg} />}
+          {community && <CommunityView view={community} sp={{ msg, err, undo, filter, q: rawQ, cat }} />}
 
           {!other && !form && !q && (
             <>

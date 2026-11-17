@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
-  Inbox, Menu, X, Globe, LogOut, ChevronDown, FolderOpen, Store,
+  Inbox, Menu, X, Globe, LogOut, ChevronDown, FolderOpen, Store, Video,
+  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Sparkles> = {
@@ -23,9 +24,20 @@ const ICONS: Record<string, typeof Sparkles> = {
   "class-waitlist": GraduationCap,
   "product-request": ShoppingBag,
   newsletter: Newspaper,
+  masterclass: Video,
+  // Community section (keys are the ?view= values)
+  community: HeartHandshake,
+  "community-members": UsersRound,
+  "community-posts": Flag,
+  "community-classroom": BookOpen,
+  "community-calendar": CalendarDays,
+  "community-plans": Tag,
+  "community-settings": Settings2,
+  "community-log": History,
 };
 
-export type MenuItem = { form: string; label: string; count?: number; fresh?: number };
+/** `href` overrides the default link; `heading` prints a small group title above the item. */
+export type MenuItem = { form: string; label: string; count?: number; fresh?: number; href?: string; heading?: string };
 
 export function MobileMenu({ items, current }: { items: MenuItem[]; current: string }) {
   const [open, setOpen] = useState(false);
@@ -80,19 +92,20 @@ export function MobileMenu({ items, current }: { items: MenuItem[]; current: str
       <div
         ref={panel}
         id="admin-menu"
+        data-lenis-prevent
         hidden={!open}
         className="absolute inset-x-0 top-full mt-2 max-h-[calc(100dvh-7.5rem)] overflow-y-auto rounded-[1.4rem] bg-plum-950 p-2 text-bone shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] ring-1 ring-white/10 sm:left-auto sm:right-4 sm:w-80"
       >
         <nav aria-label="Dashboard sections">
           <ul className="space-y-0.5">
-            {items.map((i, idx) => {
+            {items.map((i) => {
               const Icon = ICONS[i.form] ?? Inbox;
               const active = i.form === current;
               return (
                 <li key={i.form || "overview"}>
-                  {idx === 2 && <p className="px-3 pb-1 pt-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40">Your people</p>}
+                  {i.heading && <p className="px-3 pb-1 pt-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40">{i.heading}</p>}
                   <Link
-                    href={i.form === "__files" ? "/admin?view=files" : i.form === "__shop" ? "/admin?view=shop" : i.form ? `/admin?form=${i.form}` : "/admin"}
+                    href={i.href ? i.href : i.form === "__files" ? "/admin?view=files" : i.form === "__shop" ? "/admin?view=shop" : i.form ? `/admin?form=${i.form}` : "/admin"}
                     aria-current={active ? "page" : undefined}
                     className={`flex min-h-12 items-center gap-3 rounded-xl px-3 text-[0.95rem] transition ${active ? "bg-amethyst text-bone" : "text-bone/85 hover:bg-white/8"}`}
                   >
@@ -106,6 +119,10 @@ export function MobileMenu({ items, current }: { items: MenuItem[]; current: str
             })}
           </ul>
           <div className="mt-2 space-y-0.5 border-t border-white/10 pt-2">
+            <form method="post" action="/api/community/view-as" target="_blank">
+              <input type="hidden" name="_as" value="dashboard" />
+              <button className="flex min-h-12 w-full items-center gap-3 rounded-xl bg-white/10 px-3 text-left text-[0.95rem] text-bone hover:bg-amethyst"><Users className="h-[18px] w-[18px] text-brass-soft" strokeWidth={1.6} aria-hidden="true" /> Open member portal</button>
+            </form>
             <a href="/" target="_blank" rel="noopener" className="flex min-h-12 items-center gap-3 rounded-xl px-3 text-[0.95rem] text-bone/85 hover:bg-white/8">
               <Globe className="h-[18px] w-[18px]" strokeWidth={1.6} aria-hidden="true" /> View website
             </a>

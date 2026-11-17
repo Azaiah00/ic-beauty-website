@@ -53,10 +53,10 @@ export default function CirclePage() {
               A new lesson every {membership.dropDay}, a private portal that tracks your progress, and Iisha in your corner every week, for less than a bottle of conditioner a month.
             </p>
             <div className="rise mt-8 flex flex-col gap-3 sm:flex-row sm:items-center" style={{ ["--d" as string]: 3 }}>
-              <Link href="/circle/join" className="inline-flex min-h-[3.6rem] items-center justify-center rounded-pill bg-amethyst px-8 font-sans text-[0.8rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_12px_30px_rgba(110,63,134,0.32)] hover:bg-plum-800">
+              <Link href="/community/join" className="inline-flex min-h-[3.6rem] items-center justify-center rounded-pill bg-amethyst px-8 font-sans text-[0.8rem] font-semibold uppercase tracking-[0.14em] text-bone shadow-[0_12px_30px_rgba(110,63,134,0.32)] hover:bg-plum-800">
                 Start your {membership.trialDays}-day free trial
               </Link>
-              <Link href="/portal" className="inline-flex min-h-[3.6rem] items-center justify-center rounded-pill border border-plum-900/25 px-7 font-sans text-[0.76rem] font-medium uppercase tracking-[0.14em] text-plum-900 hover:border-plum-900">
+              <Link href="/community/about" className="inline-flex min-h-[3.6rem] items-center justify-center rounded-pill border border-plum-900/25 px-7 font-sans text-[0.76rem] font-medium uppercase tracking-[0.14em] text-plum-900 hover:border-plum-900">
                 Peek inside
               </Link>
             </div>
@@ -187,7 +187,7 @@ export default function CirclePage() {
                     <li key={f} className={`flex items-start gap-3 text-[0.97rem] ${p.dark ? "text-lilac" : "text-plum-700"}`}><Check className={`mt-1 h-4 w-4 shrink-0 ${p.dark ? "text-brass-soft" : "text-amethyst"}`} aria-hidden="true" />{f}</li>
                   ))}
                 </ul>
-                <Link href="/circle/join" className={`mt-8 inline-flex min-h-[3.4rem] items-center justify-center rounded-pill px-6 font-sans text-[0.78rem] font-semibold uppercase tracking-[0.14em] ${p.dark ? "bg-bone text-plum-900 hover:bg-white" : "bg-amethyst text-bone hover:bg-plum-800"}`}>Start free trial</Link>
+                <Link href="/community/join" className={`mt-8 inline-flex min-h-[3.4rem] items-center justify-center rounded-pill px-6 font-sans text-[0.78rem] font-semibold uppercase tracking-[0.14em] ${p.dark ? "bg-bone text-plum-900 hover:bg-white" : "bg-amethyst text-bone hover:bg-plum-800"}`}>Start free trial</Link>
               </div>
             ))}
           </div>
@@ -214,10 +214,10 @@ export default function CirclePage() {
         <div className="container-x relative max-w-3xl text-center">
           <h2 className="text-display">Join the <span className="italic-accent text-lilac">Circle.</span></h2>
           <p className="mx-auto mt-5 max-w-xl text-lede text-lilac">Your first lesson is waiting. Start free for {membership.trialDays} days.</p>
-          <Link href="/circle/join" className="mt-9 inline-flex min-h-[3.6rem] items-center justify-center rounded-pill bg-bone px-9 font-sans text-[0.8rem] font-semibold uppercase tracking-[0.14em] text-plum-900 hover:bg-white">Start your free trial</Link>
+          <Link href="/community/join" className="mt-9 inline-flex min-h-[3.6rem] items-center justify-center rounded-pill bg-bone px-9 font-sans text-[0.8rem] font-semibold uppercase tracking-[0.14em] text-plum-900 hover:bg-white">Start your free trial</Link>
         </div>
       </section>
-      <StickyCta href="/circle/join" label={`Start ${membership.trialDays}-day free trial`} />
+      <StickyCta href="/community/join" label={`Start ${membership.trialDays}-day free trial`} />
     </>
   );
 }
