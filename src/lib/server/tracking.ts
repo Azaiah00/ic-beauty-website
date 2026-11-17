@@ -4,7 +4,7 @@
  *   orders/<orderId>   { status, notes, updatedAt }     Iisha's pickup status for a website order
  * Netlify Blobs in production; .data/ files locally (same pattern as store.ts).
  */
-import { getStore } from "@netlify/blobs";
+import { blobStore } from "@/lib/server/blobs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
@@ -13,7 +13,7 @@ type KV = { get<T>(k: string): Promise<T | null>; set(k: string, v: unknown): Pr
 
 function kv(): KV {
   try {
-    const s = getStore({ name: NAME, consistency: "strong" });
+    const s = blobStore(NAME);
     return {
       get: async <T,>(k: string) => ((await s.get(k, { type: "json" })) as T | null) ?? null,
       set: async (k, v) => {
