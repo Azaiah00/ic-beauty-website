@@ -59,7 +59,11 @@ export function PortalProvider({ children }: { children: React.ReactNode }) {
     setThisWeek((w) => ({ ...w, [k]: v }));
     setCheckInSaved(false);
   }, []);
-  const saveCheckIn = useCallback(() => setCheckInSaved(true), []);
+  const saveCheckIn = useCallback(() => {
+    setCheckInSaved(true);
+    // Counts the weekly check-in in the community (+1 point when that rule is on). The ratings themselves stay demo data.
+    fetch("/api/community/checkin", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).catch(() => {});
+  }, []);
 
   const { habitPercent, streak } = useMemo(() => {
     const total = habits.length * 7;

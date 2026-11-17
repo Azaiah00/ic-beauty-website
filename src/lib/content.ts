@@ -286,6 +286,14 @@ export type HubItem = {
 
 export const hubItems: HubItem[] = [
   {
+    name: "The H.A.I.R. Circle Community",
+    type: "Membership",
+    price: "Free to join",
+    blurb: "Iisha's own community: a warm feed for wins and questions, a free classroom, monthly Lives, and paid plans when you want her closer.",
+    href: "/community/about",
+    cta: "Join free",
+  },
+  {
     name: "Radiance Rewired",
     type: "Digital guide",
     price: "Coming soon",

@@ -90,6 +90,23 @@ export const FORMS: Record<string, FormDef> = {
       cta: { label: "Get the free checklist while you wait", href: U(funnel.leadMagnet.file) },
     }),
   },
+  // Join requests for the community (/community/join). Saved here so they also land in Square.
+  "community-join": {
+    label: "H.A.I.R. Circle Community join requests",
+    tab: "Community joins",
+    required: ["name", "email"],
+    group: "Website: H.A.I.R. Circle Community",
+    statuses: ["New", "Welcomed", "Upgraded", "Not a fit"],
+    confirmation: (s) => ({
+      subject: "Welcome to The H.A.I.R. Circle Community",
+      heading: `${first(s)}, welcome to the Circle.`,
+      paragraphs: [
+        "Thank you for joining <strong>The H.A.I.R. Circle Community</strong>. It's free to be here, and I'm glad you came.",
+        "Start with the Start Here checklist: introduce yourself, watch the welcome lesson, and set your hair goal.",
+      ],
+      cta: { label: "Open the community", href: U("/community") },
+    }),
+  },
   "scalp-check": {
     label: "Scalp Self-Check results",
     tab: "Scalp Check",

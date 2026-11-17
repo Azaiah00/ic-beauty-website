@@ -4,9 +4,9 @@ import { useMemberName } from "./useMemberName";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, PlayCircle, LineChart, Stethoscope, Download, LogOut } from "lucide-react";
+import { Home, PlayCircle, LineChart, Stethoscope, Download, ArrowLeft } from "lucide-react";
 import { ICMark } from "@/components/brand/ICMark";
-import { demoMember, membership } from "@/lib/portal/data";
+import { membership } from "@/lib/portal/data";
 
 const items = [
   { href: "/portal", label: "Home", Icon: Home },
@@ -20,7 +20,7 @@ function active(path: string, href: string) {
   return href === "/portal" ? path === "/portal" : path.startsWith(href);
 }
 
-export function PortalSidebar() {
+export function PortalSidebar({ plan }: { plan: string }) {
   const memberName = useMemberName();
   const path = usePathname();
   return (
@@ -29,7 +29,7 @@ export function PortalSidebar() {
         <ICMark className="h-9 w-auto text-brass-soft" title="" />
         <span className="leading-tight">
           <span className="block font-display text-[1.25rem] text-bone">{membership.name}</span>
-          <span className="eyebrow text-[0.6rem] text-lilac/70">Member portal</span>
+          <span className="eyebrow text-[0.6rem] text-lilac/70">My Journey</span>
         </span>
       </Link>
       <nav aria-label="Portal" className="mt-10">
@@ -53,9 +53,9 @@ export function PortalSidebar() {
       </nav>
       <div className="mt-auto rounded-xl border border-plum-800 p-4">
         <p className="text-[0.85rem] text-bone">{memberName}</p>
-        <p className="text-[0.75rem] text-lilac/70">{demoMember.plan} member · Week {demoMember.currentWeek}</p>
-        <Link href="/circle" className="mt-3 inline-flex items-center gap-2 text-[0.75rem] text-lilac hover:text-bone">
-          <LogOut className="h-3.5 w-3.5" aria-hidden="true" /> Exit demo
+        <p className="text-[0.75rem] text-lilac/70">{plan}</p>
+        <Link href="/community" className="mt-3 inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-lilac hover:text-bone">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to Community
         </Link>
       </div>
     </aside>

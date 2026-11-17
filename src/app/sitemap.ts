@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/book", 0.9, "monthly"],
     ["/scalp-check", 0.8, "monthly"],
     ["/hub", 0.7, "weekly"],
+    ["/community/about", 0.8, "weekly"],
     ["/shop", 0.75, "weekly"],
     ["/learn", 0.8, "weekly"],
     ["/faq", 0.7, "monthly"],

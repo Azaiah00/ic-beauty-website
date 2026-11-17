@@ -78,7 +78,7 @@ export function Dashboard() {
               <span className="text-[0.82rem] text-plum-700">Day streak<br />(3+ habits)</span>
             </div>
           </div>
-          <Link href="/portal/progress" className="mt-6 inline-flex items-center gap-2 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-amethyst link-underline">
+          <Link href="/portal/progress" className="min-h-11 mt-6 inline-flex items-center gap-2 font-sans text-[0.72rem] font-medium uppercase tracking-[0.16em] text-amethyst link-underline">
             Weekly check-in & photos <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </section>

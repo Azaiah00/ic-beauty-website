@@ -5,9 +5,8 @@ import { PageHero } from "@/components/sections/PageHero";
 
 /**
  * /login: one front door for everyone who signs in.
- *  - Members: The H.A.I.R. Circle portal. Until real member accounts launch (Supabase Auth: Google +
- *    email link, approval step, Square subscription status), this card invites people to the founding list.
- *    // TODO: Supabase — swap the card's button for "Continue with Google" / "Email me a sign-in link".
+ *  - Members: The H.A.I.R. Circle Community (/community/login). Demo sign-in today (persona picker).
+ *    // TODO: Auth — Google OAuth via Supabase Auth (or Auth.js) + email magic link, keeping the approval step.
  *  - Iisha: the owner dashboard (/admin), password sign-in today.
  */
 export const metadata: Metadata = {
@@ -16,8 +15,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/login" },
   robots: { index: false, follow: true },
 };
-
-const MEMBER_PORTAL_LIVE = false;
 
 export default function LoginPage() {
   return (
@@ -30,15 +27,14 @@ export default function LoginPage() {
               <Sparkles className="h-5 w-5" aria-hidden="true" strokeWidth={1.4} />
             </span>
             <p className="eyebrow mt-5 text-amethyst">Clients &amp; members</p>
-            <h2 className="mt-2 font-display text-[1.9rem] leading-tight text-plum-900">Member portal</h2>
+            <h2 className="mt-2 font-display text-[1.9rem] leading-tight text-plum-900">The H.A.I.R. Circle Community</h2>
             <p className="mt-3 flex-1 text-plum-700">
-              {MEMBER_PORTAL_LIVE
-                ? "Your lessons, progress, care notes from Iisha and downloads, all in one place."
-                : "Your lessons, progress and care notes from Iisha will live here. The portal opens with The H.A.I.R. Circle founding membership."}
+              Your community, classroom, lessons and progress, all in one place. New here? It's free to join.
             </p>
-            <Link href={MEMBER_PORTAL_LIVE ? "/portal" : "/circle"} className="group mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-pill bg-plum-900 px-6 text-[0.78rem] font-medium uppercase tracking-[0.14em] text-bone hover:bg-amethyst">
-              {MEMBER_PORTAL_LIVE ? "Sign in" : "Join the founding list"} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            <Link href="/community/login" className="group mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-pill bg-plum-900 px-6 text-[0.78rem] font-medium uppercase tracking-[0.14em] text-bone hover:bg-amethyst">
+              Sign in to the community <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
+            <Link href="/community/join" className="mt-3 inline-flex min-h-11 items-center justify-center text-[0.9rem] text-plum-800 underline underline-offset-4 hover:text-amethyst">Not a member yet? Join free</Link>
           </div>
           <div className="flex flex-col rounded-card border border-plum-800/10 bg-paper p-7 sm:p-9">
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-plum-800/20 text-plum-900">

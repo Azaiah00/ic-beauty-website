@@ -112,6 +112,12 @@ export const shareCards: Record<string, Share> = {
     image: "/og/portal-downloads.jpg",
     alt: "Member portal downloads library",
   },
+  "/community/about": {
+    title: "The H.A.I.R. Circle Community: join free",
+    description: "Iisha C. Silver's hair wellness community. A warm feed, a free classroom, monthly Lives, and plans that bring her closer.",
+    image: "/og/community.jpg",
+    alt: "The H.A.I.R. Circle Community from I.C. Beauty",
+  },
   "/shop": {
     title: "Shop I.C. Beauty: hair wellness guides & membership",
     description: "Digital guides, free downloads and The H.A.I.R. Circle membership from Iisha C. Silver.",
