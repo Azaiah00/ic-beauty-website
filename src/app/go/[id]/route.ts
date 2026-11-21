@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const s = storefronts.find((x) => x.id === id);
-  if (!s) return NextResponse.redirect(new URL("/shop#picks", req.url), 302);
+  if (!s) return new NextResponse(null, { status: 302, headers: { Location: "/shop#picks" } });
   const ua = req.headers.get("user-agent") ?? "";
   if (!/bot|crawl|spider|preview|facebookexternalhit|slurp/i.test(ua)) await countClick(s.id);
   return NextResponse.redirect(s.href, 302);

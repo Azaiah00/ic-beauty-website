@@ -5,6 +5,7 @@
  *   GET                                      every enrollment as a spreadsheet (CSV), straight from Square
  */
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { isAdmin } from "@/lib/server/auth";
 import { RECOVERY_STATUSES, setRecoveryMark, getRecoveryMarks } from "@/lib/server/tracking";
 import { getRecoveryEnrollments, sendEnrollmentEmails, type Enrollment } from "@/lib/server/recoveryEnrollments";
@@ -14,15 +15,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const back = (req: Request, msg?: string, hash?: string) => {
-  const u = new URL("/admin?view=recovery", req.url);
-  if (msg) u.searchParams.set("msg", msg);
-  if (hash) u.hash = hash;
-  return NextResponse.redirect(u, 303);
-};
+const back = (_req: Request, msg?: string, hash?: string) => seeOther(`/admin?view=recovery${msg ? `&msg=${encodeURIComponent(msg)}` : ""}${hash ? `#${hash}` : ""}`);
 
 export async function POST(req: Request) {
-  if (!(await isAdmin())) return NextResponse.redirect(new URL("/admin/login", req.url), 303);
+  if (!(await isAdmin())) return seeOther("/admin/login");
   const fd = await req.formData();
   const action = String(fd.get("action") ?? "status");
 
@@ -57,7 +53,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  if (!(await isAdmin())) return NextResponse.redirect(new URL("/admin/login", req.url), 303);
+  if (!(await isAdmin())) return seeOther("/admin/login");
   const list = (await getRecoveryEnrollments()) ?? [];
   const marks = await getRecoveryMarks(list.map((e) => e.id));
   const cell = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);

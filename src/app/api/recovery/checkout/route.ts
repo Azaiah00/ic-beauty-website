@@ -6,6 +6,7 @@
  * The email is sent in the form body, never in the URL.
  */
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { recoveryPlans } from "@/lib/site";
 import { createRecoveryCheckout, type PayKind } from "@/lib/server/recoveryCheckout";
 
@@ -17,7 +18,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 async function go(req: Request, v: { plan: string | null; pay: string | null; agree: string | null; confirm: string | null; email: string | null }) {
   const plan = recoveryPlans.find((p) => p.id === v.plan);
   const pay = v.pay as PayKind | null;
-  const back = (reason: string) => NextResponse.redirect(new URL(`/recovery?checkout=${reason}#plans`, req.url), 303);
+  const back = (reason: string) => seeOther(`/recovery?checkout=${reason}#plans`);
   if (!plan || (pay !== "deposit" && pay !== "full")) return back("missing");
   if (v.agree !== "1") return back("terms");
   const email = v.confirm === "1" ? (v.email ?? "").trim().toLowerCase().slice(0, 200) : "";

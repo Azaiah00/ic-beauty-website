@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { COOKIE, passwordOk, sessionValue } from "@/lib/server/auth";
 
 export const runtime = "nodejs";
@@ -10,10 +11,10 @@ export async function POST(req: Request) {
   const url = new URL(req.url);
   if (!passwordOk(pw)) {
     await new Promise((r) => setTimeout(r, 900)); // slow down guessing
-    return NextResponse.redirect(new URL("/admin/login?e=1", url), 303);
+    return seeOther("/admin/login?e=1");
   }
   const s = sessionValue();
-  const res = NextResponse.redirect(new URL("/admin", url), 303);
+  const res = seeOther("/admin");
   res.cookies.set(COOKIE, s.value, { httpOnly: true, secure: url.protocol === "https:", sameSite: "lax", path: "/", maxAge: s.maxAge });
   return res;
 }

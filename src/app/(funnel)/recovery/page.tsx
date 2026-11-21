@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CalendarCheck, Mail, Video } from "lucide-react";
 import { recoveryPlans, recoveryCreditCents, recoveryFullTodayCents, usdWhole } from "@/lib/site";
 import { RecoveryChooser } from "@/components/funnel/RecoveryChooser";
+import { shareMeta } from "@/lib/share";
 
 /**
  * /recovery: "Your Recovery. Your Way." (Iisha, 2026-11-21). The three recovery programs from her printed
@@ -11,10 +12,11 @@ import { RecoveryChooser } from "@/components/funnel/RecoveryChooser";
  * checkout is a POST form (the optional confirmation email never goes in a URL).
  */
 export const metadata: Metadata = {
-  title: "Your Recovery. Your Way. | I.C. Beauty",
+  title: "Your Recovery. Your Way.",
   description: "Choose the level of support that fits your journey: Guided, Supported or Exclusive Recovery with Iisha C. Silver. Secure your spot with a deposit or pay in full.",
   alternates: { canonical: "/recovery" },
   robots: { index: false, follow: true },
+  ...shareMeta("/recovery"),
 };
 
 const NEXT = [
