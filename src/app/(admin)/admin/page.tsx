@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck, Video,
   LogOut, Download, Search, FolderOpen, Store, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
-  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History,
+  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History, Sprout,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS, formNames } from "@/lib/server/forms";
@@ -18,6 +18,7 @@ import { ICMark } from "@/components/brand/ICMark";
 import { MobileMenu } from "./MobileMenu";
 import { DeliverablesView } from "./Deliverables";
 import { ShopView } from "./ShopView";
+import { RecoveryView } from "./RecoveryView";
 import { EmailComposer, type Template } from "./EmailComposer";
 import { emailMode } from "@/lib/server/email";
 import { getHours, getServices } from "@/lib/server/squareLive";
@@ -194,13 +195,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const { form: rawForm, q: rawQ, view, msg, sent, err, undo, filter, cat } = await searchParams;
   const files = view === "files";
   const shopView = view === "shop";
+  const recoveryView = view === "recovery";
   // Community section (?view=community…): its own views, numbers and banner live in ./community.
   const community = isCommunityView(view) ? view : "";
   const communityMeta = COMMUNITY_VIEWS.find((v) => v.view === community);
   // The dashboard never waits on the community: if its numbers are slow or unavailable, carry on without the badges.
   const needs = await Promise.race([communityNeeds().catch((e) => (console.error("[admin] community numbers failed", e), null)), new Promise<null>((r) => setTimeout(() => r(null), 5000))]);
   const communityBadge = (v: string) => (v === "community-members" ? needs?.pending : v === "community-posts" ? needs?.reported : undefined);
-  const other = files || shopView || !!community;
+  const other = files || shopView || recoveryView || !!community;
   const form = rawForm && FORMS[rawForm] ? rawForm : "";
   const q = (rawQ ?? "").trim().toLowerCase();
 
@@ -255,10 +257,10 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
   const [live, liveServices] = other ? [null, []] : await Promise.all([getHours(), getServices()]);
 
   const NavItem = ({ f, text, n }: { f: string; text: string; n?: number }) => {
-    const Icon = f === "__files" ? FolderOpen : f === "__shop" ? Store : f ? ICONS[f] ?? Inbox : LayoutDashboard;
-    const active = f === "__files" ? files : f === "__shop" ? shopView : !other && form === f;
+    const Icon = f === "__files" ? FolderOpen : f === "__shop" ? Store : f === "__recovery" ? Sprout : f ? ICONS[f] ?? Inbox : LayoutDashboard;
+    const active = f === "__files" ? files : f === "__shop" ? shopView : f === "__recovery" ? recoveryView : !other && form === f;
     return (
-      <Link href={f === "__files" ? "/admin?view=files" : f === "__shop" ? "/admin?view=shop" : f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
+      <Link href={f === "__files" ? "/admin?view=files" : f === "__shop" ? "/admin?view=shop" : f === "__recovery" ? "/admin?view=recovery" : f ? `/admin?form=${f}` : "/admin"} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-[0.9rem] [@media(min-width:1024px)_and_(max-height:860px)]:min-h-9 transition ${active ? "bg-amethyst text-bone shadow-[0_8px_20px_-8px_rgba(110,63,134,0.9)]" : "text-bone/75 hover:bg-white/8 hover:text-bone"}`}>
         <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.6} aria-hidden="true" />
         <span className="flex-1 truncate">{text}</span>
         {n ? <span className={`rounded-full px-2 text-[0.7rem] tabular-nums ${active ? "bg-bone/25" : "bg-white/10"}`}>{n}</span> : null}
@@ -298,12 +300,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </div>
           <div className="relative z-10 px-4 pb-3 lg:hidden">
             <Suspense>
-              <MobileMenu current={community || (files ? "__files" : shopView ? "__shop" : form)} items={[{ form: "", label: "Overview" }, { form: "__shop", label: "Shop & orders" }, { form: "__files", label: "Deliverables" }, ...COMMUNITY_VIEWS.map((v, i) => ({ form: v.view, label: v.label, href: `/admin?view=${v.view}`, fresh: communityBadge(v.view), ...(i === 0 ? { heading: "Community" } : {}) })), ...formNames.map((f, i) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh, ...(i === 0 ? { heading: "Your people" } : {}) }))]} />
+              <MobileMenu current={community || (files ? "__files" : shopView ? "__shop" : recoveryView ? "__recovery" : form)} items={[{ form: "", label: "Overview" }, { form: "__shop", label: "Shop & orders" }, { form: "__recovery", label: "Recovery enrollments", href: "/admin?view=recovery" }, { form: "__files", label: "Deliverables" }, ...COMMUNITY_VIEWS.map((v, i) => ({ form: v.view, label: v.label, href: `/admin?view=${v.view}`, fresh: communityBadge(v.view), ...(i === 0 ? { heading: "Community" } : {}) })), ...formNames.map((f, i) => ({ form: f, label: FORMS[f].tab, count: counts[f].total, fresh: counts[f].fresh, ...(i === 0 ? { heading: "Your people" } : {}) }))]} />
             </Suspense>
           </div>
           <nav aria-label="Dashboard" className="hidden lg:mt-6 lg:flex lg:flex-col lg:gap-1 [@media(min-width:1024px)_and_(max-height:860px)]:mt-3">
             <NavItem f="" text="Overview" />
             <NavItem f="__shop" text="Shop & orders" />
+            <NavItem f="__recovery" text="Recovery enrollments" />
             <NavItem f="__files" text="Deliverables" />
             <p className="mt-4 hidden px-3 text-[0.62rem] uppercase tracking-[0.22em] text-bone/40 lg:block [@media(min-width:1024px)_and_(max-height:860px)]:mt-2">Community</p>
             {COMMUNITY_VIEWS.map((v) => {
@@ -337,9 +340,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <main className="min-w-0 px-4 pb-16 pt-4 lg:px-2 lg:pt-2">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{communityMeta ? communityMeta.title : files ? "Deliverables" : shopView ? "Shop & orders" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
+              <h1 className="font-display text-[2rem] leading-tight text-plum-900">{communityMeta ? communityMeta.title : files ? "Deliverables" : shopView ? "Shop & orders" : recoveryView ? "Recovery enrollments" : form ? FORMS[form].label : `${greet}, Iisha`}</h1>
               <p className="text-[0.9rem] text-plum-700">
-                {communityMeta ? communityMeta.sub : files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
+                {communityMeta ? communityMeta.sub : files ? "Your files from Couture House, plus anything you upload" : shopView ? "Website orders, product stock, and clicks to your storefronts" : recoveryView ? "Who enrolled in Guided, Supported and Exclusive Recovery, what they paid, and where they are" : form ? `${counts[form].total} total · ${counts[form].fresh} waiting on you` : now.toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "long", day: "numeric" })}
               </p>
             </div>
             <form method="post" action="/api/community/view-as" target="_blank" className="shrink-0 sm:order-last">
@@ -372,6 +375,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           )}
           {files && <DeliverablesView msg={msg} />}
           {shopView && <ShopView msg={msg} />}
+          {recoveryView && (
+            <>
+              {msg && (
+                <p role="status" className="mt-5 flex items-start gap-2 rounded-2xl bg-[#e3efe8] px-4 py-3 text-[0.9rem] text-[#24603f]">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                  {msg}
+                </p>
+              )}
+              <RecoveryView />
+            </>
+          )}
           {community && <CommunityView view={community} sp={{ msg, err, undo, filter, q: rawQ, cat }} />}
 
           {!other && !form && !q && (
