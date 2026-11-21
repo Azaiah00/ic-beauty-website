@@ -5,6 +5,7 @@
  *   POST /api/admin/files             multipart upload (file, title, note) or { action: "delete", id }
  */
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { isAdmin } from "@/lib/server/auth";
 import { readDeliverable, saveUpload, deleteUpload, MAX_UPLOAD } from "@/lib/server/deliverables";
 
@@ -30,8 +31,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const back = (msg: string) => NextResponse.redirect(new URL(`/admin?view=files${msg ? `&msg=${encodeURIComponent(msg)}` : ""}`, req.url), 303);
-  if (!(await isAdmin())) return NextResponse.redirect(new URL("/admin/login", req.url), 303);
+  const back = (msg: string) => seeOther(`/admin?view=files${msg ? `&msg=${encodeURIComponent(msg)}` : ""}`);
+  if (!(await isAdmin())) return seeOther("/admin/login");
   const fd = await req.formData();
   if (fd.get("action") === "delete") {
     await deleteUpload(String(fd.get("id") ?? ""));

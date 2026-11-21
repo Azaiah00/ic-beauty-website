@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { COOKIE } from "@/lib/server/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-  const res = NextResponse.redirect(new URL("/admin/login", req.url), 303);
+  const res = seeOther("/admin/login");
   res.cookies.set(COOKIE, "", { path: "/", maxAge: 0 });
   return res;
 }

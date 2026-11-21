@@ -11,6 +11,7 @@
  * GET /api/community/my-data          "Download my data" (JSON)
  */
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { DEMO, TZ } from "@/lib/community/config";
 import { occurrences } from "@/lib/community/calendar";
 import { can, isLive } from "@/lib/community/permissions";
@@ -66,11 +67,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ action:
   if (form) {
     const safe = (p: string | undefined) => (p && p.startsWith("/") && !p.startsWith("//") ? p : "");
     const [path, hash] = (safe(r.ok ? r.goto : "") || safe(str(args.back)) || "/community").split("#");
-    const url = new URL(path, req.url);
+    const url = new URL(path, "http://local"); // relative redirect below: stay on the host the visitor is on
     if (r.message) url.searchParams.set(r.ok ? "msg" : "err", r.message);
     if (r.ok && r.auditId) url.searchParams.set("undo", r.auditId);
     if (hash) url.hash = hash;
-    res = NextResponse.redirect(url, 303);
+    res = seeOther(url.pathname + url.search + url.hash);
   } else {
     res = NextResponse.json(r.ok ? { ok: true, message: r.message, data: r.data, goto: r.goto, auditId: r.auditId } : { ok: false, message: r.message }, { status: r.ok ? 200 : r.status });
   }

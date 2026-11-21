@@ -22,6 +22,12 @@ export const shareCards: Record<string, Share> = {
     image: "/og/event.jpg",
     alt: "I.C. Beauty event page with two choices: request a discovery call or get the free checklist",
   },
+  "/recovery": {
+    title: "Your Recovery. Your Way. Hair recovery programs with Iisha",
+    description: "Guided, Supported or Exclusive Recovery. Choose your level of support, pay a deposit or in full, and get a $100 Program Credit when you enroll today.",
+    image: "/og/recovery.jpg",
+    alt: "Your Recovery. Your Way.: Guided, Supported and Exclusive Recovery programs from I.C. Beauty with prices and deposits",
+  },
   "/masterclass": {
     title: "The H.A.I.R. Shift Masterclass: free live class with Iisha",
     description: "Think Differently. Care Differently. A free live Zoom class with Iisha C. Silver on what healthy hair really requires, beyond products and styling.",

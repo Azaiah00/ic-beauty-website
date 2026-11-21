@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { seeOther } from "@/lib/server/redirect";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS } from "@/lib/server/forms";
 import { updateSubmission } from "@/lib/server/store";
@@ -7,7 +8,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-  if (!(await isAdmin())) return NextResponse.redirect(new URL("/admin/login", req.url), 303);
+  if (!(await isAdmin())) return seeOther("/admin/login");
   const fd = await req.formData();
   const form = String(fd.get("form") ?? "");
   const id = String(fd.get("id") ?? "");
@@ -19,5 +20,5 @@ export async function POST(req: Request) {
     await updateSubmission(form, id, (s) => ({ ...s, status: def.statuses.includes(status) ? status : s.status, notes }));
   }
   const dest = back.startsWith("/admin") ? back : "/admin";
-  return NextResponse.redirect(new URL(`${dest}${dest.includes("#") ? "" : `#${id}`}`, req.url), 303);
+  return seeOther(`${dest}${dest.includes("#") ? "" : `#${id}`}`);
 }

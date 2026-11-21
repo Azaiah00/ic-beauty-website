@@ -6,7 +6,7 @@ import { Btn } from "@/components/ui/Btn";
 import { business, recoveryPlans } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "You're Enrolled | I.C. Beauty",
+  title: "You're Enrolled",
   description: "Your recovery program enrollment is in.",
   alternates: { canonical: "/recovery/thank-you" },
   robots: { index: false, follow: false },
