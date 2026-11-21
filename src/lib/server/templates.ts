@@ -89,3 +89,30 @@ ${paras}
   const text = `${body.trim()}\n\nWith love,\nIisha C. Silver\nI.C. Beauty · ${business.phone} · ${SITE_URL.replace(/^https?:\/\//, "")}`;
   return { html: shell(inner, body.trim().split("\n")[0].slice(0, 120)), text, subject };
 }
+
+/** Iisha's alert when someone enrolls in a recovery program through /recovery (data from Square). */
+export function renderEnrollmentAlert(e: { id: string; program: string; pay: "deposit" | "full"; paidCents: number; balanceCents: number; name: string; email: string; phone: string; confirmEmail: string; createdAt: string }) {
+  const usd = (c: number) => `$${(c / 100).toLocaleString("en-US", { minimumFractionDigits: c % 100 ? 2 : 0 })}`;
+  const link = `${SITE_URL}/admin?view=recovery#${e.id}`;
+  const rows: [string, string][] = [
+    ["Program", e.program],
+    ["Payment", e.pay === "full" ? "Paid in full ($100 credit applied)" : "Deposit"],
+    ["Paid today", usd(e.paidCents)],
+    ...(e.pay === "deposit" ? ([["Balance after $100 credit", usd(e.balanceCents)]] as [string, string][]) : []),
+    ["Confirmation email", e.confirmEmail ? `Requested (${e.confirmEmail})` : "Not requested"],
+  ];
+  const trs = rows
+    .map(([k, v]) => `<tr><td style="padding:8px 12px;border-bottom:1px solid #eee3ec;color:#6b5d6e;font-size:13px;white-space:nowrap;">${esc(k)}</td><td style="padding:8px 12px;border-bottom:1px solid #eee3ec;font-size:14px;color:#24132a;">${esc(v)}</td></tr>`)
+    .join("");
+  const who = e.name || e.email || "New client";
+  const inner = `<tr><td style="padding:28px 32px 8px;font-family:Arial,Helvetica,sans-serif;color:#3a2a3e;">
+<p style="margin:0 0 4px;font-size:11px;letter-spacing:3px;color:${AMETHYST};font-weight:bold;">NEW · RECOVERY ENROLLMENT</p>
+<h1 style="margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:26px;color:${PLUM};">${esc(who)}</h1>
+<p style="margin:0 0 18px;font-size:14px;">${e.email ? `<a href="mailto:${esc(e.email)}" style="color:${AMETHYST};">${esc(e.email)}</a>` : ""}${e.phone ? ` · <a href="tel:${esc(e.phone.replace(/[^\d+]/g, ""))}" style="color:${AMETHYST};">${esc(e.phone)}</a>` : ""}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial,Helvetica,sans-serif;border-top:1px solid #eee3ec;">${trs}</table>
+<p style="margin:16px 0 0;font-size:14px;">Next: send their customized care plan and schedule their Recovery Roadmap Zoom.</p>
+<div style="height:14px"></div>${button("Open in your dashboard", link)}<div style="height:18px"></div>
+</td></tr>`;
+  const text = [`New recovery enrollment: ${who}`, `${e.email} ${e.phone}`, "", ...rows.map(([k, v]) => `${k}: ${v}`), "", `Dashboard: ${link}`].join("\n");
+  return { html: shell(inner, `${who} enrolled in ${e.program}`), text };
+}

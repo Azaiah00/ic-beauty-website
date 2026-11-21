@@ -127,6 +127,25 @@ export function shippingCents(qty: number, subtotalCents: number) {
   return s.firstItemCents + Math.max(0, qty - 1) * s.eachAdditionalCents;
 }
 
+/**
+ * Recovery programs (Iisha's "Your Recovery. Your Way." sheet, 2026-11-21). Prices and deposits are hers, verbatim.
+ * /recovery sells each one as a deposit or paid in full through a Square checkout link (money goes to her Square).
+ * Change prices HERE only; the page, the checkout route and the printed QR all read this list.
+ */
+export const recoveryPlans = [
+  { id: "guided", num: "01", name: "Guided", term: "90 days", support: "At-home guidance", fullCents: 99500, depositCents: 15000,
+    blurb: "Find clarity, build a personalized routine, and care for your hair with expert guidance." },
+  { id: "supported", num: "02", name: "Supported", term: "90 days", support: "Hands-on support", fullCents: 249500, depositCents: 37500,
+    blurb: "Move forward with home-care guidance, professional scalp treatments, and accountability." },
+  { id: "exclusive", num: "03", name: "Exclusive", term: "6 months", support: "Premier support", fullCents: 450000, depositCents: 67500,
+    blurb: "Receive our highest level of care, with extended treatments, close monitoring, and adjustments." },
+] as const;
+export type RecoveryPlanId = (typeof recoveryPlans)[number]["id"];
+export const recoveryCreditCents = 10000; // same-day enrollment benefit (Iisha, 2026-11-21): deposit -> applied to the remaining balance by Iisha; paid in full -> taken off at checkout
+/** What a pay-in-full client is charged today: the program price less the $100 program credit. */
+export const recoveryFullTodayCents = (p: { fullCents: number }) => p.fullCents - recoveryCreditCents;
+export const usdWhole = (cents: number) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: cents % 100 ? 2 : 0 })}`;
+
 export const bookHref = links.phase1Scheduler || "/book";
 
 export const nav = [

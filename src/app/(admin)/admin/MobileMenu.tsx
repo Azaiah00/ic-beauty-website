@@ -7,13 +7,14 @@ import { useSearchParams } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck,
   Inbox, Menu, X, Globe, LogOut, ChevronDown, FolderOpen, Store, Video,
-  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History,
+  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History, Sprout,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Sparkles> = {
   "": LayoutDashboard,
   __files: FolderOpen,
   __shop: Store,
+  __recovery: Sprout,
   "pilot-application": Sparkles,
   "hair-love-optin": ClipboardCheck,
   "circle-join": Users,

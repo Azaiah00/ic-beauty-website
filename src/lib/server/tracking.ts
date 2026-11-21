@@ -2,6 +2,7 @@
  * Small shop counters for the owner dashboard. Server-only.
  *   clicks/<YYYY-MM>   { amazon: 12, solex: 4, ... }   clicks to each affiliate storefront (via /go/<id>)
  *   orders/<orderId>   { status, notes, updatedAt }     Iisha's pickup status for a website order
+ *   recovery/<orderId> { status, notes, updatedAt }     Iisha's progress on a recovery-program enrollment
  * Netlify Blobs in production; .data/ files locally (same pattern as store.ts).
  */
 import { blobStore } from "@/lib/server/blobs";
@@ -75,4 +76,24 @@ export async function setOrderMark(id: string, patch: Partial<OrderMark>) {
   const store = kv();
   const cur = (await store.get<OrderMark>(`orders/${id}`)) ?? { status: "New", notes: "", updatedAt: "" };
   await store.set(`orders/${id}`, { ...cur, ...patch, updatedAt: new Date().toISOString() });
+}
+
+/* recovery/<orderId>   { status, notes, updatedAt }   Iisha's progress on a recovery-program enrollment */
+export const RECOVERY_STATUSES = ["New", "Care plan sent", "Roadmap Zoom done", "In program", "Completed", "Cancelled"] as const;
+
+/** alertedAt: when Iisha's new-enrollment email went out. confirmedTo: where the client's confirmation went (if they asked for one). */
+export type RecoveryMark = OrderMark & { alertedAt?: string; confirmedTo?: string; emailLog?: string };
+
+export const getRecoveryMark = async (id: string) => kv().get<RecoveryMark>(`recovery/${id}`);
+
+export const getRecoveryMarks = async (ids: string[]) => {
+  const store = kv();
+  const marks = await Promise.all(ids.map((id) => store.get<RecoveryMark>(`recovery/${id}`)));
+  return new Map(ids.map((id, i) => [id, marks[i]]));
+};
+
+export async function setRecoveryMark(id: string, patch: Partial<RecoveryMark>) {
+  const store = kv();
+  const cur = (await store.get<RecoveryMark>(`recovery/${id}`)) ?? { status: "New", notes: "", updatedAt: "" };
+  await store.set(`recovery/${id}`, { ...cur, ...patch, updatedAt: new Date().toISOString() });
 }
