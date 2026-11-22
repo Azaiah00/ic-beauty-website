@@ -19,6 +19,7 @@ import { recordSubmission } from "@/lib/server/submit";
 import { addPoints, audit, batchNames, bool, canUndo, fail, fmtDate, list, mentions, missing, notify, notifyTeam, ok, sendWelcome, shortName, str, type Args, type ServiceResult } from "./core";
 import { db, newId, resetDemo } from "./store";
 import { COMM_COOKIE, WHO_COOKIE, signMember } from "./token";
+import { anyRandom, tooFast } from "@/lib/server/spam";
 
 export type Ctx = { actor: Actor; args: Args; now: Date; /** Signed in to the owner dashboard with the password. */ authed: boolean };
 type Def = { allow: (c: Ctx) => Promise<Decision> | Decision; run: (c: Ctx) => Promise<ServiceResult> };
@@ -141,8 +142,13 @@ export const ACTIONS: Record<string, Def> = {
       const s = await db.settings();
       const actor = who as Member | null;
       if (actor && ["active", "past_due", "canceled"].includes(actor.state)) return ok(undefined, { goto: "/community" });
-      if (!bool(args.agree)) return fail(422, "Please agree to the community guidelines to continue.");
       const answers = Object.fromEntries(s.questions.map((q) => [q.id, str(args[`q-${q.id}`], 600)]));
+      // Spam bots: hidden honeypot filled, posted too fast / without the form's render time, or random-text
+      // name or answers. Look like a normal "pending" result; save nothing, email nobody.
+      if (!actor && (str(args["bot-field"]) || tooFast(args.t) || anyRandom([args.name, ...Object.values(answers)]))) {
+        return ok(undefined, { goto: "/community/pending" });
+      }
+      if (!bool(args.agree)) return fail(422, "Please agree to the community guidelines to continue.");
       if (actor?.state === "pending") {
         await db.saveMember({ ...actor, answers, hairGoal: answers.goal || actor.hairGoal });
         return ok("Thank you. Your answers are in.", { goto: "/community/pending" });
