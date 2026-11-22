@@ -9,7 +9,7 @@ const TERMS = [
   ["First visit & payments", "Your first program visit is scheduled 30-45 days after your deposit. Your first program installment is due at that visit. Afterward, monthly payments are due the day before each scheduled appointment."],
   ["Cancellations", "Please cancel or reschedule at least 48 hours before your appointment."],
   ["No-show policy", "A valid card must remain securely on file. If you do not attend a scheduled appointment without cancelling, a no-show fee of 50% of that appointment's stated value will be charged to the card on file."],
-  ["Refunds", "There are no refunds for services already rendered. The treatment of unused services and enrollment deposits will be described in the written enrollment agreement before payment."],
+  ["Refunds", "There are no refunds for services already rendered. If you pay a deposit and change your mind, your deposit can be used toward home-care products or tools of equal value. If you paid in full and need to miss scheduled appointments, let us know in writing (email or text) to rebook new dates."],
   ["Results & your role", "Results are not guaranteed. Recovery is a team effort: your consistency with home care, recommended visits, communication, and follow-through are essential to working toward your goals."],
 ] as const;
 
