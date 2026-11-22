@@ -11,6 +11,7 @@ import { newId, saveSubmission, type Submission } from "@/lib/server/store";
 import { sendEmail, OWNER } from "@/lib/server/email";
 import { renderConfirmation, renderOwnerAlert } from "@/lib/server/templates";
 import { squareReady, upsertCustomer } from "@/lib/server/square";
+import { anyRandom } from "@/lib/server/spam";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX_FIELD = 4000;
@@ -29,6 +30,8 @@ export async function recordSubmission(form: string, input: Record<string, unkno
   }
   // Honeypot: bots fill the hidden field. Pretend success, store nothing.
   if (data["bot-field"]) return { ok: true };
+  // Random-text names (spam bots using real people's emails): same silent success, nothing saved or sent.
+  if (anyRandom([data.name, data["first-name"], data["last-name"], data.goal])) return { ok: true };
   delete data["bot-field"];
   delete data["form-name"];
 
