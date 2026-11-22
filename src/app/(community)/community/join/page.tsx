@@ -18,6 +18,7 @@ export default async function JoinPage({ searchParams }: { searchParams: Promise
   if (actor && hasAccess(actor)) redirect("/community");
   if (actor?.state === "paused") redirect("/community/paused");
   if (actor?.state === "removed") redirect("/community/login?removed=1");
+  const renderedAt = String(Date.now());
   return (
     <div className="mx-auto max-w-xl">
       <p className="eyebrow text-amethyst">Join free</p>
@@ -31,6 +32,13 @@ export default async function JoinPage({ searchParams }: { searchParams: Promise
 
       <form method="post" action="/api/community/join" className={`${card} mt-6 space-y-5 p-5 sm:p-7`}>
         <input type="hidden" name="back" value="/community/join" />
+        {/* Spam protection: render time (bots post instantly) and a hidden field only bots fill. */}
+        <input type="hidden" name="t" value={renderedAt} />
+        <p className="hidden" aria-hidden="true">
+          <label>
+            Don&apos;t fill this out: <input name="bot-field" tabIndex={-1} autoComplete="off" />
+          </label>
+        </p>
         {!actor && (
           <>
             <p className="rounded-xl bg-mist px-4 py-3 text-[0.9rem] text-plum-900">{DEMO ? "Demo sign-in: at launch this step is “Continue with Google”. For now, type your name and email." : "Tell us who you are."}</p>
