@@ -74,11 +74,13 @@ export async function recordSubmission(form: string, input: Record<string, unkno
           return { ok: r.ok, detail: r.id ?? r.error };
         })
       : Promise.resolve(),
-    step("Alert to Iisha", async () => {
-      const a = renderOwnerAlert(sub, def.label);
-      const r = await sendEmail({ to: OWNER, subject: `New ${def.tab}: ${name || email}`, ...a, replyTo: email || undefined });
-      return { ok: r.ok, detail: r.id ?? r.error };
-    }),
+    def.ownerAlert === false
+      ? Promise.resolve()
+      : step("Alert to Iisha", async () => {
+          const a = renderOwnerAlert(sub, def.label);
+          const r = await sendEmail({ to: OWNER, subject: `New ${def.tab}: ${name || email}`, ...a, replyTo: email || undefined });
+          return { ok: r.ok, detail: r.id ?? r.error };
+        }),
     email && squareReady()
       ? step("Square customer", async () => {
           const r = await upsertCustomer({ name, email, phone, group: def.group, note: `Website: ${def.label} (${now.toISOString().slice(0, 10)})`, referenceId: sub.id });

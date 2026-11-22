@@ -20,6 +20,8 @@ export type FormDef = {
   group: string;
   statuses: string[];
   confirmation?: (s: Submission) => Confirmation;
+  /** false = don't email Iisha an alert for each one (high-volume forms, e.g. gift downloads during a live class). */
+  ownerAlert?: boolean;
 };
 
 const first = (s: Submission) => (s.name.split(/\s+/)[0] || "there").replace(/^\w/, (c) => c.toUpperCase());
@@ -73,6 +75,26 @@ export const FORMS: Record<string, FormDef> = {
     required: ["email"],
     group: "Website: H.A.I.R. Shift Masterclass",
     statuses: ["Registered", "Contacted", "Attended", "No-show"],
+  },
+  // The H.A.I.R. Shift cheat sheet (free gift): people reach /masterclass/gift from the QR on Iisha's Zoom slide and
+  // enter their name + email to download. One alert per download would flood her inbox mid-class, so no owner alert.
+  "masterclass-gift": {
+    label: "H.A.I.R. Shift gift downloads",
+    tab: "Gift downloads",
+    required: ["name", "email"],
+    group: "Website: H.A.I.R. Shift gift",
+    statuses: ["Downloaded", "Contacted", "Not a fit"],
+    ownerAlert: false,
+    confirmation: (s) => ({
+      subject: "Your H.A.I.R. Shift Hair Decision Cheat Sheet",
+      heading: `${first(s)}, here is your cheat sheet.`,
+      paragraphs: [
+        "Thank you for being part of the H.A.I.R. Shift Masterclass. Here is your free gift, <strong>The H.A.I.R. Shift: Your Hair Decision Cheat Sheet</strong>, so you always have it.",
+        "Print it, save it to your phone, and keep it close for your next hair decision.",
+      ],
+      cta: { label: "Download your cheat sheet", href: U("/downloads/the-hair-shift-hair-decision-cheat-sheet.pdf") },
+      links: [{ label: "Join the H.A.I.R. Circle Community", href: U("/community/join") }],
+    }),
   },
   "circle-join": {
     label: "H.A.I.R. Circle sign-ups",

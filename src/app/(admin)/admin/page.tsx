@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import {
   LayoutDashboard, Sparkles, ClipboardCheck, Users, ScanSearch, MessageSquare, Mic, GraduationCap, ShoppingBag, Newspaper, CalendarCheck, Video,
   LogOut, Download, Search, FolderOpen, Store, Mail, Phone, CheckCircle2, AlertTriangle, Globe, ExternalLink, Inbox, ArrowRight,
-  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History, Sprout,
+  HeartHandshake, UsersRound, Flag, BookOpen, CalendarDays, Tag, Settings2, History, Sprout, Gift,
 } from "lucide-react";
 import { isAdmin } from "@/lib/server/auth";
 import { FORMS, formNames } from "@/lib/server/forms";
@@ -19,6 +19,7 @@ import { MobileMenu } from "./MobileMenu";
 import { DeliverablesView } from "./Deliverables";
 import { ShopView } from "./ShopView";
 import { RecoveryView } from "./RecoveryView";
+import { MasterclassGift } from "./MasterclassGift";
 import { EmailComposer, type Template } from "./EmailComposer";
 import { emailMode } from "@/lib/server/email";
 import { getHours, getServices } from "@/lib/server/squareLive";
@@ -42,6 +43,7 @@ const ICONS: Record<string, typeof Sparkles> = {
   "product-request": ShoppingBag,
   newsletter: Newspaper,
   masterclass: Video,
+  "masterclass-gift": Gift,
 };
 
 /** Icons for the Community group (keys are the ?view= values). */
@@ -387,6 +389,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             </>
           )}
           {community && <CommunityView view={community} sp={{ msg, err, undo, filter, q: rawQ, cat }} />}
+          {form === "masterclass" && !q && <MasterclassGift />}
 
           {!other && !form && !q && (
             <>

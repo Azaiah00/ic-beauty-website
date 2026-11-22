@@ -28,6 +28,12 @@ export const shareCards: Record<string, Share> = {
     image: "/og/recovery.jpg",
     alt: "Your Recovery. Your Way.: Guided, Supported and Exclusive Recovery programs from I.C. Beauty with prices and deposits",
   },
+  "/masterclass/gift": {
+    title: "Your free gift: The H.A.I.R. Shift Hair Decision Cheat Sheet",
+    description: "For H.A.I.R. Shift Masterclass participants: 9 questions to ask before you buy, style, or second-guess your hair. Download your free cheat sheet.",
+    image: "/og/masterclass-gift.jpg",
+    alt: "The H.A.I.R. Shift: Your Hair Decision Cheat Sheet, a free download for masterclass participants from I.C. Beauty",
+  },
   "/masterclass": {
     title: "The H.A.I.R. Shift Masterclass: free live class with Iisha",
     description: "Think Differently. Care Differently. A free live Zoom class with Iisha C. Silver on what healthy hair really requires, beyond products and styling.",

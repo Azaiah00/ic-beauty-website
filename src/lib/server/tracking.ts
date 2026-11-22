@@ -97,3 +97,12 @@ export async function setRecoveryMark(id: string, patch: Partial<RecoveryMark>) 
   const cur = (await store.get<RecoveryMark>(`recovery/${id}`)) ?? { status: "New", notes: "", updatedAt: "" };
   await store.set(`recovery/${id}`, { ...cur, ...patch, updatedAt: new Date().toISOString() });
 }
+
+/* gift/<key>  { total, email, qr, other, last }   downloads of a masterclass gift */
+export type GiftCount = { total: number; email: number; qr: number; other: number; last: string };
+export const getGiftCount = async (key: string) => (await kv().get<GiftCount>(`gift/${key}`)) ?? { total: 0, email: 0, qr: 0, other: 0, last: "" };
+export async function countGift(key: string, src: string) {
+  const c = await getGiftCount(key);
+  const k: "email" | "qr" | "other" = src === "email" ? "email" : src === "qr" ? "qr" : "other";
+  await kv().set(`gift/${key}`, { ...c, total: c.total + 1, [k]: c[k] + 1, last: new Date().toISOString() });
+}
