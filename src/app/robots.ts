@@ -7,8 +7,8 @@ export const dynamic = "force-static";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/__forms.html", "/admin", "/api/", "/go/", "/shop/thank-you", "/recovery/thank-you"] },
-      { userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Claude-SearchBot", "Google-Extended", "Applebot-Extended", "Bingbot"], allow: "/", disallow: ["/admin", "/api/", "/go/", "/shop/thank-you", "/recovery/thank-you"] },
+      { userAgent: "*", allow: "/", disallow: ["/__forms.html", "/admin", "/api/", "/go/", "/shop/thank-you", "/recovery/thank-you", "/masterclass/gift", "/downloads/the-hair-shift-hair-decision-cheat-sheet.pdf"] },
+      { userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Claude-SearchBot", "Google-Extended", "Applebot-Extended", "Bingbot"], allow: "/", disallow: ["/admin", "/api/", "/go/", "/shop/thank-you", "/recovery/thank-you", "/masterclass/gift", "/downloads/the-hair-shift-hair-decision-cheat-sheet.pdf"] },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
